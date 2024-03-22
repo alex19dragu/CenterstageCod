@@ -136,9 +136,9 @@ public class BlueFar extends LinearOpMode {
     public static double x_score_second_cycle_left = 47.5, y_score_second_cycle_left = 11, angle_score_second_angle_left = 210;
 
     // Third cycle scoring positions
-    public static double x_score_third_cycle_right = 47.5, y_score_third_cycle_right = 8, angle_score_third_angle_right = 210;
+    public static double x_score_third_cycle_right = 47.5, y_score_third_cycle_right = 10, angle_score_third_angle_right = 210;
     public static double x_score_third_cycle_center = 47.5, y_score_third_cycle_center = 10, angle_score_third_angle_center = 210;
-    public static double x_score_third_cycle_left = 47.5, y_score_third_cycle_left = 9, angle_score_third_angle_left = 210;
+    public static double x_score_third_cycle_left = 47.5, y_score_third_cycle_left = 10, angle_score_third_angle_left = 210;
 
 
 
@@ -159,8 +159,8 @@ public class BlueFar extends LinearOpMode {
      * intern score
      */
 
-    public static double x_inter_score_first_cycle = 20, y_inter_score_first_cycle = 7, angle_inter_score_first_cycle =180;
-    public static double x_inter_score_first_cycle_left = 22, y_inter_score_first_cycle_left = 7, angle_inter_score_first_cycle_left =180;
+    public static double x_inter_score_first_cycle = 23, y_inter_score_first_cycle = 7, angle_inter_score_first_cycle =180;
+    public static double x_inter_score_first_cycle_left = 23, y_inter_score_first_cycle_left = 7, angle_inter_score_first_cycle_left =180;
 
     public static int caz = 0;
     public static double limit = 1.6;
