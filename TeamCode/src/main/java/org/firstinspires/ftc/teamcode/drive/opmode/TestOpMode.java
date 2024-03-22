@@ -161,7 +161,7 @@ public class TestOpMode extends LinearOpMode {
 //            telemetry.addData("extendo", r.extendoDistance.getDistance(DistanceUnit.MM));
           // telemetry.addData("fourbar", fourbar.CS);
             telemetry.addData("tick-uri",r.extendoLeft.getCurrentPosition());
-            telemetry.addData("distance", r.extendoDistance.getDistance(DistanceUnit.MM));
+           // telemetry.addData("distance", r.extendoDistance.getDistance(DistanceUnit.MM));
             telemetry.addData("encoder", r.lift.getCurrentPosition());
 
 

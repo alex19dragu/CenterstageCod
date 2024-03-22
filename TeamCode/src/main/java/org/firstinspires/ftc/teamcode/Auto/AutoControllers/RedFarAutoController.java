@@ -110,10 +110,10 @@ public class RedFarAutoController {
 
         calibratorExtendo = new DistanceSensorCalibrator(rawReadingsExtendo, actualDistancesExtendo);
 
-        double rawReading = r.extendoDistance.getDistance(DistanceUnit.CM);
-        double calibratedDistance = calibratorExtendo.calibrate(rawReading);
+//        double rawReading = r.extendoDistance.getDistance(DistanceUnit.CM);
+//        double calibratedDistance = calibratorExtendo.calibrate(rawReading);
 
-        double distance = calibratedDistance;
+//        double distance = calibratedDistance;
 
         switch (CurrentStatus)
         {
@@ -491,44 +491,44 @@ public class RedFarAutoController {
             }
 
 
-            case FAIL_SAFE_ONE_PIXEL:
-            {
-                if(distance > distance_error)
-                {
-                    extendo.CS = extendoController.extendoStatus.FAIL_SAFE;
-                    CurrentStatus = autoControllerStatus.FAIL_SAFE_CHECK_DISTANCE_ONE_PIXEL;
-                } else
-                {
-                    CurrentStatus = autoControllerStatus.FAIL_SAFE_HEADER_ONE_PIXEL;
-                }
-                break;
-
-            }
-
-            case FAIL_SAFE_CHECK_DISTANCE_ONE_PIXEL:
-            {
-                if(distance > distance_error && (r.pixelRight.getState() || r.pixelLeft.getState()))
-                {
-                    extendo.x += 30;
-                    funny_java.reset();
-                    CurrentStatus = autoControllerStatus.FUNNY_JAVA_ONE_PIXEL;
-                }
-                else
-                {
-                    if(!r.pixelRight.getState() && !r.pixelLeft.getState())
-                    {
-
-                        //  extendo.cycle = extendo.failsafe + extendo.x;
-                        // extendo.CS = extendoController.extendoStatus.CYCLE;
-                        CurrentStatus = autoControllerStatus.FAIL_SAFE_DONE_ONE_PIXEL;
-                    }
-                    else
-                    {
-                        CurrentStatus = autoControllerStatus.FAIL_SAFE_HEADER_ONE_PIXEL;
-                    }
-                }
-                break;
-            }
+//            case FAIL_SAFE_ONE_PIXEL:
+//            {
+//                if(distance > distance_error)
+//                {
+//                    extendo.CS = extendoController.extendoStatus.FAIL_SAFE;
+//                    CurrentStatus = autoControllerStatus.FAIL_SAFE_CHECK_DISTANCE_ONE_PIXEL;
+//                } else
+//                {
+//                    CurrentStatus = autoControllerStatus.FAIL_SAFE_HEADER_ONE_PIXEL;
+//                }
+//                break;
+//
+//            }
+//
+//            case FAIL_SAFE_CHECK_DISTANCE_ONE_PIXEL:
+//            {
+//                if(distance > distance_error && (r.pixelRight.getState() || r.pixelLeft.getState()))
+//                {
+//                    extendo.x += 30;
+//                    funny_java.reset();
+//                    CurrentStatus = autoControllerStatus.FUNNY_JAVA_ONE_PIXEL;
+//                }
+//                else
+//                {
+//                    if(!r.pixelRight.getState() && !r.pixelLeft.getState())
+//                    {
+//
+//                        //  extendo.cycle = extendo.failsafe + extendo.x;
+//                        // extendo.CS = extendoController.extendoStatus.CYCLE;
+//                        CurrentStatus = autoControllerStatus.FAIL_SAFE_DONE_ONE_PIXEL;
+//                    }
+//                    else
+//                    {
+//                        CurrentStatus = autoControllerStatus.FAIL_SAFE_HEADER_ONE_PIXEL;
+//                    }
+//                }
+//                break;
+//            }
 
             case FUNNY_JAVA_ONE_PIXEL:
             {

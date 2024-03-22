@@ -636,7 +636,7 @@ park.reset();
 
                 case YELLOW_DROP:
                 {
-                    if(r.back.getDistance(DistanceUnit.CM) < 20.8)
+//                    if(r.back.getDistance(DistanceUnit.CM) < 20.8)
                     {
                         redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.LATCH_DROP;
 
@@ -976,7 +976,7 @@ park.reset();
             telemetry.addData("hz ", 1000000000 / (loop - loopTime));
             telemetry.addData("status", status);
             telemetry.addData("robotcontroller", RedFarAutoController.CurrentStatus);
-            telemetry.addData("distance", r.extendoDistance.getDistance(DistanceUnit.CM));
+//            telemetry.addData("distance", r.extendoDistance.getDistance(DistanceUnit.CM));
             telemetry.addData("limit", limit);
           //  telemetry.addData("position", extendopos);
             //   telemetry.addData("target", extendo.target);

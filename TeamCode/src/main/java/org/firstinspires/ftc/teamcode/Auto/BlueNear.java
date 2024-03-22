@@ -619,15 +619,15 @@ COLLECT_VERIF_PIXELS_V2,
                     break;
                 }
 
-                case CHECK_GO_COLLECT:
-                {
-                    if(r.back.getDistance( DistanceUnit.CM) < 24  )
-                    {
-                            BlueNearAutoController.CurrentStatus = BlueNearAutoController.autoControllerStatus.LATCH_DROP;
-                            status = STROBOT.GO_COLLECT;
-                    }
-                    break;
-                }
+//                case CHECK_GO_COLLECT:
+//                {
+//                    if(r.back.getDistance( DistanceUnit.CM) < 24  )
+//                    {
+//                            BlueNearAutoController.CurrentStatus = BlueNearAutoController.autoControllerStatus.LATCH_DROP;
+//                            status = STROBOT.GO_COLLECT;
+//                    }
+//                    break;
+//                }
 
                 case GO_COLLECT:
                 {
@@ -978,7 +978,7 @@ prepare_collect.reset();
             telemetry.addData("hz ", 1000000000 / (loop - loopTime));
             telemetry.addData("status", status);
             telemetry.addData("robotcontroller", blueNearAutoController.CurrentStatus);
-            telemetry.addData("distance", r.extendoDistance.getDistance(DistanceUnit.CM));
+          //  telemetry.addData("distance", r.extendoDistance.getDistance(DistanceUnit.CM));
             telemetry.addData("x", extendo.x);
             telemetry.addData("CS", lift.CS);
             telemetry.addData("liftcp", lift.CurrentPosition);

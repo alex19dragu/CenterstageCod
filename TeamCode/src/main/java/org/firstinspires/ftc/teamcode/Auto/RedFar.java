@@ -350,27 +350,27 @@ lift.CS = liftController.liftStatus.DOWN;
                     break;
                 }
 
-                case YELLOW_LEFT:
-                {
-                    if(r.back.getDistance(DistanceUnit.CM) < 22.5)
-                    {
-                        latchDrop.CS = latchDropController.latchDropStatus.DROP_BOTH;
-                        drive.followTrajectorySequenceAsync(FRONT);
-                        status = STROBOT.NOTHING;
-                    }
-                    break;
-                }
+//                case YELLOW_LEFT:
+//                {
+//                    if(r.back.getDistance(DistanceUnit.CM) < 22.5)
+//                    {
+//                        latchDrop.CS = latchDropController.latchDropStatus.DROP_BOTH;
+//                        drive.followTrajectorySequenceAsync(FRONT);
+//                        status = STROBOT.NOTHING;
+//                    }
+//                    break;
+//                }
 
-                case YELLOW_RIGHT:
-                {
-                    if(r.back.getDistance(DistanceUnit.CM) < 22)
-                    {
-                        latchDrop.CS = latchDropController.latchDropStatus.DROP_BOTH;
-                        drive.followTrajectorySequenceAsync(FRONT);
-                        status = STROBOT.NOTHING;
-                    }
-                    break;
-                }
+//                case YELLOW_RIGHT:
+//                {
+//                    if(r.back.getDistance(DistanceUnit.CM) < 22)
+//                    {
+//                        latchDrop.CS = latchDropController.latchDropStatus.DROP_BOTH;
+//                        drive.followTrajectorySequenceAsync(FRONT);
+//                        status = STROBOT.NOTHING;
+//                    }
+//                    break;
+//                }
 
 
 

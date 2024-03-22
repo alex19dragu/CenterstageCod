@@ -38,16 +38,16 @@ public class DistanceSensorCalibrationOpMode extends LinearOpMode {
 
         while (opModeIsActive() && !isStopRequested()) {
             // Get raw sensor reading
-            double rawReading = r.extendoDistance.getDistance(DistanceUnit.CM);
+           // double rawReading = r.extendoDistance.getDistance(DistanceUnit.CM);
 
-            // Calibrate raw reading
-            double calibratedDistance = calibrator.calibrate(rawReading);
-
-            // Display raw and calibrated readings
-            telemetry.addData("Raw Reading", rawReading);
-            //telemetry.addData("Calibrated Distance WITH Filter", l.getValue(calibratedDistance));
-            telemetry.addData("Calibrated Distance WITHOUT Filter", calibratedDistance);
-            telemetry.addData("Difference", calibratedDistance - rawReading);
+//            // Calibrate raw reading
+//            double calibratedDistance = calibrator.calibrate(rawReading);
+//
+//            // Display raw and calibrated readings
+//            telemetry.addData("Raw Reading", rawReading);
+//            //telemetry.addData("Calibrated Distance WITH Filter", l.getValue(calibratedDistance));
+//            telemetry.addData("Calibrated Distance WITHOUT Filter", calibratedDistance);
+//            telemetry.addData("Difference", calibratedDistance - rawReading);
             telemetry.update();
         }
     }

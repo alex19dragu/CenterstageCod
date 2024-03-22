@@ -89,7 +89,7 @@ public class BlueNearAutoController {
     public void update(robotMap r, liftController lift, fourbarController fourbar, clawAngleController clawAngle, clawFlipController clawFlip, collectAngleController collectAngle, doorController door, extendoController extendo, latchLeftController latchLeft, latchRightController latchRight)
     {
 
-        double distance = r.extendoDistance.getDistance(DistanceUnit.CM);
+       // double distance = r.extendoDistance.getDistance(DistanceUnit.CM);
 
         switch (CurrentStatus)
         {
@@ -396,44 +396,44 @@ public class BlueNearAutoController {
             }
 
 
-            case FAIL_SAFE_ONE_PIXEL:
-            {
-                if(distance > distance_error)
-                {
-                    extendo.CS = extendoController.extendoStatus.FAIL_SAFE;
-                    CurrentStatus = autoControllerStatus.FAIL_SAFE_CHECK_DISTANCE_ONE_PIXEL;
-                } else
-                {
-                    CurrentStatus = autoControllerStatus.FAIL_SAFE_HEADER_ONE_PIXEL;
-                }
-                break;
-
-            }
-
-            case FAIL_SAFE_CHECK_DISTANCE_ONE_PIXEL:
-            {
-                if(distance > distance_error && (r.pixelRight.getState() || r.pixelLeft.getState()))
-                {
-                    extendo.x += 20;
-                    funny_java.reset();
-                    CurrentStatus = autoControllerStatus.FUNNY_JAVA_ONE_PIXEL;
-                }
-                else
-                {
-                    if(!r.pixelRight.getState() && !r.pixelLeft.getState())
-                    {
-
-                      //  extendo.cycle = extendo.failsafe + extendo.x;
-                       // extendo.CS = extendoController.extendoStatus.CYCLE;
-                        CurrentStatus = autoControllerStatus.FAIL_SAFE_DONE_ONE_PIXEL;
-                    }
-                    else
-                    {
-                        CurrentStatus = autoControllerStatus.FAIL_SAFE_HEADER_ONE_PIXEL;
-                    }
-                }
-                break;
-            }
+//            case FAIL_SAFE_ONE_PIXEL:
+//            {
+//                if(distance > distance_error)
+//                {
+//                    extendo.CS = extendoController.extendoStatus.FAIL_SAFE;
+//                    CurrentStatus = autoControllerStatus.FAIL_SAFE_CHECK_DISTANCE_ONE_PIXEL;
+//                } else
+//                {
+//                    CurrentStatus = autoControllerStatus.FAIL_SAFE_HEADER_ONE_PIXEL;
+//                }
+//                break;
+//
+//            }
+//
+//            case FAIL_SAFE_CHECK_DISTANCE_ONE_PIXEL:
+//            {
+//                if(distance > distance_error && (r.pixelRight.getState() || r.pixelLeft.getState()))
+//                {
+//                    extendo.x += 20;
+//                    funny_java.reset();
+//                    CurrentStatus = autoControllerStatus.FUNNY_JAVA_ONE_PIXEL;
+//                }
+//                else
+//                {
+//                    if(!r.pixelRight.getState() && !r.pixelLeft.getState())
+//                    {
+//
+//                      //  extendo.cycle = extendo.failsafe + extendo.x;
+//                       // extendo.CS = extendoController.extendoStatus.CYCLE;
+//                        CurrentStatus = autoControllerStatus.FAIL_SAFE_DONE_ONE_PIXEL;
+//                    }
+//                    else
+//                    {
+//                        CurrentStatus = autoControllerStatus.FAIL_SAFE_HEADER_ONE_PIXEL;
+//                    }
+//                }
+//                break;
+//            }
 
             case FUNNY_JAVA_ONE_PIXEL:
             {

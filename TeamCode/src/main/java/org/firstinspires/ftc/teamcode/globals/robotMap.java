@@ -51,8 +51,8 @@ public class robotMap {
      * Sensors
      */
 
-    public DistanceSensor back = null;
-    public DistanceSensor extendoDistance = null;
+//    public DistanceSensor back = null;
+//    public DistanceSensor extendoDistance = null;
     public DigitalChannel pixelLeft = null;
     public DigitalChannel pixelRight = null;
    // public DistanceSensor left = null;
@@ -111,8 +111,8 @@ public class robotMap {
          * Sensors
          */
 
-        back = Init.get(DistanceSensor.class, "back");
-        extendoDistance = Init.get(DistanceSensor.class, "extendoDistance");
+       // back = Init.get(DistanceSensor.class, "back");
+       // extendoDistance = Init.get(DistanceSensor.class, "extendoDistance");
        // left = Init.get(DistanceSensor.class, "left");
        // right = Init.get(DistanceSensor.class, "right");
         pixelLeft = Init.get(DigitalChannel.class, "pixelLeft");
