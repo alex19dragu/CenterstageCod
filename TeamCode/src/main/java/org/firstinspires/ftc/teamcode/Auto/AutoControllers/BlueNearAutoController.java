@@ -200,7 +200,7 @@ public class BlueNearAutoController {
 
             case COLLECT_PREPARE:
             {
-                fourbar.CS = fourbarController.fourbarStatus.DRIVE;
+                fourbar.CS = fourbarController.fourbarStatus.COLLECT;
                 claw_timer.reset();
                 CurrentStatus = autoControllerStatus.COLLECT_PREPARE_CLAW;
                 break;
@@ -239,6 +239,8 @@ public class BlueNearAutoController {
 
             case TRANSFER_BEGIN:
             {
+                extendo.CS = extendoController.extendoStatus.TRANSFER;
+                lift.CS = liftController.liftStatus.TRANSFER;
                 if(r.extendoLeft.getCurrentPosition() < 5)
                 {
                     door.CS = doorController.doorStatus.OPENED;
@@ -276,7 +278,7 @@ public class BlueNearAutoController {
                     latchLeft.CS = latchLeftController.LatchLeftStatus.SECURED;
                     latchRight.CS = latchRightController.LatchRightStatus.SECURED;
                     fourbar_timer.reset();
-                    CurrentStatus = autoControllerStatus.TRANSFER_DRIVE_POSE;
+                    CurrentStatus =autoControllerStatus.TRANSFER_DRIVE_POSE;
                 }
                 break;
             }
@@ -285,13 +287,15 @@ public class BlueNearAutoController {
             {
                 if(fourbar_timer.seconds() > 0.2)
                 {
+                    lift.CS = liftController.liftStatus.DOWN;
+                    extendo.CS = extendoController.extendoStatus.RETRACTED;
                     fourbar.CS = fourbarController.fourbarStatus.DRIVE;
                 }
-                if(fourbar_timer.seconds() > 0.22)
+                if(fourbar_timer.seconds() > 0.215)
                 {
                     clawFlip.CS = clawFlipController.clawFlipStatus.DRIVE;
                 }
-                if(fourbar_timer.seconds() > 0.227)
+                if(fourbar_timer.seconds() > 0.22)
                 {
                     CurrentStatus = autoControllerStatus.TRANSFER_DONE;
                 }
@@ -329,67 +333,56 @@ public class BlueNearAutoController {
 
             case FAIL_SAFE:
             {
-                if(distance > distance_error)
-                {
-                    extendo.CS = extendoController.extendoStatus.FAIL_SAFE;
-                    CurrentStatus = autoControllerStatus.FAIL_SAFE_CHECK_DISTANCE;
-                } else
-                {
-                    CurrentStatus = autoControllerStatus.FAIL_SAFE_HEADER;
-                }
-                break;
-
-            }
-
-            case FAIL_SAFE_CHECK_DISTANCE:
-            {
-                if(distance > distance_error && (r.pixelRight.getState() && r.pixelLeft.getState()))
-                {
-                    extendo.x += 10;
-                    funny_java.reset();
-                    CurrentStatus = autoControllerStatus.FUNNY_JAVA;
-                }
-                else
-                {
-                    if(!r.pixelRight.getState() || !r.pixelLeft.getState())
-                    {
-
-                      //  extendo.cycle = extendo.failsafe + extendo.x;
-                      //  extendo.CS = extendoController.extendoStatus.CYCLE;
-                        CurrentStatus = autoControllerStatus.FAIL_SAFE_DONE;
-                    }
-                    else
-                    {
-                        CurrentStatus = autoControllerStatus.FAIL_SAFE_HEADER;
-                    }
-                }
+                extendo.CS = extendoController.extendoStatus.FAIL_SAFE;
+                failsafe_header.reset();
+                CurrentStatus = autoControllerStatus.FAIL_SAFE_HEADER;
                 break;
             }
 
-            case FUNNY_JAVA:
-            {
-                if(funny_java.seconds() > 0.01)
-                {
-                    CurrentStatus = autoControllerStatus.FAIL_SAFE_CHECK_DISTANCE;
-                }
-                break;
-            }
+//            case FAIL_SAFE_CHECK_DISTANCE:
+//            {
+//                if(distance > distance_error && (r.pixelRight.getState() && r.pixelLeft.getState()))
+//                {
+//                    extendo.x += 10;
+//                    funny_java.reset();
+//                    CurrentStatus = autoControllerStatus.FUNNY_JAVA;
+//                }
+//                else
+//                {
+//                    if(!r.pixelRight.getState() || !r.pixelLeft.getState())
+//                    {
+//
+//                        //  extendo.cycle = extendo.failsafe + extendo.x;
+//                        //  extendo.CS = extendoController.extendoStatus.CYCLE;
+//                        CurrentStatus = autoControllerStatus.FAIL_SAFE_DONE;
+//                    }
+//                    else
+//                    {
+//                        CurrentStatus = autoControllerStatus.FAIL_SAFE_HEADER;
+//                    }
+//                }
+//                break;
+//            }
+//
+//            case FUNNY_JAVA:
+//            {
+//                if(funny_java.seconds() > 0.01)
+//                {
+//                    CurrentStatus = autoControllerStatus.FAIL_SAFE_CHECK_DISTANCE;
+//                }
+//                break;
+//            }
 
             case FAIL_SAFE_HEADER:
             {
-                if((r.pixelRight.getState() && r.pixelLeft.getState()) && collectAngle.collectAngle_i != 0)
+                if(failsafe_header.seconds() > 0.2 && collectAngle.collectAngle_i >= 1)
                 {
-                    collectAngle.collectAngle_i = Math.max(0, collectAngle.collectAngle_i-1);
-                    failsafe_header.reset();
-                    CurrentStatus = autoControllerStatus.FAIL_SAFE_HEADER_TIMER_RESET;
-                } else if(!r.pixelRight.getState() || !r.pixelLeft.getState())
-                {
+                    collectAngle.CS = collectAngleController.collectAngleStatus.COLLECT;
+                    collectAngle.collectAngle_i -= 1;
+                    extendo.CS = extendoController.extendoStatus.CYCLE;
+                    funny_java.reset();
                     CurrentStatus = autoControllerStatus.FAIL_SAFE_DONE;
-                } else
-                {
-                    CurrentStatus = autoControllerStatus.FAIL_SAFE_WRONG_HEADING;
                 }
-
                 break;
             }
 

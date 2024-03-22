@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.Auto.AutoControllers;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
+import org.checkerframework.checker.units.qual.Current;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Auto.BlueFar;
 import org.firstinspires.ftc.teamcode.Auto.RedFarBun;
@@ -325,14 +326,14 @@ public class RedFarAutoController {
                         }
 
                         case 1:
-                        { clawAngle.clawAngle_i = 4;
+                        { clawAngle.clawAngle_i = 1;
                             clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
                             break;
                         }
 
                         case 2:
                         {
-                            clawAngle.clawAngle_i = 5;
+                            clawAngle.clawAngle_i = 1;
                             clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
                             break;
                         }
@@ -426,65 +427,55 @@ public class RedFarAutoController {
 
             case FAIL_SAFE:
             {
-                if(distance > distance_error)
-                {
-                    extendo.CS = extendoController.extendoStatus.FAIL_SAFE;
-                    CurrentStatus = autoControllerStatus.FAIL_SAFE_CHECK_DISTANCE;
-                } else
-                {
-                    CurrentStatus = autoControllerStatus.FAIL_SAFE_HEADER;
-                }
-                break;
-
-            }
-
-            case FAIL_SAFE_CHECK_DISTANCE:
-            {
-                if(distance > distance_error && (r.pixelRight.getState() && r.pixelLeft.getState()))
-                {
-                    extendo.x += 10;
-                    funny_java.reset();
-                    CurrentStatus = autoControllerStatus.FUNNY_JAVA;
-                }
-                else
-                {
-                    if(!r.pixelRight.getState() || !r.pixelLeft.getState())
-                    {
-
-                        //  extendo.cycle = extendo.failsafe + extendo.x;
-                        //  extendo.CS = extendoController.extendoStatus.CYCLE;
-                        CurrentStatus = autoControllerStatus.FAIL_SAFE_DONE;
-                    }
-                    else
-                    {
-                        CurrentStatus = autoControllerStatus.FAIL_SAFE_HEADER;
-                    }
-                }
+                extendo.CS = extendoController.extendoStatus.FAIL_SAFE;
+                failsafe_header.reset();
+                CurrentStatus = autoControllerStatus.FAIL_SAFE_HEADER;
                 break;
             }
 
-            case FUNNY_JAVA:
-            {
-                if(funny_java.seconds() > 0.01)
-                {
-                    CurrentStatus = autoControllerStatus.FAIL_SAFE_CHECK_DISTANCE;
-                }
-                break;
-            }
+//            case FAIL_SAFE_CHECK_DISTANCE:
+//            {
+//                if(distance > distance_error && (r.pixelRight.getState() && r.pixelLeft.getState()))
+//                {
+//                    extendo.x += 10;
+//                    funny_java.reset();
+//                    CurrentStatus = autoControllerStatus.FUNNY_JAVA;
+//                }
+//                else
+//                {
+//                    if(!r.pixelRight.getState() || !r.pixelLeft.getState())
+//                    {
+//
+//                        //  extendo.cycle = extendo.failsafe + extendo.x;
+//                        //  extendo.CS = extendoController.extendoStatus.CYCLE;
+//                        CurrentStatus = autoControllerStatus.FAIL_SAFE_DONE;
+//                    }
+//                    else
+//                    {
+//                        CurrentStatus = autoControllerStatus.FAIL_SAFE_HEADER;
+//                    }
+//                }
+//                break;
+//            }
+//
+//            case FUNNY_JAVA:
+//            {
+//                if(funny_java.seconds() > 0.01)
+//                {
+//                    CurrentStatus = autoControllerStatus.FAIL_SAFE_CHECK_DISTANCE;
+//                }
+//                break;
+//            }
 
             case FAIL_SAFE_HEADER:
             {
-                if((r.pixelRight.getState() && r.pixelLeft.getState()) && collectAngle.collectAngle_i != 0)
+                if(failsafe_header.seconds() > 0.2 && collectAngle.collectAngle_i >= 1)
                 {
-                    collectAngle.collectAngle_i = Math.max(0, collectAngle.collectAngle_i-1);
-                    failsafe_header.reset();
-                    CurrentStatus = autoControllerStatus.FAIL_SAFE_HEADER_TIMER_RESET;
-                } else if(!r.pixelRight.getState() || !r.pixelLeft.getState())
-                {
+                    collectAngle.CS = collectAngleController.collectAngleStatus.COLLECT;
+                    collectAngle.collectAngle_i -= 1;
+                    extendo.CS = extendoController.extendoStatus.CYCLE;
+                    funny_java.reset();
                     CurrentStatus = autoControllerStatus.FAIL_SAFE_DONE;
-                } else
-                {
-                    CurrentStatus = autoControllerStatus.FAIL_SAFE_WRONG_HEADING;
                 }
 
                 break;

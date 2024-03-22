@@ -26,8 +26,8 @@ public class clawAngleController {
 
     public static clawAngleStatus CS = INITIALIZE, PS = INITIALIZE;
 
-    public static double collect = 0.478;
-    public static double score[] = {0.101, 0.296, 0.478, 0.66, 0.855, 0.76, 0.76};
+    public static double collect = 0.5;
+    public static double score[] = {0.123, 0.318, 0.5, 0.682, 0.877, 0.782, 0.782};
 
 
     public static int clawAngle_i = 1;

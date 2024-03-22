@@ -31,9 +31,9 @@ public class extendoController {
     }
 
     // PID constants for extension
-    public static double Kp_extend = 0.0055;
-    public static double Ki_extend = 0;
-    public static double Kd_extend = 0;
+    public static double Kp_extend = 0.0025;
+    public static double Ki_extend = 0.001;
+    public static double Kd_extend = 0.002;
 
     // PID constants for retraction
     public static double Kp_retract = 0.015; // Example values, adjust based on your needs
@@ -67,10 +67,10 @@ public class extendoController {
     public static double retracted = -5;
     public static double extended = 900;
     public static double drive = 600;
-    public static double failsafe = 920;
-    public static double purple[] = {350, 110, 0};
+    public static double failsafe = 940;
+    public static double purple[] = {500, 250, 0};
     public static double cycle = 945;
-    public static double cycle_far = 905;
+    public static double cycle_far = 870;
     public static double x = 10;
     public static int caz = 0;
     public static double transfer = -40;

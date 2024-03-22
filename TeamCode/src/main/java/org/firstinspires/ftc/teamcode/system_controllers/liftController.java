@@ -40,9 +40,11 @@ public class liftController {
     public static double IDRIVE = 0.0012;
     public static double DDRIVE = 0.001;
 
-    public static double PDOWN = 0.0075;
+    public static double PDOWN = 0.0095;
     public static double IDOWN = 0;
     public static double DDOWN = 0;
+
+    int target;
 
     public double pid = 0;
 
@@ -54,10 +56,11 @@ public class liftController {
     SimplePIDController LiftPID_AUTO = null;
     SimplePIDController LiftPIDDOWN = null;
     SimplePIDController LiftPID_DRIVE = null;
+    public SimplePIDController activePID;
 
 
 
-    public static double base = -5;
+    public static double base = -40;
 
     public static double down = 108;
 
@@ -67,6 +70,7 @@ public class liftController {
     public static double hang = 740;
 
     public int CurrentPosition = 0;
+    public int error = 2;
     public static double transfer = -30;
 
     public liftController()
@@ -84,9 +88,18 @@ public class liftController {
         LiftPID_DRIVE.maxOutput = maxSpeedUp;
     }
 
+
+    public void disableMotor(robotMap r) {
+        r.lift.setMotorDisable();
+    }
+
+    public void enableMotor(robotMap r)
+    {
+        r.lift.setMotorEnable();
+    }
+
     public void update(robotMap r, int position, double voltage)
     {
-        SimplePIDController activePID;
         switch (CS) {
             case UP: // Define your conditions
                 activePID = LiftPID_DRIVE;
@@ -114,12 +127,20 @@ public class liftController {
         CurrentSpeed=powerLift;
 
 
-        r.lift.setPower(powerLift);
+      //  r.lift.setPower(powerLift);
+
+        if (activePID.targetValue <= 0 && r.lift.getCurrentPosition() <=  1 && CS == DOWN) {
+           r.lift.setPower(0);
+        } else
+        if(activePID.targetValue > 0 || r.lift.getCurrentPosition() > 1)
+        {
+            r.lift.setPower(powerLift);
+        }
 
         if(CS == liftStatus.UP) activePID.targetValue = down + i_up * i_multiplication;
 
-if(CS == INITIALIZE || CS == DOWN)
-    activePID.targetValue = base;
+        if(CS == INITIALIZE || CS == DOWN)
+            activePID.targetValue = base;
 
         if(CS != PS || CS == INITIALIZE )
         {
@@ -127,42 +148,47 @@ if(CS == INITIALIZE || CS == DOWN)
             {
                 case INITIALIZE:
                 {
+                 //   target = -5;
                     activePID.targetValue = base;
                     break;
                 }
 
                 case UP:
                 {
+                 //   target = 10;
                     activePID.targetValue = down + i_up * i_multiplication;
                     break;
                 }
 
                 case DOWN:
                 {
+                   // target = -10;
                     activePID.targetValue = base;
                     break;
                 }
 
                 case PRELOAD_YELLOW:
                 {
-                    activePID.targetValue = 300;
+                   // target = 10;
+                    activePID.targetValue = 400;
                     break;
                 }
 
                 case CYCLE:
                 {
-                    activePID.targetValue = 370;
+                    activePID.targetValue = 520;
                     break;
                 }
 
                 case HANG:
-                {
+                {//target = 0;
                     activePID.targetValue = hang;
                     break;
                 }
 
                 case TRANSFER:
                 {
+                   // target = -30;
                     activePID.targetValue = transfer;
                     break;
                 }

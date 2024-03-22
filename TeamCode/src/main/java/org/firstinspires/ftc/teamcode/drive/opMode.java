@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive;
 
 import static org.firstinspires.ftc.teamcode.system_controllers.collectAngleController.collectAngle_i;
+import static org.firstinspires.ftc.teamcode.system_controllers.doorController.doorStatus.CLOSED;
 import static org.firstinspires.ftc.teamcode.system_controllers.droneController.droneStatus.RELEASED;
 import static org.firstinspires.ftc.teamcode.system_controllers.extendoController.extendoStatus.DRIVE;
 import static org.firstinspires.ftc.teamcode.system_controllers.extendoController.extendoStatus.EXTENDED;
@@ -31,6 +32,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.ejml.dense.fixed.MatrixFeatures_DDF2;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
 import org.firstinspires.ftc.teamcode.system_controllers.droneController;
@@ -347,6 +349,14 @@ timer.reset();
                 }
             }
 
+            if(!previousGamepad1.right_stick_button && currentGamepad1.right_stick_button)
+            {
+                if(door.CS != CLOSED)
+                {
+                    door.CS = CLOSED;
+                }
+            }
+
             if(!previousGamepad1.left_bumper && currentGamepad1.left_bumper)
             {
                 if(extendo.CS != DRIVE)
@@ -525,13 +535,15 @@ timer.reset();
             double loop = System.nanoTime();
 
             telemetry.addData("hz ", 1000000000 / (loop - loopTime));
-            telemetry.addData("drone_driver_2", drone_driver_2);
-            telemetry.addData("drone_driver_1", drone_driver_1);
-            telemetry.addData("drone", drone.CS);
-            telemetry.addData("amps_extendoleft", r.extendoLeft.getCurrent(CurrentUnit.AMPS));
-            telemetry.addData("extendoright", r.extendoRight.getCurrent(CurrentUnit.AMPS));
+//            telemetry.addData("drone_driver_2", drone_driver_2);
+//            telemetry.addData("drone_driver_1", drone_driver_1);
+//            telemetry.addData("drone", drone.CS);
+//            telemetry.addData("amps_extendoleft", r.extendoLeft.getCurrent(CurrentUnit.AMPS));
+//            telemetry.addData("extendoright", r.extendoRight.getCurrent(CurrentUnit.AMPS));
             telemetry.addData("liftamps", r.lift.getCurrent(CurrentUnit.AMPS));
-            telemetry.addData("fourbar_score", fourbar.score);
+            telemetry.addData("liftcp", r.lift.getCurrentPosition());
+            telemetry.addData("lift", lift.activePID.targetValue );
+         //   telemetry.addData("fourbar_score", fourbar.score);
 
 
             loopTime = loop;

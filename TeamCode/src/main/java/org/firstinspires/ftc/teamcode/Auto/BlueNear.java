@@ -959,7 +959,7 @@ prepare_collect.reset();
             latchLeft.update(r);
             latchRight.update(r);
             drone.update(r);
-            lift.update(r, position, voltage);
+            lift.update(r, 0, voltage);
             extendo.update(r, extendopos, 1, voltage);
             collectAngle.update(r);
             blueNearAutoController.update(r, lift, fourbar,clawAngle,clawFlip,collectAngle,door,extendo,latchLeft,latchRight);

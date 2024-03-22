@@ -387,7 +387,7 @@ lift.CS = liftController.liftStatus.DOWN;
             latchRight.update(r);
             pto.update(r);
             drone.update(r);
-            lift.update(r, position, voltage);
+            lift.update(r, 0, voltage);
             extendo.update(r, extendopos, 1, voltage);
             transfer.update(r, door, fourbar, clawAngle, clawFlip, latchLeft, latchRight, extendo, lift);
             outtake.update(r, lift, fourbar, clawFlip, clawAngle, door, latchRight, latchLeft, transfer);
