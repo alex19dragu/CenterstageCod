@@ -12,6 +12,7 @@ import static org.firstinspires.ftc.teamcode.system_controllers.extendoControlle
 
 import com.acmerobotics.dashboard.config.Config;
 
+import org.firstinspires.ftc.teamcode.Auto.BlueFar;
 import org.firstinspires.ftc.teamcode.globals.SimplePIDController;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
 
@@ -28,10 +29,13 @@ public class extendoController {
         DRIVE,
         FAIL_SAFE,
         TRANSFER,
+        RETRY,
+        RERTRY_PURPLE,
+        FAIL_SAFE_PURPLE,
     }
 
     // PID constants for extension
-    public static double Kp_extend = 0.0025;
+    public static double Kp_extend = 0.006;
     public static double Ki_extend = 0.001;
     public static double Kd_extend = 0.002;
 
@@ -67,13 +71,16 @@ public class extendoController {
     public static double retracted = -5;
     public static double extended = 900;
     public static double drive = 600;
-    public static double failsafe = 940;
+    public static double failsafe = 790;
     public static double purple[] = {500, 250, 0};
     public static double cycle = 945;
-    public static double cycle_far = 870;
+    public static double cycle_far = 890;
     public static double x = 10;
     public static int caz = 0;
     public static double transfer = -40;
+    public static double retry = 980;
+    public static double retry_purple[] = {580, 340, 0};
+    public static double fail_purple[] = {400, 150, 0};
 
 
     public static double extend_multiply_index = 0;
@@ -104,21 +111,30 @@ public class extendoController {
                 activePID = extendoPIDRetract;
                 break;
             case EXTENDED: // Define your conditions
-                activePID = extendoPIDExtend;
+                activePID = extendoPIDDrive;
                 break;
             case RETRACTED:
                 activePID = extendoPIDRetract;
                 break;
             case PURPLE:
-                activePID = extendoPIDExtend;
+                activePID = extendoPIDDrive;
                 break;
             case CYCLE:
-                activePID = extendoPIDExtend;
+                activePID = extendoPIDDrive;
                 break;
             case DRIVE:
                 activePID = extendoPIDDrive;
                 break;
             case FAIL_SAFE:
+                activePID = extendoPIDExtend;
+                break;
+            case RETRY:
+                activePID = extendoPIDExtend;
+                break;
+            case FAIL_SAFE_PURPLE:
+                activePID = extendoPIDExtend;
+                break;
+            case RERTRY_PURPLE:
                 activePID = extendoPIDExtend;
                 break;
             default:
@@ -172,6 +188,13 @@ public class extendoController {
                     break;
                 }
 
+                case RETRY:
+                {
+                    activePID.targetValue = retry;
+                    activePID.maxOutput = 1;
+                    break;
+                }
+
                 case RETRACTED:
                 {
                     activePID.targetValue = retracted;
@@ -211,6 +234,20 @@ public class extendoController {
                 case TRANSFER:
                 {
                     activePID.targetValue = transfer;
+                    activePID.maxOutput =1;
+                    break;
+                }
+
+                case RERTRY_PURPLE:
+                {
+                    activePID.targetValue = retry_purple[BlueFar.caz];
+                    activePID.maxOutput =1;
+                    break;
+                }
+
+                case FAIL_SAFE_PURPLE:
+                {
+                    activePID.targetValue = fail_purple[BlueFar.caz];
                     activePID.maxOutput =1;
                     break;
                 }

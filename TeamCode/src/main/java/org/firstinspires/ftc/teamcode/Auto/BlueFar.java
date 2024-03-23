@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Auto.AutoControllers.RedFarAutoController;
+import org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe;
 import org.firstinspires.ftc.teamcode.Auto.Recognition.BluePipelineStackMaster;
 import org.firstinspires.ftc.teamcode.Auto.Recognition.RedPipelineStackMaster;
 import org.firstinspires.ftc.teamcode.Auto.Recognition.YellowPixelMaster;
@@ -71,6 +72,7 @@ public class BlueFar extends LinearOpMode {
        FAIL_SAFE_HEADER_VERIF,
         FAIL_SAFE_2,
         FAIL_SAFE_HEADER_VERIF_2,
+        FAILSAFE_PURPLE,
 
         PARK,
 
@@ -165,6 +167,8 @@ public class BlueFar extends LinearOpMode {
     public static int caz = 0;
     public static double limit = 1.6;
     boolean forced = false;
+    public static int tries = 0;
+    public static int tries_purple = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -191,6 +195,7 @@ public class BlueFar extends LinearOpMode {
         droneController drone = new droneController();
         liftController lift = new liftController();
         extendoController extendo = new extendoController();
+        failsafe failsafecontroller = new failsafe();
 
         RedFarAutoController redFarAutoController = new RedFarAutoController();
 
@@ -208,6 +213,7 @@ public class BlueFar extends LinearOpMode {
         latchRight.CS = latchRightController.LatchRightStatus.SECURED;
         lift.CS = liftController.liftStatus.INITIALIZE;
         extendo.CS = extendoController.extendoStatus.RETRACTED;
+        failsafecontroller.CurrentStatus = failsafe.failsafeStatus.NOTHING;
         // angle mai mare la al treilea ciclu
 //
         drive.update();
@@ -221,6 +227,7 @@ public class BlueFar extends LinearOpMode {
         lift.update(r, 0, voltage);
         extendo.update(r, 0, 1, voltage);
         redFarAutoController.update(r, lift, fourbar,clawAngle,clawFlip,collectAngle,door,extendo,latchLeft,latchRight);
+        failsafecontroller.update(r, lift, fourbar,clawAngle,clawFlip,collectAngle,door,extendo,latchLeft,latchRight);
 
         collectAngle.update(r);
 
@@ -418,11 +425,13 @@ public class BlueFar extends LinearOpMode {
         ElapsedTime header = new ElapsedTime();
         ElapsedTime park = new ElapsedTime();
         ElapsedTime park_systems = new ElapsedTime();
+        ElapsedTime failsafe_purple = new ElapsedTime();
 
         extendo.caz = 0;
         collectAngle.collectAngle_i = 4;
         lift.i_up = 0;
-
+        tries = 0;
+        tries_purple =0;
 
         while (!isStarted() && !isStopRequested()) {
 
@@ -529,9 +538,19 @@ park.reset();
 
                 case COLLECT_PURPLE:
                 {
-                    if((!r.pixelLeft.getState() && !r.pixelRight.getState()) || preload.seconds() > 3)
+                    if((!r.pixelLeft.getState() && !r.pixelRight.getState()))
                     {
 
+                        collectAngle.CS = collectAngleController.collectAngleStatus.DRIVE;
+                        extendo.CS = extendoController.extendoStatus.RETRACTED;
+                        verif.reset();
+                        status = STROBOT.GO_SCORE_YELLOW;
+                    } else if(preload.seconds() > 1 && tries <3 && (r.pixelLeft.getState() || r.pixelRight.getState()))
+                    {                        failsafecontroller.CurrentStatus = org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE_PURPLE;
+
+                        status = STROBOT.FAILSAFE_PURPLE;
+                    } else if(tries_purple >= 3)
+                    {
                         collectAngle.CS = collectAngleController.collectAngleStatus.DRIVE;
                         extendo.CS = extendoController.extendoStatus.RETRACTED;
                         verif.reset();
@@ -539,6 +558,16 @@ park.reset();
                     }
                     break;
 
+                }
+
+                case FAILSAFE_PURPLE: {
+                    if(failsafecontroller.CurrentStatus == org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE_DONE_PURPLE)
+                    {
+                        tries_purple += 1;
+                        preload.reset();
+                        status = STROBOT.COLLECT_PURPLE;
+                    }
+                    break;
                 }
 
                 case GO_SCORE_YELLOW:
@@ -721,11 +750,18 @@ park.reset();
                         failsafe2.reset();
                         collectAngle.collectAngle_i = Math.max(0, collectAngle.collectAngle_i-1);
                         status = STROBOT.COLLECT_VERIF_PIXLES_V2;
-                    } else if(failsafe.seconds() > limit && (r.pixelLeft.getState() && r.pixelRight.getState()))
+                    } else if(failsafe.seconds() > limit && tries <3 && (r.pixelLeft.getState() && r.pixelRight.getState()))
                     {
                        // redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.FAIL_SAFE;
+                        failsafecontroller.CurrentStatus = org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE;
                         status = STROBOT.FAIL_SAFE;
-                    }}
+                    } else if (tries >=3)
+                    {
+                        forced = true;
+                        status = STROBOT.GO_SCORE_CYCLE;
+                    }
+
+                    }
                     else
                     { forced = true;
                         status = STROBOT.GO_SCORE_CYCLE;
@@ -734,17 +770,12 @@ park.reset();
                 }
 
                 case FAIL_SAFE: {
-                    if(park.seconds() < 25)
+                    if(failsafecontroller.CurrentStatus == org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE_DONE)
                     {
-
-                       extendo.CS = extendoController.extendoStatus.FAIL_SAFE;
-                       header.reset();
-                       status = STROBOT.FAIL_SAFE_HEADER_VERIF;
-
-                    }
-                    else
-                    { forced = true;
-                        status = STROBOT.GO_SCORE_CYCLE;
+                        limit = 0.6;
+                        tries += 1;
+                        failsafe.reset();
+                        status = STROBOT.COLLECT_VERIF_PIXLES;
                     }
                     break;
                 }
@@ -786,10 +817,17 @@ park.reset();
                         extendo.CS = extendoController.extendoStatus.RETRACTED;
                         extendo_timer.reset();
                         status = STROBOT.GO_SCORE_CYCLE;
-                    } else if(failsafe2.seconds() > 0.7)
-                    {
+                    } else if(failsafe2.seconds() > 0.6 && tries <3 && (r.pixelLeft.getState() || r.pixelRight.getState()))
+                    {                        failsafecontroller.CurrentStatus = org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE;
+
                         status = STROBOT.FAIL_SAFE_2;
-                    }}
+                    } else if(tries >=3)
+                    {
+                        forced = true;
+                        status = STROBOT.GO_SCORE_CYCLE;
+                    }
+
+                    }
                     else
                     { forced = true;
                         status = STROBOT.GO_SCORE_CYCLE;
@@ -798,17 +836,11 @@ park.reset();
                 }
 
                 case FAIL_SAFE_2: {
-                    if(park.seconds() < 25)
+                    if(failsafecontroller.CurrentStatus == org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE_DONE)
                     {
-
-                        extendo.CS = extendoController.extendoStatus.FAIL_SAFE;
-                        header.reset();
-                        status = STROBOT.FAIL_SAFE_HEADER_VERIF_2;
-
-                    }
-                    else
-                    { forced = true;
-                        status = STROBOT.GO_SCORE_CYCLE;
+                        failsafe2.reset();
+                        tries +=1;
+                        status = STROBOT.COLLECT_VERIF_PIXLES_V2;
                     }
                     break;
                 }
@@ -820,7 +852,7 @@ park.reset();
                         if(header.seconds() > 0.3 && (r.pixelLeft.getState() || r.pixelRight.getState()) &&  collectAngle.collectAngle_i >= 0)
                         {
                             extendo.CS = extendoController.extendoStatus.CYCLE;
-                            collectAngle.collectAngle_i = Math.max(0, collectAngle.collectAngle_i-1);
+                          //  collectAngle.collectAngle_i = Math.max(0, collectAngle.collectAngle_i-1);
                             failsafe.reset();
                             limit = 0.6;
                             status = STROBOT.COLLECT_VERIF_PIXLES_V2;
@@ -969,6 +1001,7 @@ park.reset();
             extendo.update(r, extendopos, 1, voltage);
             collectAngle.update(r);
             redFarAutoController.update(r, lift, fourbar,clawAngle,clawFlip,collectAngle,door,extendo,latchLeft,latchRight);
+            failsafecontroller.update(r, lift, fourbar,clawAngle,clawFlip,collectAngle,door,extendo,latchLeft,latchRight);
 
 
 
@@ -987,6 +1020,10 @@ park.reset();
             telemetry.addData("poz", r.extendoLeft.getCurrentPosition());
             telemetry.addData("extendo x", extendoController.x);
             telemetry.addData("extendi", extendo.CS);
+            telemetry.addData("failsafe", org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.CurrentStatus);
+            telemetry.addData("tries", tries);
+            telemetry.addData("limit", limit);
+
           //  telemetry.addData("distance", r.extendoDistance.getDistance(DistanceUnit.CM));
             //  telemetry.addData("position", extendopos);
             //   telemetry.addData("target", extendo.target);
