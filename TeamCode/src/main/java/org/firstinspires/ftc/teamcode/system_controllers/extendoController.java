@@ -13,6 +13,8 @@ import static org.firstinspires.ftc.teamcode.system_controllers.extendoControlle
 import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.teamcode.Auto.BlueFar;
+import org.firstinspires.ftc.teamcode.Auto.RedFar;
+import org.firstinspires.ftc.teamcode.Auto.RedFarBun;
 import org.firstinspires.ftc.teamcode.globals.SimplePIDController;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
 
@@ -72,15 +74,17 @@ public class extendoController {
     public static double extended = 900;
     public static double drive = 600;
     public static double failsafe = 790;
-    public static double purple[] = {500, 250, 0};
+    public static double purple[] = {0, 270, 535};
     public static double cycle = 945;
-    public static double cycle_far = 890;
+    public static double cycle_far = 910;
     public static double x = 10;
     public static int caz = 0;
     public static double transfer = -40;
     public static double retry = 980;
-    public static double retry_purple[] = {580, 340, 0};
-    public static double fail_purple[] = {400, 150, 0};
+//    public static double retry_purple[] = {580, 340, 0};
+//    public static double fail_purple[] = {400, 150, 0};
+    public static double retry_purple[] = {0, 290, 580};
+    public static double fail_purple[] = {0, 150, 480};
 
 
     public static double extend_multiply_index = 0;
@@ -240,14 +244,14 @@ public class extendoController {
 
                 case RERTRY_PURPLE:
                 {
-                    activePID.targetValue = retry_purple[BlueFar.caz];
+                    activePID.targetValue = retry_purple[RedFarBun.caz];
                     activePID.maxOutput =1;
                     break;
                 }
 
                 case FAIL_SAFE_PURPLE:
                 {
-                    activePID.targetValue = fail_purple[BlueFar.caz];
+                    activePID.targetValue = fail_purple[RedFarBun.caz];
                     activePID.maxOutput =1;
                     break;
                 }

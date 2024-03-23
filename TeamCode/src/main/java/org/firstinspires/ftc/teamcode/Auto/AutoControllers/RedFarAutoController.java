@@ -290,13 +290,13 @@ public class RedFarAutoController {
                     switch (RedFarBun.caz)
                     {
                         case 0:
-                        { clawAngle.clawAngle_i = 0; //1
+                        { clawAngle.clawAngle_i = 4; //1
                             clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
                             break;
                         }
 
                         case 1:
-                        { clawAngle.clawAngle_i = 2;
+                        { clawAngle.clawAngle_i = 4;
                             clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
                             break;
                         }

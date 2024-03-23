@@ -73,6 +73,10 @@ public class BlueFar extends LinearOpMode {
         FAIL_SAFE_2,
         FAIL_SAFE_HEADER_VERIF_2,
         FAILSAFE_PURPLE,
+        RETRACT_AND_RERTY,
+        RETRY_TIMER_RESET,
+        RETRACT_AND_RERTY_v2,
+        RETRY_TIMER_RESET_v2,
 
         PARK,
 
@@ -94,8 +98,8 @@ public class BlueFar extends LinearOpMode {
      * yellow
      */
 
-    public static double x_yellow_preload_right = 44, y_yellow_preload_right = 38, angle_yellow_preload_right = 180;
-    public static double x_yellow_preload_center = 44, y_yellow_preload_center = 31.8, angle_yellow_preload_center = 180;
+    public static double x_yellow_preload_right = 45, y_yellow_preload_right = 36.9, angle_yellow_preload_right = 180;
+    public static double x_yellow_preload_center = 45, y_yellow_preload_center = 31.8, angle_yellow_preload_center = 180;
     public static double x_yellow_preload_left = 44, y_yellow_preload_left = 27, angle_yellow_preload_left = 180;
    // public static double x_yellow_inter =
 
@@ -125,7 +129,7 @@ public class BlueFar extends LinearOpMode {
     public static double x_inter_collect_cycle_3_left = 30, y_inter_collect_cycle_3_left = 5, angle_inter_collect_cycle_3_left = 180;
     public static double x_collect_cycle_3_left = -26, y_collect_cycle_3_left = 5, angle_collect_cycle_3_left = 180;
 
-
+    public static double retry_x = -30.5, retry_y = 6, retry_angle = 180;
 
     /**
      * score
@@ -400,6 +404,9 @@ public class BlueFar extends LinearOpMode {
         TrajectorySequence ParkBun = drive.trajectorySequenceBuilder(SCORE_SECOND_CYCLE_LEFT.end())
                 .lineToLinearHeading(new Pose2d(40,  4, Math.toRadians(180)))
                 .build();
+        TrajectorySequence RETRY = drive.trajectorySequenceBuilder(COLLECT_CYCLE_2_CENTER.end())
+                        .lineToLinearHeading(new Pose2d(retry_x, retry_y, Math.toRadians(retry_angle)))
+                                .build();
 
 
         drive.setPoseEstimate(start_pose);
@@ -426,6 +433,7 @@ public class BlueFar extends LinearOpMode {
         ElapsedTime park = new ElapsedTime();
         ElapsedTime park_systems = new ElapsedTime();
         ElapsedTime failsafe_purple = new ElapsedTime();
+        ElapsedTime retry = new ElapsedTime();
 
         extendo.caz = 0;
         collectAngle.collectAngle_i = 4;
@@ -689,7 +697,7 @@ park.reset();
 
                 case PREPARE_COLLECT:
                 {
-                    if(prepare_collect.seconds() > 0.2)
+                    if(prepare_collect.seconds() > 0.5)
                     {
                         redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.COLLECT_PREPARE;
                         extendo_timer.reset();
@@ -757,13 +765,70 @@ park.reset();
                         status = STROBOT.FAIL_SAFE;
                     } else if (tries >=3)
                     {
-                        forced = true;
-                        status = STROBOT.GO_SCORE_CYCLE;
+                       // forced = true;
+                        r.collect.setPower(0);
+                        extendo.CS = extendoController.extendoStatus.RETRACTED;
+                        status = STROBOT.RETRACT_AND_RERTY;
                     }
 
                     }
                     else
                     { forced = true;
+                        status = STROBOT.GO_SCORE_CYCLE;
+                    }
+                    break;
+                }
+
+                case RETRACT_AND_RERTY:
+                {
+                    if(park.seconds() < 25)
+                    { tries =0;
+                        drive.followTrajectorySequenceAsync(RETRY);
+                    retry.reset();
+                    status = STROBOT.RETRY_TIMER_RESET;} else
+                    {
+                        forced = true;
+                        status = STROBOT.GO_SCORE_CYCLE;
+                    }
+                    break;
+                }
+
+                case RETRY_TIMER_RESET:
+                {
+                    if(park.seconds() < 25)
+                    {  if(retry.seconds() > 1)
+                    {
+                        r.collect.setPower(1);
+                        switch (nrcicluri)
+                        {
+                            case 0:
+                            {
+                                collectAngle.collectAngle_i = 4;
+                                extendo.CS = extendoController.extendoStatus.CYCLE;
+                                failsafe.reset();
+                                break;
+                            }
+                            case 1:
+                            {
+                                collectAngle.collectAngle_i = 2;
+                                extendo.CS = extendoController.extendoStatus.CYCLE;
+                                failsafe.reset();
+                                break;
+                            }
+                            case 2:
+                            {
+                                collectAngle.collectAngle_i = 0;
+                                extendo.CS = extendoController.extendoStatus.CYCLE;
+                                failsafe.reset();
+                                break;
+                            }
+
+                        }
+                        status = STROBOT.COLLECT_VERIF_PIXLES;
+                    }
+                    } else
+                    {
+                        forced = true;
                         status = STROBOT.GO_SCORE_CYCLE;
                     }
                     break;
@@ -823,8 +888,9 @@ park.reset();
                         status = STROBOT.FAIL_SAFE_2;
                     } else if(tries >=3)
                     {
-                        forced = true;
-                        status = STROBOT.GO_SCORE_CYCLE;
+                        r.collect.setPower(0);
+                        extendo.CS = extendoController.extendoStatus.RETRACTED;
+                        status = STROBOT.RETRACT_AND_RERTY_v2;
                     }
 
                     }
@@ -834,6 +900,62 @@ park.reset();
                     }
                     break;
                 }
+
+                case RETRACT_AND_RERTY_v2:
+                {
+                    if(park.seconds() < 25)
+                    { tries =0;
+                        drive.followTrajectorySequenceAsync(RETRY);
+                        retry.reset();
+                        status = STROBOT.RETRY_TIMER_RESET_v2;} else
+                    {
+                        forced = true;
+                        status = STROBOT.GO_SCORE_CYCLE;
+                    }
+                    break;
+                }
+
+                case RETRY_TIMER_RESET_v2:
+                {
+                    if(park.seconds() < 25)
+                    {  if(retry.seconds() > 1)
+                    {
+                        r.collect.setPower(1);
+                        switch (nrcicluri)
+                        {
+                            case 0:
+                            {
+                                collectAngle.collectAngle_i = 3;
+                                extendo.CS = extendoController.extendoStatus.CYCLE;
+                                failsafe.reset();
+                                break;
+                            }
+                            case 1:
+                            {
+                                collectAngle.collectAngle_i = 1;
+                                extendo.CS = extendoController.extendoStatus.CYCLE;
+                                failsafe.reset();
+                                break;
+                            }
+                            case 2:
+                            {
+                                collectAngle.collectAngle_i = 0;
+                                extendo.CS = extendoController.extendoStatus.CYCLE;
+                                failsafe.reset();
+                                break;
+                            }
+
+                        }
+                        status = STROBOT.COLLECT_VERIF_PIXLES_V2;
+                    }
+                    } else
+                    {
+                        forced = true;
+                        status = STROBOT.GO_SCORE_CYCLE;
+                    }
+                    break;
+                }
+
 
                 case FAIL_SAFE_2: {
                     if(failsafecontroller.CurrentStatus == org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE_DONE)
