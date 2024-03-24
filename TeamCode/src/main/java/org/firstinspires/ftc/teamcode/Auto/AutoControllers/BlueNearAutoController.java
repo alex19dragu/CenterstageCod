@@ -4,7 +4,9 @@ package org.firstinspires.ftc.teamcode.Auto.AutoControllers;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.Auto.RedFarBun;
+import org.firstinspires.ftc.teamcode.Auto.RedFar;
+
+import org.firstinspires.ftc.teamcode.Auto.RedNear;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
 import org.firstinspires.ftc.teamcode.system_controllers.clawAngleController;
 import org.firstinspires.ftc.teamcode.system_controllers.clawFlipController;
@@ -148,7 +150,7 @@ public class BlueNearAutoController {
                 {
                     door.CS = doorController.doorStatus.CLOSED;
                     lift.pid = 1;
-                    lift.CS = liftController.liftStatus.PRELOAD_YELLOW;
+                    lift.CS = liftController.liftStatus.YELLOW_NEAR;
                     claw_timer.reset();
                     CurrentStatus = autoControllerStatus.SCORE_YELLOW_CLAW;
                 }
@@ -159,23 +161,23 @@ public class BlueNearAutoController {
             {
                 if(claw_timer.seconds() > 0.2)
                 {
-                    switch (RedFarBun.caz)
+                    switch (RedNear.caz)
                     {
                         case 0:
-                        { clawAngle.clawAngle_i = 1;
+                        { clawAngle.clawAngle_i = 3;
                             clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
                             break;
                         }
 
                         case 1:
-                        { clawAngle.clawAngle_i = 2;
+                        { clawAngle.clawAngle_i = 3;
                             clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
                             break;
                         }
 
                         case 2:
                         {
-                            clawAngle.clawAngle_i = 0;
+                            clawAngle.clawAngle_i = 3;
                             clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
                             break;
                         }
@@ -200,7 +202,7 @@ public class BlueNearAutoController {
 
             case COLLECT_PREPARE:
             {
-                fourbar.CS = fourbarController.fourbarStatus.COLLECT;
+                fourbar.CS = fourbarController.fourbarStatus.DRIVE;
                 claw_timer.reset();
                 CurrentStatus = autoControllerStatus.COLLECT_PREPARE_CLAW;
                 break;

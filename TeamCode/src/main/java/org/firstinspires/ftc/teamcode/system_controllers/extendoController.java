@@ -12,9 +12,9 @@ import static org.firstinspires.ftc.teamcode.system_controllers.extendoControlle
 
 import com.acmerobotics.dashboard.config.Config;
 
-import org.firstinspires.ftc.teamcode.Auto.BlueFar;
+
+//import org.firstinspires.ftc.teamcode.Auto.RedFarBun;
 import org.firstinspires.ftc.teamcode.Auto.RedFar;
-import org.firstinspires.ftc.teamcode.Auto.RedFarBun;
 import org.firstinspires.ftc.teamcode.globals.SimplePIDController;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
 
@@ -26,6 +26,7 @@ public class extendoController {
         INITIALIZE,
         RETRACTED,
         EXTENDED,
+        EXTENDED_NEAR,
         PURPLE,
         CYCLE,
         DRIVE,
@@ -192,6 +193,13 @@ public class extendoController {
                     break;
                 }
 
+                case EXTENDED_NEAR:
+                {
+                    activePID.targetValue = 820;
+                    activePID.maxOutput = 1;
+                    break;
+                }
+
                 case RETRY:
                 {
                     activePID.targetValue = retry;
@@ -244,14 +252,14 @@ public class extendoController {
 
                 case RERTRY_PURPLE:
                 {
-                    activePID.targetValue = retry_purple[RedFarBun.caz];
+                    activePID.targetValue = retry_purple[RedFar.caz];
                     activePID.maxOutput =1;
                     break;
                 }
 
                 case FAIL_SAFE_PURPLE:
                 {
-                    activePID.targetValue = fail_purple[RedFarBun.caz];
+                    activePID.targetValue = fail_purple[RedFar.caz];
                     activePID.maxOutput =1;
                     break;
                 }

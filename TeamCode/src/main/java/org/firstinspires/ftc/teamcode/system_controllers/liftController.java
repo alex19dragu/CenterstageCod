@@ -20,6 +20,7 @@ public class liftController {
         UP,
         CYCLE,
         HANG,
+        YELLOW_NEAR,
 
         PRELOAD_YELLOW,
         TRANSFER,
@@ -113,6 +114,9 @@ public class liftController {
             case PRELOAD_YELLOW:
                 activePID = LiftPID_AUTO;
                 break;
+            case YELLOW_NEAR:
+                activePID = LiftPID_AUTO;
+                break;
             case HANG:
                 activePID = LiftPID_DRIVE;
                 break;
@@ -171,6 +175,12 @@ public class liftController {
                 {
                    // target = 10;
                     activePID.targetValue = 405;
+                    break;
+                }
+
+                case  YELLOW_NEAR:
+                {
+                    activePID.targetValue = 300;
                     break;
                 }
 

@@ -6,8 +6,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.checkerframework.checker.units.qual.Current;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.Auto.BlueFar;
-import org.firstinspires.ftc.teamcode.Auto.RedFarBun;
+
+import org.firstinspires.ftc.teamcode.Auto.RedFar;
+
+import org.firstinspires.ftc.teamcode.Auto.RedNear;
 import org.firstinspires.ftc.teamcode.DistanceSensorCalibrator;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
 
@@ -287,7 +289,7 @@ public class RedFarAutoController {
             {
                 if(claw_timer.seconds() > 0.2)
                 {
-                    switch (RedFarBun.caz)
+                    switch (RedFar.caz)
                     {
                         case 0:
                         { clawAngle.clawAngle_i = 4; //1
@@ -317,7 +319,7 @@ public class RedFarAutoController {
             {
                 if(claw_timer.seconds() > 0.2)
                 {
-                    switch (BlueFar.caz)
+                    switch (RedFar.caz)
                     {
                         case 0:
                         { clawAngle.clawAngle_i = 1; //1
