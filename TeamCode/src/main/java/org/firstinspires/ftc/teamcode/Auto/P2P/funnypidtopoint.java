@@ -17,22 +17,27 @@ public class funnypidtopoint {
 
     private final double MAX_TRANSLATIONAL_SPEED = 1.0;
     private final double MAX_ROTATIONAL_SPEED = 1.0;
-    private final double K_STATIC = 1.0;
-    private static final double ALLOWED_TRANSLATIONAL_ERROR = 0.75;
-    private static final double ALLOWED_HEADING_ERROR = Math.toRadians(5);
+   // private final double K_STATIC = 1.0;
+    private static final double ALLOWED_TRANSLATIONAL_ERROR = 0.35;
+    private static final double ALLOWED_HEADING_ERROR = Math.toRadians(2);
     private static final long STABLE_MS = 250;
-    private static final long DEAD_MS = 2500;
+    private static final long DEAD_MS = 350;
+
+    public boolean hasReachedProximity;
 
     public funnypidtopoint(HardwareMap hardwareMap) {
         drive = new SampleMecanumDrive(hardwareMap);
 
-        pidX = new PIDFController(0.08, 0, 0.012, 0);
-        pidY = new PIDFController(0.08, 0, 0.012, 0);
-        pidHeading = new PIDFController(0.8, 0, 0.045, 0);
+        pidX = new PIDFController(0.097, 0.003, 0.012, 0);
+        pidY = new PIDFController(0.125, 0.001, 0.011, 0);
+        pidHeading = new PIDFController(0.9, 0, 0.032, 0);
     }
 
-   public void execute(double targetX, double targetY, double targetHeadingRadians) {
-        Pose targetPose = new Pose(targetX, targetY, targetHeadingRadians);
+
+
+    public void execute(Pose targetPose) {
+        hasReachedProximity = false;
+
         timer.reset();
         stable.reset();
 
@@ -42,6 +47,14 @@ public class funnypidtopoint {
             drive.setMotorPowers(motorPowers[0], motorPowers[1], motorPowers[2], motorPowers[3]);
             drive.update();
 
+
+            if (isCloseToTarget(robotPose, targetPose)) {
+                if (!hasReachedProximity) {
+                    hasReachedProximity = true;
+                    timer.reset();
+                }
+            }
+
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
@@ -49,22 +62,35 @@ public class funnypidtopoint {
                 return;
             }
         }
-
-        stopMotors();
     }
+
 
     public boolean isFinished(Pose targetPose) {
         Pose robotPose = drive.returnPose();
         Pose delta = targetPose.subtract(robotPose);
 
+
         if (delta.toVec2D().magnitude() > ALLOWED_TRANSLATIONAL_ERROR ||
                 Math.abs(delta.getY()) > ALLOWED_TRANSLATIONAL_ERROR ||
                 Math.abs(delta.heading) > ALLOWED_HEADING_ERROR) {
             stable.reset();
+        } else if (!hasReachedProximity) {
+
+            hasReachedProximity = true;
+            timer.reset();
         }
 
-        return timer.milliseconds() > DEAD_MS || stable.milliseconds() > STABLE_MS;
+        return hasReachedProximity && (timer.milliseconds() > DEAD_MS || stable.milliseconds() > STABLE_MS);
     }
+
+
+    private boolean isCloseToTarget(Pose robotPose, Pose targetPose) {
+        Pose delta = targetPose.subtract(robotPose);
+        return delta.toVec2D().magnitude() <= (ALLOWED_TRANSLATIONAL_ERROR + 2) &&
+                Math.abs(delta.getY()) <= (ALLOWED_TRANSLATIONAL_ERROR + 2) &&
+                Math.abs(delta.heading) <= (ALLOWED_HEADING_ERROR + Math.toRadians(5));
+    }
+
 
     public double[] getMotorPowers(Pose robotPose, Pose targetPose) {
 

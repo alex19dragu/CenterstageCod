@@ -13,19 +13,27 @@ public class testpidtopoint extends LinearOpMode {
     public void runOpMode() {
         funnypidtopoint controller = new funnypidtopoint(hardwareMap);
 
-        Pose targetPose = new Pose(0, 0, Math.toRadians(0));
+        Pose targetPose = new Pose(0, -50, Math.toRadians(0));
         Pose currentPose = new Pose(0, 0, Math.toRadians(0));
 
-      //  controller.drive.setPose(currentPose);
+        Pose targetPose2 = new Pose(0, 0, Math.toRadians(0));
+
+        controller.drive.setPose(currentPose);
 
         waitForStart();
 
-     controller.execute(50, -50, Math.toRadians(180));
+     controller.execute(targetPose);
 
-        while (opModeIsActive() ) {
+        while (opModeIsActive()) {
 
 
-            Pose2d currentpose = controller.drive.getPoseEstimate();
+           // Pose2d currentpose = controller.drive.getPoseEstimate();
+
+
+            if(controller.isFinished(targetPose))
+            {
+                controller.execute(targetPose2);
+            }
 
 
 //            double errorX = targetPose.getX() - currentpose.getX();
@@ -34,9 +42,10 @@ public class testpidtopoint extends LinearOpMode {
 
             // Update telemetry with the current pose and error values
            // telemetry.addData("Current Pose", currentpose.toString());
-            telemetry.addData("Error X",  controller.drive.returnPose().x);
-            telemetry.addData("Error Y",  controller.drive.returnPose().y);
-            telemetry.addData("Error Y", Math.toDegrees(controller.drive.returnPose().heading) );
+            telemetry.addData("X",  controller.drive.returnPose().x);
+            telemetry.addData("Y",  controller.drive.returnPose().y);
+            telemetry.addData("angle", Math.toDegrees(controller.drive.returnPose().heading) );
+            telemetry.addData("hasReachedProximity", controller.hasReachedProximity);
            // telemetry.addData("Error Heading (degrees)", Math.toDegrees(errorHeading));
             telemetry.update();
 
@@ -46,7 +55,7 @@ public class testpidtopoint extends LinearOpMode {
         }
 
         // Optionally, stop motors after the movement is finished
-        controller.stopMotors();
+      //  controller.stopMotors();
 
         // Indicate that the target has been reached
         telemetry.addData("Status", "Target Reached");
