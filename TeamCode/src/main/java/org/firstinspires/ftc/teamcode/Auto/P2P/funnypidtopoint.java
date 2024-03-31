@@ -8,87 +8,93 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.drive.opmode.SampleMecanumDrive;
 
+import java.util.LinkedList;
+import java.util.List;
+
 @Photon
 public class funnypidtopoint {
     public SampleMecanumDrive drive;
     private PIDFController pidX, pidY, pidHeading;
+    private LinkedList<Pose> targetPoses = new LinkedList<>();
+    private Pose targetPose;
+    private boolean sequenceFinished = false;
     private ElapsedTime timer = new ElapsedTime();
     private ElapsedTime stable = new ElapsedTime();
 
     private final double MAX_TRANSLATIONAL_SPEED = 1.0;
     private final double MAX_ROTATIONAL_SPEED = 1.0;
-   // private final double K_STATIC = 1.0;
+    // private final double K_STATIC = 1.0;
     private static final double ALLOWED_TRANSLATIONAL_ERROR = 0.35;
     private static final double ALLOWED_HEADING_ERROR = Math.toRadians(2);
-    private static final long STABLE_MS = 250;
-    private static final long DEAD_MS = 350;
+    private static final long STABLE_MS = 100;
+    private static final long DEAD_MS = 100;
 
     public boolean hasReachedProximity;
+    public boolean reset_timer = true;
 
     public funnypidtopoint(HardwareMap hardwareMap) {
         drive = new SampleMecanumDrive(hardwareMap);
 
-        pidX = new PIDFController(0.097, 0.003, 0.012, 0);
-        pidY = new PIDFController(0.125, 0.001, 0.011, 0);
-        pidHeading = new PIDFController(0.9, 0, 0.032, 0);
+        pidX = new PIDFController(0.09, 0, 0.02, 0);
+        pidY = new PIDFController(0.09, 0, 0.02, 0);
+        pidHeading = new PIDFController(1, 0, 0.05, 0);
     }
 
+    public void setTargetPose(Pose targetPose) {
+        this.targetPose = targetPose;
 
-
-    public void execute(Pose targetPose) {
         hasReachedProximity = false;
+    }
 
-        timer.reset();
-        stable.reset();
+    public void setTargetPoses(List<Pose> poses) {
+        targetPoses.clear();
+        targetPoses.addAll(poses);
+        sequenceFinished = targetPoses.isEmpty();
+        advanceToNextTarget();
+    }
 
-        while (!isFinished(targetPose)) {
-            Pose robotPose = drive.returnPose();
-            double[] motorPowers = getMotorPowers(robotPose, targetPose);
-            drive.setMotorPowers(motorPowers[0], motorPowers[1], motorPowers[2], motorPowers[3]);
-            drive.update();
-
-
-            if (isCloseToTarget(robotPose, targetPose)) {
-                if (!hasReachedProximity) {
-                    hasReachedProximity = true;
-                    timer.reset();
-                }
-            }
-
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                return;
-            }
+    private void advanceToNextTarget() {
+        if (!targetPoses.isEmpty()) {
+            setTargetPose(targetPoses.poll());
+        } else {
+            sequenceFinished = true;
         }
     }
 
+    public void update() {
 
-    public boolean isFinished(Pose targetPose) {
-        Pose robotPose = drive.returnPose();
-        Pose delta = targetPose.subtract(robotPose);
-
-
-        if (delta.toVec2D().magnitude() > ALLOWED_TRANSLATIONAL_ERROR ||
-                Math.abs(delta.getY()) > ALLOWED_TRANSLATIONAL_ERROR ||
-                Math.abs(delta.heading) > ALLOWED_HEADING_ERROR) {
-            stable.reset();
-        } else if (!hasReachedProximity) {
-
-            hasReachedProximity = true;
-            timer.reset();
+        if (!sequenceFinished && hasReachedTarget()) {
+            advanceToNextTarget();
         }
 
-        return hasReachedProximity && (timer.milliseconds() > DEAD_MS || stable.milliseconds() > STABLE_MS);
+        if (targetPose == null) return;
+
+        Pose robotPose = drive.returnPose();
+        double[] motorPowers = getMotorPowers(robotPose, targetPose);
+        drive.setMotorPowers(motorPowers[0], motorPowers[1], motorPowers[2], motorPowers[3]);
+        drive.update();
+
+        if (isCloseToTarget(robotPose, targetPose)) {
+            hasReachedProximity = true;
+        } else {
+            hasReachedProximity = false;
+        }
+    }
+
+    public boolean hasReachedTarget() {
+        return hasReachedProximity;
+    }
+
+    public boolean isSequenceFinished() {
+        return sequenceFinished;
     }
 
 
     private boolean isCloseToTarget(Pose robotPose, Pose targetPose) {
         Pose delta = targetPose.subtract(robotPose);
-        return delta.toVec2D().magnitude() <= (ALLOWED_TRANSLATIONAL_ERROR + 2) &&
-                Math.abs(delta.getY()) <= (ALLOWED_TRANSLATIONAL_ERROR + 2) &&
-                Math.abs(delta.heading) <= (ALLOWED_HEADING_ERROR + Math.toRadians(5));
+        return delta.toVec2D().magnitude() <= (ALLOWED_TRANSLATIONAL_ERROR) &&
+                Math.abs(delta.getY()) <= (ALLOWED_TRANSLATIONAL_ERROR) &&
+                Math.abs(delta.heading) <= (ALLOWED_HEADING_ERROR);
     }
 
 

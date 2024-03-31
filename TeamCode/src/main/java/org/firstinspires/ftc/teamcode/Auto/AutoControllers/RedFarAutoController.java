@@ -405,7 +405,7 @@ public class RedFarAutoController {
                 { clawAngle.clawAngle_i = 6;}
                 else
                 {
-                    clawAngle.clawAngle_i = 2;
+                    clawAngle.clawAngle_i = 6;
                 }
                 clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
                 CurrentStatus = autoControllerStatus.SCORE_CYCLE_LIFT;
