@@ -35,10 +35,12 @@ public class extendoController {
         RETRY,
         RERTRY_PURPLE,
         FAIL_SAFE_PURPLE,
+        FAIL_SAFE_NEAR,
+        RETRY_NEAR,
     }
 
     // PID constants for extension
-    public static double Kp_extend = 0.006;
+    public static double Kp_extend = 0.01;
     public static double Ki_extend = 0.001;
     public static double Kd_extend = 0.002;
 
@@ -73,16 +75,20 @@ public class extendoController {
     public static double CurrentPosition = 0;
     public static double retracted = -5;
     public static double extended = 900;
-    public static double drive = 600;
+    public static double drive = 750;
     public static double failsafe = 790;
-    public static double purple[] = {0, 270, 535};
+    public static double purple[] = {0, 280, 535};
     public static double cycle = 945;
-    public static double cycle_far = 910;
+    public static double cycle_far = 1200;
     public static double x = 10;
     public static int caz = 0;
     public static double transfer = -40;
     public static double retry = 980;
-//    public static double retry_purple[] = {580, 340, 0};
+
+    public static double retry_near = 1010;
+    public static double failsafe_near = 900;
+
+    //    public static double retry_purple[] = {580, 340, 0};
 //    public static double fail_purple[] = {400, 150, 0};
     public static double retry_purple[] = {0, 290, 580};
     public static double fail_purple[] = {0, 150, 480};
@@ -195,7 +201,7 @@ public class extendoController {
 
                 case EXTENDED_NEAR:
                 {
-                    activePID.targetValue = 820;
+                    activePID.targetValue = 990;
                     activePID.maxOutput = 1;
                     break;
                 }
@@ -260,6 +266,20 @@ public class extendoController {
                 case FAIL_SAFE_PURPLE:
                 {
                     activePID.targetValue = fail_purple[RedFar.caz];
+                    activePID.maxOutput =1;
+                    break;
+                }
+
+                case FAIL_SAFE_NEAR:
+                {
+                    activePID.targetValue = failsafe_near;
+                    activePID.maxOutput =1;
+                    break;
+                }
+
+                case RETRY_NEAR:
+                {
+                    activePID.targetValue = retry_near;
                     activePID.maxOutput =1;
                     break;
                 }

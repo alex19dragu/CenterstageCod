@@ -10,9 +10,12 @@ import static org.firstinspires.ftc.teamcode.system_controllers.latchDropControl
 import static org.firstinspires.ftc.teamcode.system_controllers.latchDropController.latchDropStatus.DROP_ONE;
 import static org.firstinspires.ftc.teamcode.system_controllers.liftController.liftStatus.DOWN;
 import static org.firstinspires.ftc.teamcode.system_controllers.liftController.liftStatus.INITIALIZE;
+import static org.firstinspires.ftc.teamcode.system_controllers.liftController.liftStatus.NOTHING;
 import static org.firstinspires.ftc.teamcode.system_controllers.liftController.liftStatus.UP;
+import static org.firstinspires.ftc.teamcode.system_controllers.outtakeController.outtakeStatus.COLLECT_DONE;
 import static org.firstinspires.ftc.teamcode.system_controllers.outtakeController.outtakeStatus.COLLECT_FOURBAR;
 import static org.firstinspires.ftc.teamcode.system_controllers.outtakeController.outtakeStatus.COLLECT_LIFT;
+import static org.firstinspires.ftc.teamcode.system_controllers.outtakeController.outtakeStatus.HANG_DONE;
 import static org.firstinspires.ftc.teamcode.system_controllers.outtakeController.outtakeStatus.HANG_DOWN;
 import static org.firstinspires.ftc.teamcode.system_controllers.outtakeController.outtakeStatus.HANG_FOURBAR;
 import static org.firstinspires.ftc.teamcode.system_controllers.outtakeController.outtakeStatus.SCORE_FOURBAR;
@@ -24,6 +27,7 @@ import static org.firstinspires.ftc.teamcode.system_controllers.transferControll
 
 import android.annotation.SuppressLint;
 
+import com.outoftheboxrobotics.photoncore.Photon;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -50,7 +54,7 @@ import org.firstinspires.ftc.teamcode.system_controllers.latchRightController;
 import org.firstinspires.ftc.teamcode.system_controllers.liftController;
 import org.firstinspires.ftc.teamcode.system_controllers.ptoController;
 
-
+@Photon
 @TeleOp(name="TeleOP", group="OpMode")
 public class opMode extends LinearOpMode {
 
@@ -88,10 +92,19 @@ public class opMode extends LinearOpMode {
 
         if(pto_ON == true)
         {
+            if(gamepad1.right_trigger > 0)
+            {
+                leftBack.setPower(-1);
+                rightBack.setPower(-1);
+            }
+            else
+            {
+                leftBack.setPower(backLeftPower);
+                rightBack.setPower(backRightPower);
+            }
             leftFront.setPower(0);
             rightFront.setPower(0);
-            leftBack.setPower(backLeftPower);
-            rightBack.setPower(backRightPower);
+
         } else
         {
             leftFront.setPower(frontLeftPower);
@@ -338,7 +351,7 @@ timer.reset();
              * INTAKE
              */
 
-            if(!previousGamepad1.right_bumper && currentGamepad1.right_bumper)
+            if(!previousGamepad1.right_bumper && currentGamepad1.right_bumper && (transfer.CS == transferController.transferStatus.INITIALIZE || transfer.CS == TRANSFER_DONE))
             {
                 if(extendo.CS != EXTENDED)
                 {
@@ -378,7 +391,7 @@ timer.reset();
                 extendo.extend_multiply_index += 10 * extend_power;
             }
 
-            if(lift.CS == DOWN || lift.CS == INITIALIZE)
+            if(outtake.CS == outtakeController.outtakeStatus.INITIALIZE || outtake.CS == COLLECT_DONE)
             {  if(!previousGamepad2.dpad_up && currentGamepad2.dpad_up)
                 {
                     transfer.CS = TRANSFER_EXTENDO;
@@ -406,7 +419,7 @@ timer.reset();
             if(lift.CS == UP)
             {  if(!previousGamepad2.dpad_up && currentGamepad2.dpad_up)
             {
-                lift.i_up = Math.min(14, lift.i_up+1);
+                lift.i_up = Math.min(18, lift.i_up+1);
             }
 
             if(!previousGamepad2.dpad_down && currentGamepad2.dpad_down)
@@ -416,7 +429,7 @@ timer.reset();
 
             if(lift.i_up > 11)
             {
-                fourbar.score = 0.5;
+                fourbar.score = 0.18;
             } else
             {
                 fourbar.score = 0.18;
@@ -479,6 +492,7 @@ timer.reset();
                 if(pto.CS != ON)
                 {
                     pto_ON = !pto_ON;
+                  //  lift.CS = NOTHING;
                     pto.CS = ON;
                 } else
                 {
@@ -489,7 +503,7 @@ timer.reset();
 
             if(!previousGamepad2.square && currentGamepad2.square)
             {
-                if(outtake.CS == HANG_DOWN)
+                if(outtake.CS != HANG_FOURBAR && outtake.CS != HANG_DONE)
                 {
                     outtake.CS = HANG_FOURBAR;
                 } else

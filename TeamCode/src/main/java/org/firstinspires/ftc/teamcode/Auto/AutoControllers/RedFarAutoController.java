@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.checkerframework.checker.units.qual.Current;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
+import org.firstinspires.ftc.teamcode.Auto.BlueFarMTI;
 import org.firstinspires.ftc.teamcode.Auto.RedFar;
 
 import org.firstinspires.ftc.teamcode.Auto.RedNear;
@@ -174,7 +175,7 @@ public class RedFarAutoController {
 
             case TRANSFER_FOURBAR:
             {
-                if(fourbar_timer.seconds() > 0.3)
+                if(fourbar_timer.seconds() > 0.2)
                 {
                     latchLeft.CS = latchLeftController.LatchLeftStatus.CLOSED;
                     latchRight.CS = latchRightController.LatchRightStatus.CLOSED;
@@ -195,7 +196,7 @@ public class RedFarAutoController {
 
             case TRANSFER_LATCHES:
             {
-                if(latches_timer.seconds() > 0.32)
+                if(latches_timer.seconds() > 0.25)
                 {
                     latchLeft.CS = latchLeftController.LatchLeftStatus.SECURED;
                     latchRight.CS = latchRightController.LatchRightStatus.SECURED;
@@ -213,11 +214,11 @@ public class RedFarAutoController {
                     extendo.CS = extendoController.extendoStatus.RETRACTED;
                     fourbar.CS = fourbarController.fourbarStatus.DRIVE;
                 }
-                if(fourbar_timer.seconds() > 0.215)
+                if(fourbar_timer.seconds() > 0.225)
                 {
                     clawFlip.CS = clawFlipController.clawFlipStatus.DRIVE;
                 }
-                if(fourbar_timer.seconds() > 0.22)
+                if(fourbar_timer.seconds() > 0.23)
                 {
                   CurrentStatus = autoControllerStatus.TRANSFER_DONE;
                 }
@@ -319,7 +320,7 @@ public class RedFarAutoController {
             {
                 if(claw_timer.seconds() > 0.2)
                 {
-                    switch (RedFar.caz)
+                    switch (BlueFarMTI.caz)
                     {
                         case 0:
                         { clawAngle.clawAngle_i = 1; //1
@@ -328,7 +329,7 @@ public class RedFarAutoController {
                         }
 
                         case 1:
-                        { clawAngle.clawAngle_i = 1;
+                        { clawAngle.clawAngle_i = 0;
                             clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
                             break;
                         }
@@ -400,7 +401,12 @@ public class RedFarAutoController {
                 fourbar.CS = fourbarController.fourbarStatus.SCORE;
                 lift.pid = 1;
                 lift.CS = liftController.liftStatus.CYCLE;
-                clawAngle.clawAngle_i = 6;
+                if(BlueFarMTI.nrcicluri >2)
+                { clawAngle.clawAngle_i = 6;}
+                else
+                {
+                    clawAngle.clawAngle_i = 2;
+                }
                 clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
                 CurrentStatus = autoControllerStatus.SCORE_CYCLE_LIFT;
                 break;

@@ -41,12 +41,12 @@ public class TestOpMode extends LinearOpMode {
     //  clawAngleController clawAngle = new clawAngleController();
     //clawFlipController clawFlip = new clawFlipController();
     //   collectAngleController collectAngle = new collectAngleController();
-  //  doorController door = new doorController();
+   doorController door = new doorController();
       // fourbarController fourbar = new fourbarController();
    //  latchLeftController latchLeft = new latchLeftController();
  // latchRightController latchRight = new latchRightController();
  //    ptoController pto = new ptoController();
-      droneController drone = new droneController();
+     // droneController drone = new droneController();
 //        liftController lift = new liftController();
    //  extendoController extendo = new extendoController();
      //  transferController transfer = new transferController();
@@ -66,7 +66,7 @@ public class TestOpMode extends LinearOpMode {
 
 
     //   lift.update(r, 0, voltage);
-
+door.update(r);
 
 
 
@@ -111,12 +111,12 @@ public class TestOpMode extends LinearOpMode {
 
             if(!previousGamepad1.circle && currentGamepad1.circle)
             {
-                if(drone.CS != droneController.droneStatus.RELEASED)
+                if(door.CS != doorController.doorStatus.OPENED)
                 {
-                    drone.CS = droneController.droneStatus.RELEASED;
+                    door.CS = doorController.doorStatus.OPENED;
                 } else
                 {
-                    drone.CS = droneController.droneStatus.SECURED;
+                    door.CS = doorController.doorStatus.CLOSED;
                 }
             }
 
@@ -131,13 +131,13 @@ public class TestOpMode extends LinearOpMode {
 // clawAngle.update(r);
           //  clawFlip.update(r);
 //            clawAngle.update(r);
-          //  door.update(r);
+          door.update(r);
 //            collectAngle.update(r);
         // fourbar.update(r);
        // latchLeft.update(r);
          //   latchRight.update(r);
         //  pto.update(r);
-   drone.update(r);
+  // drone.update(r);
 //            lift.update(r, 0, voltage);
           //  extendo.update(r, position, 1, voltage);
     //  transfer.update(r, door, fourbar, clawAngle, clawFlip, latchLeft, latchRight, extendo);
@@ -147,7 +147,7 @@ public class TestOpMode extends LinearOpMode {
             double loop = System.nanoTime();
 
             telemetry.addData("hz ", 1000000000 / (loop - loopTime));
-            telemetry.addData("drone", drone.CS);
+            telemetry.addData("drone", door.CS);
 
             loopTime = loop;
 //            telemetry.addData("x", poseEstimate.getX());

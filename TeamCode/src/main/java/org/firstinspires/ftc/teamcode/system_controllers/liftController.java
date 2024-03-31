@@ -3,9 +3,11 @@ package org.firstinspires.ftc.teamcode.system_controllers;
 
 import static org.firstinspires.ftc.teamcode.system_controllers.liftController.liftStatus.DOWN;
 import static org.firstinspires.ftc.teamcode.system_controllers.liftController.liftStatus.INITIALIZE;
+import static org.firstinspires.ftc.teamcode.system_controllers.liftController.liftStatus.NOTHING;
 
 import com.acmerobotics.dashboard.config.Config;
 
+import org.firstinspires.ftc.teamcode.Auto.RedNearLinear;
 import org.firstinspires.ftc.teamcode.drive.opmode.BackAndForth;
 import org.firstinspires.ftc.teamcode.globals.SimplePIDController;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
@@ -23,6 +25,7 @@ public class liftController {
         YELLOW_NEAR,
 
         PRELOAD_YELLOW,
+        NOTHING,
         TRANSFER,
     }
 
@@ -66,7 +69,7 @@ public class liftController {
     public static double down = 108;
 
     public static int i_up = 0;
-    public static double i_multiplication = 108;
+    public static double i_multiplication = 54;
 
     public static double hang = 740;
 
@@ -174,13 +177,18 @@ public class liftController {
                 case PRELOAD_YELLOW:
                 {
                    // target = 10;
-                    activePID.targetValue = 405;
+                    activePID.targetValue = 300;
                     break;
                 }
 
                 case  YELLOW_NEAR:
                 {
-                    activePID.targetValue = 300;
+                    if(RedNearLinear.caz == 0)
+                    {  activePID.targetValue = 108;}
+                    else
+                    {
+                        activePID.targetValue = 108;
+                    }
                     break;
                 }
 

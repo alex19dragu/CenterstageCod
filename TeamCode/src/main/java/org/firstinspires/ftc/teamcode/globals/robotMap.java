@@ -4,10 +4,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 public class robotMap {
 
@@ -19,6 +17,9 @@ public class robotMap {
     public DcMotorEx leftBack = null;
     public DcMotorEx rightFront = null;
     public DcMotorEx rightBack = null;
+
+
+ //   public MecanumDrivetrain drivetrain;
 
     /**
      * Intake
@@ -65,9 +66,15 @@ public class robotMap {
     public Servo pto = null;
     public Servo drone = null;
 
+    public static robotMap instance = null ;
+    private boolean enabled;
+
+
+
     /**
      * INIT
      */
+
 
     public robotMap(HardwareMap Init) {
         /**
@@ -78,7 +85,7 @@ public class robotMap {
         leftFront = Init.get(DcMotorEx.class, "leftFront");
         rightBack = Init.get(DcMotorEx.class, "rightBack");
         leftBack = Init.get(DcMotorEx.class, "leftBack");
-
+      //  drivetrain = new MecanumDrivetrain();
         /**
          * Intake
          */
@@ -147,8 +154,10 @@ public class robotMap {
         rightBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        extendoLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        collect.setDirection(DcMotorSimple.Direction.REVERSE);
+        extendoLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        extendoRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        lift.setDirection(DcMotorSimple.Direction.REVERSE);
+       // collect.setDirection(DcMotorSimple.Direction.REVERSE);
 
 //        extendoRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 //        extendoRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

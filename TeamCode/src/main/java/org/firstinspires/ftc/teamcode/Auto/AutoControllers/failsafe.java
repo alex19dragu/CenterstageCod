@@ -26,6 +26,9 @@ public class failsafe {
         FAIL_SAFE_PURPLE,
         FAIL_SAFE_HEADER_PURPLE,
         FAIL_SAFE_DONE_PURPLE,
+        FAIL_SAFE_NEAR,
+        FAIL_SAFE_HEADER_NEAR,
+        FAIL_SAFE_DONE_NEAR,
 
     }
     public static failsafeStatus CurrentStatus = failsafeStatus.NOTHING, PreviousStatus = failsafeStatus.NOTHING;
@@ -76,6 +79,27 @@ public class failsafe {
                     collectAngle.collectAngle_i = Math.max(0, collectAngle.collectAngle_i - 1);
                     extendo.CS = extendoController.extendoStatus.RERTRY_PURPLE;
                     CurrentStatus = failsafeStatus.FAIL_SAFE_DONE_PURPLE;
+                }
+                break;
+            }
+
+            case FAIL_SAFE_NEAR:
+            {
+                extendo.CS = extendoController.extendoStatus.FAIL_SAFE_NEAR;
+                r.collect.setPower(-0.7);
+                fail_safe_header.reset();
+                CurrentStatus = failsafeStatus.FAIL_SAFE_HEADER_NEAR;
+                break;
+            }
+
+            case FAIL_SAFE_HEADER_NEAR:
+            {
+
+                if(fail_safe_header.seconds() > 0.35)
+                {   r.collect.setPower(1);
+                    collectAngle.collectAngle_i = Math.max(0, collectAngle.collectAngle_i - 1);
+                    extendo.CS = extendoController.extendoStatus.RETRY_NEAR;
+                    CurrentStatus = failsafeStatus.FAIL_SAFE_DONE_NEAR;
                 }
                 break;
             }

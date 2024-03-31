@@ -34,13 +34,13 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import java.util.List;
 import java.util.Vector;
 
-@Disabled
 @Config
-@Autonomous(group = "Auto" , name = "RedNear")
+@Autonomous(group = "Auto" , name = "RedNearLinear")
 
-public class RedNear extends LinearOpMode {
+public class RedNearLinear extends LinearOpMode {
 
     enum STROBOT {
+        VERIF_CASE,
         START,
         PURPLE,
         GO_SCORE_YELLOW,
@@ -77,33 +77,33 @@ public class RedNear extends LinearOpMode {
      */
 
     public static double x_purple_preload_right = 25, y_purple_preload_right = -40, angle_purple_preload_right = 270;
-    public static double x_purple_preload_center = 16, y_purple_preload_center = -24, angle_purple_preload_center = 270;
-    public static double x_purple_preload_left = 5, y_purple_preload_left = -30, angle_purple_preload_left = 270;
+    public static double x_purple_preload_center = 16, y_purple_preload_center = -37.5, angle_purple_preload_center = 270;
+    public static double x_purple_preload_left = 13.5, y_purple_preload_left = -32, angle_purple_preload_left = 320;
 
     /**
      * yellow
      */
 
-    public static double x_yellow_preload_right = 46, y_yellow_preload_right = -36, angle_yellow_preload_right = 180;
-    public static double x_yellow_preload_center = 44, y_yellow_preload_center = -35, angle_yellow_preload_center = 180;
-    public static double x_yellow_preload_left = 44, y_yellow_preload_left = -28, angle_yellow_preload_left = 180;
+    public static double x_yellow_preload_right = 47.5, y_yellow_preload_right = -36, angle_yellow_preload_right = 180;
+    public static double x_yellow_preload_center = 47.5, y_yellow_preload_center = -28, angle_yellow_preload_center = 180;
+    public static double x_yellow_preload_left = 47.5, y_yellow_preload_left = -21, angle_yellow_preload_left = 180;
 
 
     /**
      * first cycle collect
      */
 
-     public static double x_inter_backdrop_first_cycle = 25, y_inter_backdrop_first_cycle = -60;
-     public static double x_change_heading_first_cycle = -12, y_change_heading_first_cycle = -60;
-     public static double x_collect_first_cycle = -30, y_collect_first_cycle = -62, angle_collect_first_cycle = 155;
+    public static double x_inter_backdrop_first_cycle = 25, y_inter_backdrop_first_cycle = -58;
+    public static double x_change_heading_first_cycle = -12, y_change_heading_first_cycle = -58;
+    public static double x_collect_first_cycle = -24, y_collect_first_cycle = -58, angle_collect_first_cycle = 155;
 
     /**
      * first cycle score
      */
 
     public static double x_change_heading_first_cycle_score = 0, y_change_heading_first_cycle_score = -58, angle_change_heading_first_cycle_score = 180;
-    public static double x_inter_backdrop_first_cycle_score = 35, y_inter_backdrop_first_cycle_score = -48;
-    public static double x_score_first_cycle = 48, y_score_first_cycle = -38;
+    public static double x_inter_backdrop_first_cycle_score = 35, y_inter_backdrop_first_cycle_score = -58;
+    public static double x_score_first_cycle = 50, y_score_first_cycle = -36;
 
 
     public static int caz = 0;
@@ -196,6 +196,9 @@ public class RedNear extends LinearOpMode {
         Pose2d collect_first_cycle = new Pose2d(x_collect_first_cycle,y_collect_first_cycle, Math.toRadians(angle_collect_first_cycle));
         Pose2d collect_first_cycle2 = new Pose2d(x_collect_first_cycle,y_collect_first_cycle-4, Math.toRadians(angle_collect_first_cycle));
 
+        Pose2d collect_first_cycle_right = new Pose2d(x_collect_first_cycle-4,y_collect_first_cycle, Math.toRadians(angle_collect_first_cycle));
+
+
         Pose2d change_heading_first_cycle_score = new Pose2d(x_change_heading_first_cycle_score, y_change_heading_first_cycle_score, Math.toRadians(angle_change_heading_first_cycle_score));
         Pose2d inter_backdrop_first_cycle_score= new Pose2d(x_inter_backdrop_first_cycle_score, y_inter_backdrop_first_cycle_score,Math.toRadians(180));
         Pose2d score_first_cycle = new Pose2d(x_score_first_cycle, y_score_first_cycle,Math.toRadians(180));
@@ -232,34 +235,36 @@ public class RedNear extends LinearOpMode {
 
         TrajectorySequence COLLECT_FIRST_CYCLE_LEFT = drive.trajectorySequenceBuilder(YELLOW_LEFT.end())
                 .lineToLinearHeading(inter_backdrop_first_cycle)
-
+                .lineToLinearHeading(change_heading_first_cycle)
                 .lineToLinearHeading(collect_first_cycle)
                 .build();
 
         TrajectorySequence COLLECT_FIRST_CYCLE_CENTER = drive.trajectorySequenceBuilder(YELLOW_CENTER.end())
                 .lineToLinearHeading(inter_backdrop_first_cycle)
-
+                .lineToLinearHeading(change_heading_first_cycle)
                 .lineToLinearHeading(collect_first_cycle)
                 .build();
 
         TrajectorySequence COLLECT_FIRST_CYCLE_RIGHT = drive.trajectorySequenceBuilder(YELLOW_RIGHT.end())
                 .lineToLinearHeading(inter_backdrop_first_cycle)
-
+                .lineToLinearHeading(change_heading_first_cycle)
                 .lineToLinearHeading(collect_first_cycle)
                 .build();
 
         TrajectorySequence SCORE_FIRST_CYCLE = drive.trajectorySequenceBuilder(COLLECT_FIRST_CYCLE_RIGHT.end())
+                .lineToLinearHeading(change_heading_first_cycle)
                 .lineToLinearHeading(inter_backdrop_first_cycle_score)
                 .lineToLinearHeading(score_first_cycle)
                 .build();
 
         TrajectorySequence COLLECT_SECOND_CYCLE = drive.trajectorySequenceBuilder(SCORE_FIRST_CYCLE.end())
                 .lineToLinearHeading(inter_backdrop_first_cycle2)
+                .lineToLinearHeading(change_heading_first_cycle)
                 .lineToLinearHeading(collect_first_cycle2)
                 .build();
 
         TrajectorySequence ParkBun = drive.trajectorySequenceBuilder(SCORE_FIRST_CYCLE.end())
-                .lineToLinearHeading(new Pose2d(40,  4, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(45,  -58, Math.toRadians(180)))
                 .build();
 
 
@@ -270,8 +275,8 @@ public class RedNear extends LinearOpMode {
 
 
         drive.setPoseEstimate(start_pose);
-        STROBOT status = STROBOT.START;
-tries = 0;
+        STROBOT status = STROBOT.VERIF_CASE;
+        tries = 0;
 
         int nrcicluri = 0;
         double loopTime = 0;
@@ -285,6 +290,8 @@ tries = 0;
         ElapsedTime retry =new ElapsedTime();
         ElapsedTime park_systems = new ElapsedTime();
         ElapsedTime score_yellow = new ElapsedTime();
+        ElapsedTime verif_case = new ElapsedTime();
+        ElapsedTime scuipa = new ElapsedTime();
 
         extendo.caz = 0;
         collectAngle.collectAngle_i = 4;
@@ -310,7 +317,7 @@ tries = 0;
 
         waitForStart();
 
-park.reset();
+        park.reset();
 
         if (isStopRequested()) return;
 
@@ -336,9 +343,17 @@ park.reset();
 
             switch (status) {
 
+                case VERIF_CASE:
+                {
+                    verif_case.reset();
+                    status= STROBOT.START;
+                    break;
+                }
+
                 case START: {
 
-                    switch (caz)
+                    if (caz == 0 && verif_case.seconds() > 5)
+                    {switch (caz)
                     {
                         case 0:
                         {
@@ -358,9 +373,36 @@ park.reset();
                         }
                     }
 
+
                     purple_timer.reset();
                     blueNearAutoController.CurrentStatus = BlueNearAutoController.autoControllerStatus.PURPLE;
-                    status = STROBOT.PURPLE;
+                    status = STROBOT.PURPLE;}
+                    else if(caz != 0)
+                    {
+                        switch (caz)
+                        {
+                            case 0:
+                            {
+                                drive.followTrajectorySequenceAsync(PURPLE_LEFT);
+                                break;
+                            }
+                            case 1:
+                            {
+                                drive.followTrajectorySequenceAsync(PURPLE_CENTER);
+                                break;
+
+                            }
+                            case 2:
+                            {
+                                drive.followTrajectorySequenceAsync(PURPLE_RIGHT);
+                                break;
+                            }
+                        }
+
+                        purple_timer.reset();
+                        blueNearAutoController.CurrentStatus = BlueNearAutoController.autoControllerStatus.PURPLE;
+                        status = STROBOT.PURPLE;
+                    }
                     break;
                 }
 
@@ -416,17 +458,17 @@ park.reset();
 
                 case CHECK_GO_COLLECT:
                 {
-                            BlueNearAutoController.CurrentStatus = BlueNearAutoController.autoControllerStatus.LATCH_DROP;
-                            score_yellow.reset();
-                            status = STROBOT.GO_COLLECT;
+                    BlueNearAutoController.CurrentStatus = BlueNearAutoController.autoControllerStatus.LATCH_DROP;
+                    score_yellow.reset();
+                    status = STROBOT.GO_COLLECT;
 
                     break;
                 }
 
                 case GO_COLLECT:
                 {
-                        if(score_yellow.seconds() > 0.3)
-                        {  switch (nrcicluri) {
+                    if(score_yellow.seconds() > 0.15)
+                    {  switch (nrcicluri) {
                         case 0: // Assuming this is for the first cycle
                             switch (caz) {
                                 case 0:
@@ -446,14 +488,14 @@ park.reset();
                             // Handle unexpected number of cycles
                             System.out.println("Unexpected number of cycles: " + nrcicluri);
                     }
-                    prepare_collect.reset();
-                    status = STROBOT.COLLECT_PREPARE;}
+                        prepare_collect.reset();
+                        status = STROBOT.COLLECT_PREPARE;}
                     break;
                 }
 
                 case COLLECT_PREPARE:
                 {
-                    if(prepare_collect.seconds() > 0.1)
+                    if(prepare_collect.seconds() > 0.4)
                     { blueNearAutoController.CurrentStatus = BlueNearAutoController.autoControllerStatus.COLLECT_PREPARE;
                         status= STROBOT.COLLECT_EXTENDO;}
                     break;
@@ -461,7 +503,7 @@ park.reset();
 
                 case COLLECT_EXTENDO:
                 {
-                    if(park.seconds()<26.5)
+                    if(park.seconds()<20.5)
                     {if(!drive.isBusy())
                     {
                         collectAngle.CS = collectAngleController.collectAngleStatus.COLLECT;
@@ -492,10 +534,11 @@ park.reset();
                             }
 
                         }
-                        limit = 1.6;
+                        limit = 2;
                         status = STROBOT.COLLECT_VERIF_PIXELS;
                     }}
                     else{
+                        scuipa.reset();
                         forced = true;
                         status = STROBOT.GO_SCORE_CYCLE;
                     }
@@ -504,7 +547,7 @@ park.reset();
 
                 case COLLECT_VERIF_PIXELS:
                 {
-                    if(park.seconds() < 26.5)
+                    if(park.seconds() < 20.5)
                     {if((!r.pixelLeft.getState() || !r.pixelRight.getState()))
                     {
                         failsafe2.reset();
@@ -513,10 +556,10 @@ park.reset();
                     } else if(failsafe.seconds() > limit && tries <3 && (r.pixelLeft.getState() && r.pixelRight.getState()))
                     {
                         // redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.FAIL_SAFE;
-                        failsafecontroller.CurrentStatus = org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE;
+                        failsafecontroller.CurrentStatus = org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE_NEAR;
                         status = STROBOT.FAIL_SAFE;
                     } else if (tries >=3)
-                    {
+                    {scuipa.reset();
                         // forced = true;
                         forced = true;
                         status = STROBOT.GO_SCORE_CYCLE;
@@ -524,7 +567,8 @@ park.reset();
 
                     }
                     else
-                    { forced = true;
+                    { scuipa.reset();
+                        forced = true;
                         status = STROBOT.GO_SCORE_CYCLE;
                     }
                     break;
@@ -533,12 +577,19 @@ park.reset();
 
                 case FAIL_SAFE:
                 {
-                    if(failsafecontroller.CurrentStatus == org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE_DONE)
+                    if(park.seconds() <20.5)
+                    { if(failsafecontroller.CurrentStatus == org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE_DONE_NEAR)
                     {
-                        limit = 0.6;
+                        limit = 0.8;
                         tries += 1;
                         failsafe.reset();
                         status = STROBOT.COLLECT_VERIF_PIXELS;
+                    }}
+                    else
+                    {
+                        scuipa.reset();
+                        forced = true;
+                        status = STROBOT.GO_SCORE_CYCLE;
                     }
                     break;
                 }
@@ -547,36 +598,45 @@ park.reset();
 
                 case COLLECT_VERIF_PIXELS_V2:
                 {
-                    if(park.seconds() < 26.5)
+                    if(park.seconds() < 20.5)
                     { if(!r.pixelLeft.getState() && !r.pixelRight.getState())
                     {
                         extendo.CS = extendoController.extendoStatus.RETRACTED;
                         extendo_timer.reset();
+                        scuipa.reset();
                         status = STROBOT.GO_SCORE_CYCLE;
                     } else if(failsafe2.seconds() > 0.6 && tries <3 && (r.pixelLeft.getState() || r.pixelRight.getState()))
                     {                        failsafecontroller.CurrentStatus = org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE;
 
                         status = STROBOT.FAIL_SAFE_2;
                     } else if(tries >=3)
-                    {
+                    {scuipa.reset();
                         forced = true;
                         status = STROBOT.GO_SCORE_CYCLE;
                     }
 
                     }
                     else
-                    { forced = true;
+                    {scuipa.reset();
+                        forced = true;
                         status = STROBOT.GO_SCORE_CYCLE;
                     }
                     break;
                 }
 
                 case FAIL_SAFE_2: {
-                    if(failsafecontroller.CurrentStatus == org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE_DONE)
+                    if(park.seconds() < 20.5)
+                    {if(failsafecontroller.CurrentStatus == org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE_DONE)
                     {
                         failsafe2.reset();
                         tries +=1;
                         status = STROBOT.COLLECT_VERIF_PIXELS_V2;
+                    }}
+                    else
+                    {
+                        scuipa.reset();
+                        forced = true;
+                        status = STROBOT.GO_SCORE_CYCLE;
                     }
                     break;
                 }
@@ -628,8 +688,14 @@ park.reset();
                             break;
 
                     }
-                    blueNearAutoController.CurrentStatus = BlueNearAutoController.autoControllerStatus.TRANSFER_BEGIN;
-                    status = STROBOT.PREPARE_SCORE_CYCLE;
+                    if(scuipa.seconds() > 0.1)
+                    {
+                        r.collect.setPower(-1);
+                    }
+                    if(scuipa.seconds() > 0.3)
+                    { r.collect.setPower(0);
+                        blueNearAutoController.CurrentStatus = BlueNearAutoController.autoControllerStatus.TRANSFER_BEGIN;
+                    status = STROBOT.PREPARE_SCORE_CYCLE;}
                     break;
                 }
 
@@ -647,45 +713,13 @@ park.reset();
 
                 case SCORE_CYCLE:
                 {
-                    if( blueNearAutoController.CurrentStatus == BlueNearAutoController.autoControllerStatus.SCORE_CYCLE_DONE && score.seconds() > 2.5)
+                    if( blueNearAutoController.CurrentStatus == BlueNearAutoController.autoControllerStatus.SCORE_CYCLE_DONE && !drive.isBusy())
                     {
                         blueNearAutoController.CurrentStatus = BlueNearAutoController.autoControllerStatus.LATCH_DROP;
-
-                        if(forced == false)
-                        {  switch (nrcicluri) {
-                            case 1:
-                                switch (caz) {
-                                    case 0:
-                                        drive.followTrajectorySequenceAsync(COLLECT_SECOND_CYCLE);
-                                        break;
-                                    case 1:
-                                        drive.followTrajectorySequenceAsync(COLLECT_SECOND_CYCLE);
-                                        break;
-                                    case 2:
-                                        drive.followTrajectorySequenceAsync(COLLECT_SECOND_CYCLE);
-                                        break;
-
-
-                                }
-                                break;
-
-                            default:
-                                drive.followTrajectorySequenceAsync(ParkBun);
-                                break;
-
-                        }
-                            prepare_collect.reset();
-                            if(nrcicluri <2)
-                            {  status= STROBOT.COLLECT_PREPARE;}
-                            else
-                            { drive.followTrajectorySequenceAsync(ParkBun);
-                                park_systems.reset();
-                                status = STROBOT.PARK;
-                            }}
-                        else
-                        { drive.followTrajectorySequenceAsync(ParkBun);
+                        park_systems.reset();
+                        drive.followTrajectorySequenceAsync(ParkBun);
                             status = STROBOT.PARK;
-                        }
+
                     }
 
                     break;
@@ -693,7 +727,7 @@ park.reset();
 
                 case PARK:
                 {
-                    if(park_systems.seconds() > 0.1)
+                    if(park_systems.seconds() > 0.4)
                     { blueNearAutoController.CurrentStatus = BlueNearAutoController.autoControllerStatus.COLLECT_PREPARE;
                         status = STROBOT.NOTHING;}
                     break;
