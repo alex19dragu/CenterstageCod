@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.outoftheboxrobotics.photoncore.Photon;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Auto.P2P.Pose;
 import org.firstinspires.ftc.teamcode.Auto.P2P.funnypidtopoint;
@@ -26,7 +27,7 @@ public class SimpleAutoUsingPidToPoint extends LinearOpMode {
     private static final double x_start = 0, y_start = 0, angle_start = Math.toRadians(0);
 
     // Purple center
-    private static final double x_purple_preload_center = 0, y_purple_preload_center = -50, angle_purple_preload_center = Math.toRadians(0);
+    private static final double x_purple_preload_center = 0, y_purple_preload_center = 0, angle_purple_preload_center = Math.toRadians(180);
 
     // Yellow center
     private static final double x_yellow_preload_center = 0, y_yellow_preload_center = 0, angle_yellow_preload_center = Math.toRadians(0);
@@ -39,10 +40,13 @@ public class SimpleAutoUsingPidToPoint extends LinearOpMode {
         Pose startPose = new Pose(x_start, y_start, angle_start);
         Pose purpleCenterPose = new Pose(x_purple_preload_center, y_purple_preload_center, angle_purple_preload_center);
         Pose yellowCenterPose = new Pose(x_yellow_preload_center, y_yellow_preload_center, angle_yellow_preload_center);
+        ElapsedTime timer = new ElapsedTime();
+        ElapsedTime timer2 = new ElapsedTime();
 
         pidToPoint.drive.setPose(startPose); // If your drive class has a method to set the initial pose
 
         waitForStart();
+timer.reset();
 
         currentState = State.START;
 
@@ -50,19 +54,22 @@ public class SimpleAutoUsingPidToPoint extends LinearOpMode {
 
             switch (currentState) {
                 case START:
-                    pidToPoint.setTargetPose(purpleCenterPose);
-                    currentState = State.MOVE_TO_PURPLE_CENTER;
+                    if(timer.seconds() > 3)
+                    { pidToPoint.setTargetPose(purpleCenterPose);
+                        timer2.reset();
+                    currentState = State.MOVE_TO_PURPLE_CENTER;}
                     break;
                 case MOVE_TO_PURPLE_CENTER:
-                    if (pidToPoint.hasReachedTarget()) {
-                        pidToPoint.setTargetPose(yellowCenterPose);
-                        currentState = State.MOVE_TO_YELLOW_CENTER;
+                    if (pidToPoint.hasReachedTarget() || timer2.seconds() > 3) {
+                        pidToPoint.setTargetPose(startPose);
+                        timer.reset();
+                        currentState = State.START;
                     }
                     break;
                 case MOVE_TO_YELLOW_CENTER:
 
                     if (pidToPoint.hasReachedTarget()) {
-                        currentState = State.END;
+                        currentState = State.START;
                     }
                     break;
                 case END:
@@ -73,8 +80,7 @@ public class SimpleAutoUsingPidToPoint extends LinearOpMode {
 
             pidToPoint.update();
 
-            telemetry.addData("paralel", hardwareMap.dcMotor.get("collect").getCurrentPosition());
-            telemetry.addData("perpendicular", hardwareMap.dcMotor.get("extendoRight").getCurrentPosition());
+
             telemetry.update();
 
         }

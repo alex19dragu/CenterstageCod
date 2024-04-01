@@ -96,7 +96,7 @@ public class BlueFarP2P extends LinearOpMode {
      */
 
     public static double x_yellow_preload_right = 43, y_yellow_preload_right = 36.9, angle_yellow_preload_right = 180;
-    public static double x_yellow_preload_center = 44, y_yellow_preload_center = 26, angle_yellow_preload_center = 180;
+    public static double x_yellow_preload_center = 43.2, y_yellow_preload_center = 28, angle_yellow_preload_center = 180;
     public static double x_yellow_preload_left = 43, y_yellow_preload_left = 27, angle_yellow_preload_left = 180;
    // public static double x_yellow_inter =
 
@@ -110,18 +110,18 @@ public class BlueFarP2P extends LinearOpMode {
     public static double x_inter_collect_cycle_2_right = 30, y_inter_collect_cycle_2_right = 7, angle_inter_collect_cycle_2_right = 180;
     public static double x_collect_cycle_2_right = -26, y_collect_cycle_2_right = 7, angle_collect_cycle_2_right = 180;
 
-    public static double x_inter_collect_cycle_2_center = 27, y_inter_collect_cycle_2_center = 9.5, angle_inter_collect_cycle_2_center = 180;
-    public static double x_collect_cycle_2_center = -25, y_collect_cycle_2_center = 9.5, angle_collect_cycle_2_center = 180;
+    public static double x_inter_collect_cycle_2_center = 27, y_inter_collect_cycle_2_center = 6, angle_inter_collect_cycle_2_center = 180;
+    public static double x_collect_cycle_2_center = -24, y_collect_cycle_2_center = 6, angle_collect_cycle_2_center = 180;
 
-    public static double x_inter_collect_cycle_2_left = 30, y_inter_collect_cycle_2_left = 7, angle_inter_collect_cycle_2_left = 180;
-    public static double x_collect_cycle_2_left = -26, y_collect_cycle_2_left = 7, angle_collect_cycle_2_left = 180;
+    public static double x_inter_collect_cycle_2_left = 30, y_inter_collect_cycle_2_left = 6.5, angle_inter_collect_cycle_2_left = 180;
+    public static double x_collect_cycle_2_left = -26, y_collect_cycle_2_left = 6.5, angle_collect_cycle_2_left = 180;
 
     // Cycle 3
-    public static double x_inter_collect_cycle_3_right = 30, y_inter_collect_cycle_3_right = 7, angle_inter_collect_cycle_3_right = 180;
+    public static double x_inter_collect_cycle_3_right = 30, y_inter_collect_cycle_3_right = 6, angle_inter_collect_cycle_3_right = 180;
     public static double x_collect_cycle_3_right = -26, y_collect_cycle_3_right = 7, angle_collect_cycle_3_right = 180;
 
-    public static double x_inter_collect_cycle_3_center = 30, y_inter_collect_cycle_3_center = 7, angle_inter_collect_cycle_3_center = 180;
-    public static double x_collect_cycle_3_center = -26, y_collect_cycle_3_center = 7, angle_collect_cycle_3_center = 180;
+    public static double x_inter_collect_cycle_3_center = 27, y_inter_collect_cycle_3_center = 6, angle_inter_collect_cycle_3_center = 180;
+    public static double x_collect_cycle_3_center = -24, y_collect_cycle_3_center = 6, angle_collect_cycle_3_center = 180;
 
     public static double x_inter_collect_cycle_3_left = 30, y_inter_collect_cycle_3_left = 7, angle_inter_collect_cycle_3_left = 180;
     public static double x_collect_cycle_3_left = -26, y_collect_cycle_3_left = 7, angle_collect_cycle_3_left = 180;
@@ -135,7 +135,7 @@ public class BlueFarP2P extends LinearOpMode {
 
     // Second cycle scoring positions
     public static double x_score_second_cycle_right = 42, y_score_second_cycle_right = 9.5, angle_score_second_angle_right = 210;
-    public static double x_score_second_cycle_center = 42, y_score_second_cycle_center = 10, angle_score_second_angle_center = 210;
+    public static double x_score_second_cycle_center = 47, y_score_second_cycle_center = 10, angle_score_second_angle_center = 210;
     public static double x_score_second_cycle_left = 42, y_score_second_cycle_left = 11, angle_score_second_angle_left = 210;
 
     // Third cycle scoring positions
@@ -324,6 +324,10 @@ public class BlueFarP2P extends LinearOpMode {
                 collect_cycle2_center
         );
 
+        List<Pose> collect_third_cycle = Arrays.asList(
+                collect_cycle3_center
+        );
+
 
 
 
@@ -335,7 +339,7 @@ public class BlueFarP2P extends LinearOpMode {
         double loopTime = 0;
         double extendo_timer_i[] = {3.25, 2.35, 3};
 
-        double extendo_timer_i_purple[] = {1.2, 1.5, 1.2};
+        double extendo_timer_i_purple[] = {1.2, 2.1, 1.2};
 
         ElapsedTime transfer = new ElapsedTime();
         ElapsedTime prepare_score_yellowqe = new ElapsedTime();
@@ -986,13 +990,13 @@ park.reset();
                             case 1:
                                 switch (caz) {
                                     case 0:
-                                        funnypidtopoint.setTargetPose(collect_cycle3_center);
+                                        funnypidtopoint.setTargetPoses(collect_third_cycle);
                                         break;
                                     case 1:
-                                        funnypidtopoint.setTargetPose(collect_cycle3_center);
+                                        funnypidtopoint.setTargetPoses(collect_third_cycle);
                                         break;
                                     case 2:
-                                        funnypidtopoint.setTargetPose(collect_cycle3_center);
+                                        funnypidtopoint.setTargetPoses(collect_third_cycle);
                                         break;
 
 

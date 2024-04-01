@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Auto.P2P;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
+
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.outoftheboxrobotics.photoncore.Photon;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.drive.opmode.SampleMecanumDrive;
 import java.util.LinkedList;
 import java.util.List;
 
+@Config
 @Photon
 public class funnypidtopoint {
     public SampleMecanumDrive drive;
@@ -20,14 +22,20 @@ public class funnypidtopoint {
     private boolean sequenceFinished = false;
     private ElapsedTime timer = new ElapsedTime();
     private ElapsedTime stable = new ElapsedTime();
+    private ElapsedTime closeTimer = new ElapsedTime();
+    private boolean isRelativelyClose = false;
 
-    private final double MAX_TRANSLATIONAL_SPEED = 1.0;
-    private final double MAX_ROTATIONAL_SPEED = 1.0;
-    // private final double K_STATIC = 1.0;
-    private static final double ALLOWED_TRANSLATIONAL_ERROR = 0.35;
-    private static final double ALLOWED_HEADING_ERROR = Math.toRadians(2);
-    private static final long STABLE_MS = 100;
+    public static double KPX = 0.23, KDX = 0.039;
+    public static double KPY = 0.28, KDY = 0.031;
+    public static double KPANGLE = 1, KDANGLE = 0.03;
+
+    private final double MAX_TRANSLATIONAL_SPEED = 1;
+    private final double MAX_ROTATIONAL_SPEED = 1;
+    private static final double ALLOWED_TRANSLATIONAL_ERROR = 0.75;
+    private static final double ALLOWED_HEADING_ERROR = Math.toRadians(3);
+    private static final long STABLE_MS = 150;
     private static final long DEAD_MS = 100;
+    private final long MAX_CLOSE_DURATION_MS = 1000;
 
     public boolean hasReachedProximity;
     public boolean reset_timer = true;
@@ -35,15 +43,20 @@ public class funnypidtopoint {
     public funnypidtopoint(HardwareMap hardwareMap) {
         drive = new SampleMecanumDrive(hardwareMap);
 
-        pidX = new PIDFController(0.09, 0, 0.02, 0);
-        pidY = new PIDFController(0.09, 0, 0.02, 0);
-        pidHeading = new PIDFController(1, 0, 0.05, 0);
+//        pidX = new PIDFController(0.1, 0, 0.035, 0);
+//        pidY = new PIDFController(0.1, 0, 0.035, 0);
+//        pidHeading = new PIDFController(0.9, 0, 0.045, 0);
+
+        pidX = new PIDFController(KPX, 0, KDX, 0);
+        pidY = new PIDFController(KPY, 0, KDY, 0);
+        pidHeading = new PIDFController(KPANGLE, 0, KDANGLE, 0);
     }
 
     public void setTargetPose(Pose targetPose) {
         this.targetPose = targetPose;
-
         hasReachedProximity = false;
+        reset_timer = true;
+        isRelativelyClose = false;
     }
 
     public void setTargetPoses(List<Pose> poses) {
@@ -62,7 +75,6 @@ public class funnypidtopoint {
     }
 
     public void update() {
-
         if (!sequenceFinished && hasReachedTarget()) {
             advanceToNextTarget();
         }
@@ -75,10 +87,46 @@ public class funnypidtopoint {
         drive.update();
 
         if (isCloseToTarget(robotPose, targetPose)) {
-            hasReachedProximity = true;
+            if (reset_timer) {
+                stable.reset();
+                reset_timer = false;
+            }
+            if (stable.milliseconds() > STABLE_MS) {
+                hasReachedProximity = true;
+                reset_timer = true;
+                isRelativelyClose = false;
+                closeTimer.reset();
+            }
         } else {
-            hasReachedProximity = false;
+            if (isRelativelyCloseToTarget(robotPose, targetPose)) {
+                if (!isRelativelyClose) {
+                    closeTimer.reset();
+                    isRelativelyClose = true;
+                } else if (closeTimer.milliseconds() > MAX_CLOSE_DURATION_MS) {
+                    hasReachedProximity = true;
+                    advanceToNextTarget();
+                    isRelativelyClose = false;
+                }
+            }
+
+            if (!isRelativelyCloseToTarget(robotPose, targetPose)) {
+                isRelativelyClose = false;
+            }
         }
+    }
+
+    private boolean isCloseToTarget(Pose robotPose, Pose targetPose) {
+        Pose delta = targetPose.subtract(robotPose);
+        return delta.toVec2D().magnitude() <= (ALLOWED_TRANSLATIONAL_ERROR) &&
+                Math.abs(delta.getY()) <= (ALLOWED_TRANSLATIONAL_ERROR) &&
+                Math.abs(delta.heading) <= (ALLOWED_HEADING_ERROR);
+    }
+
+    private boolean isRelativelyCloseToTarget(Pose robotPose, Pose targetPose) {
+        Pose delta = targetPose.subtract(robotPose);
+        return delta.toVec2D().magnitude() <= (ALLOWED_TRANSLATIONAL_ERROR + 3) &&
+                Math.abs(delta.getY()) <= (ALLOWED_TRANSLATIONAL_ERROR + 3) &&
+                Math.abs(delta.heading) <= (ALLOWED_HEADING_ERROR + Math.toRadians(7));
     }
 
     public boolean hasReachedTarget() {
@@ -88,15 +136,6 @@ public class funnypidtopoint {
     public boolean isSequenceFinished() {
         return sequenceFinished;
     }
-
-
-    private boolean isCloseToTarget(Pose robotPose, Pose targetPose) {
-        Pose delta = targetPose.subtract(robotPose);
-        return delta.toVec2D().magnitude() <= (ALLOWED_TRANSLATIONAL_ERROR) &&
-                Math.abs(delta.getY()) <= (ALLOWED_TRANSLATIONAL_ERROR) &&
-                Math.abs(delta.heading) <= (ALLOWED_HEADING_ERROR);
-    }
-
 
     public double[] getMotorPowers(Pose robotPose, Pose targetPose) {
 
