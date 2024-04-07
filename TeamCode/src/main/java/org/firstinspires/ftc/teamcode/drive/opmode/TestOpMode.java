@@ -40,11 +40,11 @@ public class TestOpMode extends LinearOpMode {
 
     //  clawAngleController clawAngle = new clawAngleController();
     //clawFlipController clawFlip = new clawFlipController();
-    //   collectAngleController collectAngle = new collectAngleController();
-   doorController door = new doorController();
+       collectAngleController collectAngle = new collectAngleController();
+ doorController door = new doorController();
       // fourbarController fourbar = new fourbarController();
    //  latchLeftController latchLeft = new latchLeftController();
- // latchRightController latchRight = new latchRightController();
+ latchRightController latchRight = new latchRightController();
  //    ptoController pto = new ptoController();
      // droneController drone = new droneController();
 //        liftController lift = new liftController();
@@ -66,7 +66,7 @@ public class TestOpMode extends LinearOpMode {
 
 
     //   lift.update(r, 0, voltage);
-door.update(r);
+//door.update(r);
 
 
 
@@ -111,12 +111,12 @@ door.update(r);
 
             if(!previousGamepad1.circle && currentGamepad1.circle)
             {
-                if(door.CS != doorController.doorStatus.OPENED)
+                if(collectAngle.CS != collectAngleController.collectAngleStatus.DRIVE)
                 {
-                    door.CS = doorController.doorStatus.OPENED;
+                    collectAngle.CS = collectAngleController.collectAngleStatus.DRIVE;
                 } else
                 {
-                    door.CS = doorController.doorStatus.CLOSED;
+                  collectAngle.CS = collectAngleController.collectAngleStatus.INITIALIZE;
                 }
             }
 
@@ -131,11 +131,11 @@ door.update(r);
 // clawAngle.update(r);
           //  clawFlip.update(r);
 //            clawAngle.update(r);
-          door.update(r);
-//            collectAngle.update(r);
+        //  door.update(r);
+          collectAngle.update(r);
         // fourbar.update(r);
        // latchLeft.update(r);
-         //   latchRight.update(r);
+        //    latchRight.update(r);
         //  pto.update(r);
   // drone.update(r);
 //            lift.update(r, 0, voltage);
@@ -147,7 +147,7 @@ door.update(r);
             double loop = System.nanoTime();
 
             telemetry.addData("hz ", 1000000000 / (loop - loopTime));
-            telemetry.addData("drone", door.CS);
+            telemetry.addData("drone", collectAngle.CS);
 
             loopTime = loop;
 //            telemetry.addData("x", poseEstimate.getX());

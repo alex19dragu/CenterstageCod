@@ -16,6 +16,7 @@ public class doorController {
         INITIALIZE,
         OPENED,
         CLOSED,
+        CLOSED_COLLECT,
     }
 
     public doorController()
@@ -28,6 +29,7 @@ public class doorController {
 
     public static double opened = 0.84;
     public static double closed = 0.4;
+    public static double closed_collect = 0.425;
 
     public void update(robotMap r)
     {
@@ -50,6 +52,11 @@ public class doorController {
                 case CLOSED:
                 {
                     r.door.setPosition(closed);
+                    break;
+                }
+                case  CLOSED_COLLECT:
+                {
+                    r.door.setPosition(closed_collect);
                     break;
                 }
             }

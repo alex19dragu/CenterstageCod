@@ -14,6 +14,7 @@ import com.acmerobotics.dashboard.config.Config;
 
 
 //import org.firstinspires.ftc.teamcode.Auto.RedFarBun;
+import org.firstinspires.ftc.teamcode.Auto.BlueFar;
 import org.firstinspires.ftc.teamcode.Auto.RedFar;
 import org.firstinspires.ftc.teamcode.globals.SimplePIDController;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
@@ -74,25 +75,25 @@ public class extendoController {
 
     public static double CurrentPosition = 0;
     public static double retracted = -5;
-    public static double extended = 900;
-    public static double drive = 750;
-    public static double failsafe = 790;
-    public static double purple[] = {0, 280, 535};
-    public static double cycle = 945;
-    public static double cycle_far = 1200;
+    public static double extended = 800;
+    public static double drive = 800;
+    public static double failsafe = 800;
+    public static double purple[] = {490, 230, 0};
+    public static double cycle = 800;
+    public static double cycle_far = 800;
     public static double x = 10;
     public static int caz = 0;
     public static double transfer = -40;
-    public static double retry = 980;
+    public static double retry = 800;
 
-    public static double retry_near = 1010;
-    public static double failsafe_near = 900;
+    public static double retry_near = 800;
+    public static double failsafe_near = 760;
 
-    //    public static double retry_purple[] = {580, 340, 0};
-//    public static double fail_purple[] = {400, 150, 0};
-    public static double retry_purple[] = {0, 290, 580};
-    public static double fail_purple[] = {0, 150, 480};
-
+        public static double retry_purple[] = {580, 255, 0};
+    public static double fail_purple[] = {400, 150, 0};
+//    public static double retry_purple[] = {0, 290, 580};
+//    public static double fail_purple[] = {0, 150, 480};
+public SimplePIDController activePID;
 
     public static double extend_multiply_index = 0;
 
@@ -116,7 +117,7 @@ public class extendoController {
     public void update(robotMap r, int position, double powerCap, double voltage)
     {
 
-        SimplePIDController activePID;
+      //  SimplePIDController activePID;
         switch (CS) {
             case INITIALIZE:
                 activePID = extendoPIDRetract;
@@ -258,14 +259,14 @@ public class extendoController {
 
                 case RERTRY_PURPLE:
                 {
-                    activePID.targetValue = retry_purple[RedFar.caz];
+                    activePID.targetValue = retry_purple[BlueFar.caz];
                     activePID.maxOutput =1;
                     break;
                 }
 
                 case FAIL_SAFE_PURPLE:
                 {
-                    activePID.targetValue = fail_purple[RedFar.caz];
+                    activePID.targetValue = fail_purple[BlueFar.caz];
                     activePID.maxOutput =1;
                     break;
                 }

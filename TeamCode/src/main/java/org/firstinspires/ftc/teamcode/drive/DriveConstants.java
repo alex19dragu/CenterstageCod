@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.outoftheboxrobotics.photoncore.Photon;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 /*
@@ -33,9 +34,9 @@ public class DriveConstants {
      * If using the built-in motor velocity PID, update MOTOR_VELO_PID with the tuned coefficients
      * from DriveVelocityPIDTuner.
      */
-    public static final boolean RUN_USING_ENCODER = false;
-    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(28, 0, 5.5,
-            13.6);
+    public static final boolean RUN_USING_ENCODER = true;
+    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(28, 0, 15,
+            12.6);
 
     /*
      * These are physical constants that can be determined from your robot (including the track
@@ -47,7 +48,7 @@ public class DriveConstants {
      */
     public static double WHEEL_RADIUS = 1.8898; // in
     public static double GEAR_RATIO = 1.411764705882353; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 12.98; // in
+    public static double TRACK_WIDTH = 12.86; // in
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using

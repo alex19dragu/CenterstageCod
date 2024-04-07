@@ -70,7 +70,7 @@ public class outtakeController {
 
                 case SCORE_FOURBAR:
                 {
-                    if(transfer.CS == transferController.transferStatus.TRANSFER_DONE || transfer.CS == transferController.transferStatus.INITIALIZE)
+                    if(transfer.CS == transferController.transferStatus.TRANSFER_DONE || transfer.CS == transferController.transferStatus.INITIALIZE || transfer.CS == transferController.transferStatus.TRANSFER_CLOSE_DOORv2)
                     {
                         fourbar.CS = fourbarController.fourbarStatus.SCORE;
 
@@ -83,6 +83,7 @@ public class outtakeController {
                 {
                     if(lift_timer.seconds() > 0.3)
                     {
+                      //  transfer.CS = transferController.transferStatus.TRANSFER_CLOSE_DOORv2;
                         lift.pid = 1;
                         lift.CS = liftController.liftStatus.UP;
                         claw_timer.reset();

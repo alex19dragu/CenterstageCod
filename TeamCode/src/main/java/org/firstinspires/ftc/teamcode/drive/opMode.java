@@ -2,12 +2,15 @@ package org.firstinspires.ftc.teamcode.drive;
 
 import static org.firstinspires.ftc.teamcode.system_controllers.collectAngleController.collectAngle_i;
 import static org.firstinspires.ftc.teamcode.system_controllers.doorController.doorStatus.CLOSED;
+import static org.firstinspires.ftc.teamcode.system_controllers.doorController.doorStatus.CLOSED_COLLECT;
 import static org.firstinspires.ftc.teamcode.system_controllers.droneController.droneStatus.RELEASED;
 import static org.firstinspires.ftc.teamcode.system_controllers.extendoController.extendoStatus.DRIVE;
 import static org.firstinspires.ftc.teamcode.system_controllers.extendoController.extendoStatus.EXTENDED;
 import static org.firstinspires.ftc.teamcode.system_controllers.extendoController.extendoStatus.RETRACTED;
 import static org.firstinspires.ftc.teamcode.system_controllers.latchDropController.latchDropStatus.DROP_BOTH;
 import static org.firstinspires.ftc.teamcode.system_controllers.latchDropController.latchDropStatus.DROP_ONE;
+import static org.firstinspires.ftc.teamcode.system_controllers.latchDropController.latchDropStatus.DROP_ONE_LEFT;
+import static org.firstinspires.ftc.teamcode.system_controllers.latchDropController.latchDropStatus.DROP_ONE_RIGHT;
 import static org.firstinspires.ftc.teamcode.system_controllers.liftController.liftStatus.DOWN;
 import static org.firstinspires.ftc.teamcode.system_controllers.liftController.liftStatus.INITIALIZE;
 import static org.firstinspires.ftc.teamcode.system_controllers.liftController.liftStatus.NOTHING;
@@ -21,6 +24,7 @@ import static org.firstinspires.ftc.teamcode.system_controllers.outtakeControlle
 import static org.firstinspires.ftc.teamcode.system_controllers.outtakeController.outtakeStatus.SCORE_FOURBAR;
 import static org.firstinspires.ftc.teamcode.system_controllers.ptoController.ptoStatus.OFF;
 import static org.firstinspires.ftc.teamcode.system_controllers.ptoController.ptoStatus.ON;
+import static org.firstinspires.ftc.teamcode.system_controllers.transferController.transferStatus.TRANSFER_CLOSE_DOORv2;
 import static org.firstinspires.ftc.teamcode.system_controllers.transferController.transferStatus.TRANSFER_DONE;
 import static org.firstinspires.ftc.teamcode.system_controllers.transferController.transferStatus.TRANSFER_DRIVE_POSE;
 import static org.firstinspires.ftc.teamcode.system_controllers.transferController.transferStatus.TRANSFER_EXTENDO;
@@ -311,6 +315,17 @@ timer.reset();
                 collectAngle.CS = collectAngleController.collectAngleStatus.DRIVE;
             }
 
+//            if((transfer.CS == TRANSFER_CLOSE_DOORv2 || transfer.CS == transferController.transferStatus.INITIALIZE))
+//            {
+//                if(collectPower == 0 || (!leftPixelState && !rightPixelState))
+//                {
+//                    door.CS = CLOSED;
+//                } else
+//                {
+//                    door.CS = CLOSED_COLLECT;
+//                }
+//            }
+
             if(!previousGamepad2.left_stick_button && currentGamepad2.left_stick_button)
             {
                collectAngle.collectAngle_i = 0;
@@ -321,6 +336,8 @@ timer.reset();
                 collectAngle.collectAngle_i = 4;
             }
 
+            if(lift.CS == DOWN || lift.CS == INITIALIZE)
+            {
             if(!previousGamepad2.dpad_right && currentGamepad2.dpad_right)
             {
                 collectAngle.collectAngle_i = Math.min(4, collectAngle.collectAngle_i+1);
@@ -329,7 +346,7 @@ timer.reset();
             if(!previousGamepad2.dpad_left && currentGamepad2.dpad_left)
             {
                 collectAngle.collectAngle_i = Math.max(0, collectAngle.collectAngle_i-1);
-            }
+            }}
 
             /**
              * HEPTIC
@@ -351,7 +368,7 @@ timer.reset();
              * INTAKE
              */
 
-            if(!previousGamepad1.right_bumper && currentGamepad1.right_bumper && (transfer.CS == transferController.transferStatus.INITIALIZE || transfer.CS == TRANSFER_DONE))
+            if(!previousGamepad1.right_bumper && currentGamepad1.right_bumper && (transfer.CS == transferController.transferStatus.INITIALIZE || transfer.CS == TRANSFER_DONE || transfer.CS == TRANSFER_CLOSE_DOORv2))
             {
                 if(extendo.CS != EXTENDED)
                 {
@@ -417,7 +434,9 @@ timer.reset();
             }
 
             if(lift.CS == UP)
-            {  if(!previousGamepad2.dpad_up && currentGamepad2.dpad_up)
+            {
+
+                if(!previousGamepad2.dpad_up && currentGamepad2.dpad_up)
             {
                 lift.i_up = Math.min(18, lift.i_up+1);
             }
@@ -425,7 +444,19 @@ timer.reset();
             if(!previousGamepad2.dpad_down && currentGamepad2.dpad_down)
             {
                 lift.i_up = Math.max(0, lift.i_up-1);
-            }}
+            }
+
+                if(!previousGamepad2.dpad_right && currentGamepad2.dpad_right)
+                {
+                    lift.i_up = Math.min(18, lift.i_up+2);
+                }
+
+                if(!previousGamepad2.dpad_left && currentGamepad2.dpad_left)
+                {
+                    lift.i_up = Math.max(0, lift.i_up-2);
+                }
+
+            }
 
             if(lift.i_up > 11)
             {
@@ -460,7 +491,12 @@ timer.reset();
 
             if(!previousGamepad2.circle && currentGamepad2.circle)
             {
-                latchDrop.CS = DROP_ONE;
+                if(clawAngle.clawAngle_i <=2)
+                {latchDrop.CS = DROP_ONE_LEFT;}
+                else
+                {
+                    latchDrop.CS = DROP_ONE_RIGHT;
+                }
             }
 
             /**
@@ -557,6 +593,10 @@ timer.reset();
             telemetry.addData("liftamps", r.lift.getCurrent(CurrentUnit.AMPS));
             telemetry.addData("liftcp", r.lift.getCurrentPosition());
             telemetry.addData("lift", lift.activePID.targetValue );
+            telemetry.addData("extendo", extendo.activePID.targetValue);
+            telemetry.addData("status", outtake.CS);
+            telemetry.addData("lift", lift.CS);
+            telemetry.addData("transfer", transfer.CS);
          //   telemetry.addData("fourbar_score", fourbar.score);
 
 

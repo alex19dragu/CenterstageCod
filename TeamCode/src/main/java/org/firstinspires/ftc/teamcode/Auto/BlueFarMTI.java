@@ -276,7 +276,9 @@ public class BlueFarMTI extends LinearOpMode {
                 .build();
 
         TrajectorySequence COLLECT_SECOND_CYCLE2 = drive.trajectorySequenceBuilder(SCORE_SECOND_CYCLE.end())
-                .lineToLinearHeading(new Pose2d(-20.2, 8, Math.toRadians(180)))
+              //  .setTangent(Math.toRadians(250))
+               // .splineToSplineHeading(new Pose2d(25, 8, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-20.5, 8, Math.toRadians(180)), Math.toRadians(180))
                 .build();
 
         TrajectorySequence ParkBun = drive.trajectorySequenceBuilder(SCORE_SECOND_CYCLE.end())

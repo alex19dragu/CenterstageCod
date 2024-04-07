@@ -29,6 +29,7 @@ public class transferController {
         TRANSFER_DRIVE_POSE,
         TRANSFER_CLOSE_DOOR,
         TRANSFER_DONE,
+        TRANSFER_CLOSE_DOORv2,
     }
 
     public transferController()

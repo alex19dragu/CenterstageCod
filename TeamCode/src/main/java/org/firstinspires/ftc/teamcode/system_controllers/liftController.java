@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.system_controllers;
 import static org.firstinspires.ftc.teamcode.system_controllers.liftController.liftStatus.DOWN;
 import static org.firstinspires.ftc.teamcode.system_controllers.liftController.liftStatus.INITIALIZE;
 import static org.firstinspires.ftc.teamcode.system_controllers.liftController.liftStatus.NOTHING;
+import static org.firstinspires.ftc.teamcode.system_controllers.liftController.liftStatus.TRANSFER;
 
 import com.acmerobotics.dashboard.config.Config;
 
@@ -75,7 +76,7 @@ public class liftController {
 
     public int CurrentPosition = 0;
     public int error = 2;
-    public static double transfer = -30;
+    public static double transfer = -100;
 
     public liftController()
     {
@@ -139,7 +140,7 @@ public class liftController {
         if (activePID.targetValue <= 0 && r.lift.getCurrentPosition() <=  1 && CS == DOWN) {
            r.lift.setPower(0);
         } else
-        if(activePID.targetValue > 0 || r.lift.getCurrentPosition() > 1)
+        if(activePID.targetValue > 0 || r.lift.getCurrentPosition() > 1 || CS == TRANSFER)
         {
             r.lift.setPower(powerLift);
         }

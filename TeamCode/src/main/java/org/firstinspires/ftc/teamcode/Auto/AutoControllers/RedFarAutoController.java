@@ -175,7 +175,7 @@ public class RedFarAutoController {
 
             case TRANSFER_FOURBAR:
             {
-                if(fourbar_timer.seconds() > 0.2)
+                if(fourbar_timer.seconds() > 0.35)
                 {
                     latchLeft.CS = latchLeftController.LatchLeftStatus.CLOSED;
                     latchRight.CS = latchRightController.LatchRightStatus.CLOSED;

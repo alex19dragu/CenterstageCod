@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ACCEL;
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ANG_ACCEL;
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ANG_VEL;
@@ -8,10 +9,11 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_VEL;
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MOTOR_VELO_PID;
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.RUN_USING_ENCODER;
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.TRACK_WIDTH;
+import static org.firstinspires.ftc.teamcode.drive.DriveConstants.encoderTicksToInches;
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kA;
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kStatic;
-import static org.firstinspires.ftc.teamcode.drive.opmode.TwoWheelTrackingLocalizer.encoderTicksToInches;
+//import static org.firstinspires.ftc.teamcode.drive.opmode.TwoWheelTrackingLocalizer.encoderTicksToInches;
 
 import androidx.annotation.NonNull;
 
@@ -31,6 +33,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationCon
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.outoftheboxrobotics.photoncore.Photon;
+import com.outoftheboxrobotics.photoncore.hardware.PhotonLynxVoltageSensor;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -42,7 +45,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.teamcode.Auto.P2P.Pose;
+
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceRunner;
@@ -58,11 +61,10 @@ import java.util.List;
 /*
  * Simple mecanum drive hardware implementation for REV hardware.
  */
-@Photon
 @Config
 public class SampleMecanumDrive extends MecanumDrive {
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(6, 0, 1.5);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(5, 0, 0.38);
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(5.2, 0, 1.7);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0);
 
     public static double LATERAL_MULTIPLIER = 1;
 
@@ -84,15 +86,19 @@ public class SampleMecanumDrive extends MecanumDrive {
     //private IMU imu;
     private VoltageSensor batteryVoltageSensor;
 
+   private PhotonLynxVoltageSensor sensor;
+
     YawPitchRollAngles robotOrientation;
 
     public SampleMecanumDrive(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
-                new Pose2d(0, 0, Math.toRadians(0)), 0.5);
+                new Pose2d(0.2, 0.2, Math.toRadians(1)), 0.5);
 
         LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
+
+//sensor = hardwareMap.getAll(PhotonLynxVoltageSensor.class).iterator().next();
 
         batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
 
@@ -264,7 +270,7 @@ public class SampleMecanumDrive extends MecanumDrive {
     public void setPIDFCoefficients(DcMotor.RunMode runMode, PIDFCoefficients coefficients) {
         PIDFCoefficients compensatedCoefficients = new PIDFCoefficients(
                 coefficients.p, coefficients.i, coefficients.d,
-                coefficients.f * 12 / 13.2
+                coefficients.f * 12 / batteryVoltageSensor.getVoltage()
         );
 
         for (DcMotorEx motor : motors) {
@@ -356,12 +362,4 @@ public class SampleMecanumDrive extends MecanumDrive {
         return new ProfileAccelerationConstraint(maxAccel);
     }
 
-    public Pose returnPose() {
-        Pose2d pose = getPoseEstimate();
-        return new Pose(pose.getX(), pose.getY(), pose.getHeading());
-    }
-
-    public void setPose(Pose pose) {
-        super.setPoseEstimate(new Pose2d(pose.x, pose.y, pose.heading));
-    }
 }
