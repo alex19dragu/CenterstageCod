@@ -29,7 +29,7 @@ public class clawFlipController {
     public static clawFlipStatus CS = INITIALIZE, PS = INITIALIZE;
 
     public static  double init = 0.95;
-    public static double collect = 0.78;
+    public static double collect = 0.76;
     public static double score = 0.3;
     public static double drive = 0.95;
     public static double purple = 0.15;
@@ -41,7 +41,7 @@ public class clawFlipController {
             switch (CS) {
 
                 case INITIALIZE: {
-                    r.clawFlip.setPosition(init);
+                    r.clawFlip.setPosition(collect);
                     break;
                 }
 

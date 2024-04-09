@@ -28,6 +28,7 @@ public class liftController {
         PRELOAD_YELLOW,
         NOTHING,
         TRANSFER,
+        ALILBIT_UP,
     }
 
     public double CurrentSpeed = 0;
@@ -72,7 +73,7 @@ public class liftController {
     public static int i_up = 0;
     public static double i_multiplication = 54;
 
-    public static double hang = 740;
+    public static double hang = 690;
 
     public int CurrentPosition = 0;
     public int error = 2;
@@ -119,6 +120,9 @@ public class liftController {
                 activePID = LiftPID_AUTO;
                 break;
             case YELLOW_NEAR:
+                activePID = LiftPID_AUTO;
+                break;
+            case ALILBIT_UP:
                 activePID = LiftPID_AUTO;
                 break;
             case HANG:
@@ -209,6 +213,12 @@ public class liftController {
                 {
                    // target = -30;
                     activePID.targetValue = transfer;
+                    break;
+                }
+
+                case ALILBIT_UP:
+                {
+                    activePID.targetValue = 690;
                     break;
                 }
             }

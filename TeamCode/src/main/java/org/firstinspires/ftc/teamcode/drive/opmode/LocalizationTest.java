@@ -15,13 +15,14 @@ import org.firstinspires.ftc.teamcode.globals.robotMap;
  * exercise is to ascertain whether the localizer has been configured properly (note: the pure
  * encoder localizer heading may be significantly off if the track width has not been tuned).
  */
+
 @Photon
 @TeleOp(group = "drive")
 public class LocalizationTest extends LinearOpMode {
 
 
     public static double x_start = 0, y_start = 0, angle_start = 0;
-  ;
+    double loopTime;
     Pose2d start_pose = new Pose2d(x_start, y_start, Math.PI);
     @Override
     public void runOpMode() throws InterruptedException {
@@ -30,8 +31,12 @@ public class LocalizationTest extends LinearOpMode {
         drive.setPoseEstimate(start_pose);
 
         drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robotMap.collect.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robotMap.extendoRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         waitForStart();
+        robotMap.collect.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robotMap.extendoRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         while (!isStopRequested()) {
             drive.setWeightedDrivePower(
@@ -46,12 +51,18 @@ public class LocalizationTest extends LinearOpMode {
 
             Pose2d poseEstimate = drive.getPoseEstimate();
 
-            Pose2d relativePose = poseEstimate.minus(start_pose);
-            telemetry.addData("x relative", drive.getPoseEstimate().getX());
-            telemetry.addData("y relative", drive.getPoseEstimate().getY());
-            telemetry.addData("heading relative", Math.toDegrees(drive.getPoseEstimate().getHeading()));
-            telemetry.addData("paralel", robotMap.collect.getCurrentPosition());
-            telemetry.addData("perpendicular", robotMap.extendoRight.getCurrentPosition());
+            double loop = System.nanoTime();
+
+            telemetry.addData("hz ", 1000000000 / (loop - loopTime));
+
+
+//            Pose2d relativePose = poseEstimate.minus(start_pose);
+//            telemetry.addData("x relative", drive.getPoseEstimate().getX());
+//            telemetry.addData("y relative", drive.getPoseEstimate().getY());
+//            telemetry.addData("heading relative", Math.toDegrees(drive.getPoseEstimate().getHeading()));
+          telemetry.addData("paralel", robotMap.collect.getCurrentPosition());
+         telemetry.addData("perpendicular", robotMap.extendoRight.getCurrentPosition());
+            loopTime = loop;
             telemetry.update();
         }
     }

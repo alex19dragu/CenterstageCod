@@ -86,6 +86,9 @@ public class RedFarAutoController {
 
 
         LATCH_DROP,
+        LATCH_DROP_YELLOW,
+        LIFT_ALILBITUP,
+        LIFT_ALILBITUP_DONE,
 
 
     }
@@ -98,6 +101,7 @@ public class RedFarAutoController {
     ElapsedTime pulamea = new ElapsedTime();
     ElapsedTime failsafe_header = new ElapsedTime();
     ElapsedTime funny_java = new ElapsedTime();
+    ElapsedTime alibitup = new ElapsedTime();
 
     DistanceSensorCalibrator calibratorExtendo;
 
@@ -148,7 +152,7 @@ public class RedFarAutoController {
 
             case PURPLE_DRIVE:
             {
-                if(purple_drive.seconds() > 0.2)
+                if(purple_drive.seconds() > 0.4)
                 { fourbar.CS = fourbarController.fourbarStatus.DRIVE;
                 clawFlip.CS = clawFlipController.clawFlipStatus.COLLECT;
                 CurrentStatus = autoControllerStatus.PURPLE_DROP_DONE;
@@ -350,8 +354,17 @@ public class RedFarAutoController {
             {
                 latchLeft.CS = latchLeftController.LatchLeftStatus.CLOSED;
                 latchRight.CS = latchRightController.LatchRightStatus.CLOSED;
-                        CurrentStatus = autoControllerStatus.NOTHING;
+                alibitup.reset();
+                        CurrentStatus = autoControllerStatus.LIFT_ALILBITUP;
                         break;
+            }
+
+            case LATCH_DROP_YELLOW:
+            {
+                latchLeft.CS = latchLeftController.LatchLeftStatus.CLOSED;
+                latchRight.CS = latchRightController.LatchRightStatus.CLOSED;
+                CurrentStatus = autoControllerStatus.NOTHING;
+                break;
             }
 
             /**
@@ -571,6 +584,15 @@ public class RedFarAutoController {
                 {
                     CurrentStatus = autoControllerStatus.FAIL_SAFE_HEADER_ONE_PIXEL;
                 }
+                break;
+            }
+
+            case LIFT_ALILBITUP:
+            {
+                if(alibitup.seconds() > 0.2)
+                {lift.CS = liftController.liftStatus.ALILBIT_UP;}
+                if(alibitup.seconds() > 0.35)
+                { CurrentStatus = autoControllerStatus.LIFT_ALILBITUP_DONE;}
                 break;
             }
 

@@ -34,7 +34,7 @@ public class fourbarController {
 
     public static  double init = 0.8;
     public static double score = 0.18;
-    public static double collect = 0.92;
+    public static double collect = 0.93;
     public static double drive = 0.8;
     public static double preload = 0.075;
     public static double neutral = 0.5;

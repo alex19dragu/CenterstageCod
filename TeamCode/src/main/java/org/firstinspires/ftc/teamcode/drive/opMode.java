@@ -492,10 +492,24 @@ timer.reset();
             if(!previousGamepad2.circle && currentGamepad2.circle)
             {
                 if(clawAngle.clawAngle_i <=2)
-                {latchDrop.CS = DROP_ONE_LEFT;}
+                {
+                    if(latchLeft.CS != latchLeftController.LatchLeftStatus.CLOSED)
+                    {
+                        latchLeft.CS = latchLeftController.LatchLeftStatus.CLOSED;
+                    } else
+                    {
+                        latchRight.CS = latchRightController.LatchRightStatus.CLOSED;
+                    }
+                }
                 else
                 {
-                    latchDrop.CS = DROP_ONE_RIGHT;
+                    if(latchRight.CS != latchRightController.LatchRightStatus.CLOSED)
+                    {
+                        latchRight.CS = latchRightController.LatchRightStatus.CLOSED;
+                    } else
+                    {
+                        latchLeft.CS = latchLeftController.LatchLeftStatus.CLOSED;
+                    }
                 }
             }
 
@@ -597,6 +611,8 @@ timer.reset();
             telemetry.addData("status", outtake.CS);
             telemetry.addData("lift", lift.CS);
             telemetry.addData("transfer", transfer.CS);
+            telemetry.addData("fourbarl", r.fourbarLeft.getPosition());
+            telemetry.addData("fourbarr", r.fourbarRight.getPosition());
          //   telemetry.addData("fourbar_score", fourbar.score);
 
 

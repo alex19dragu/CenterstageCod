@@ -42,7 +42,7 @@ public class TestOpMode extends LinearOpMode {
     //clawFlipController clawFlip = new clawFlipController();
        collectAngleController collectAngle = new collectAngleController();
  doorController door = new doorController();
-      // fourbarController fourbar = new fourbarController();
+       fourbarController fourbar = new fourbarController();
    //  latchLeftController latchLeft = new latchLeftController();
  latchRightController latchRight = new latchRightController();
  //    ptoController pto = new ptoController();
@@ -111,12 +111,12 @@ public class TestOpMode extends LinearOpMode {
 
             if(!previousGamepad1.circle && currentGamepad1.circle)
             {
-                if(collectAngle.CS != collectAngleController.collectAngleStatus.DRIVE)
+                if(fourbar.CS != fourbarController.fourbarStatus.COLLECT)
                 {
-                    collectAngle.CS = collectAngleController.collectAngleStatus.DRIVE;
+                    fourbar.CS = fourbarController.fourbarStatus.COLLECT;
                 } else
                 {
-                  collectAngle.CS = collectAngleController.collectAngleStatus.INITIALIZE;
+                 fourbar.CS = fourbarController.fourbarStatus.DRIVE;
                 }
             }
 
@@ -132,8 +132,8 @@ public class TestOpMode extends LinearOpMode {
           //  clawFlip.update(r);
 //            clawAngle.update(r);
         //  door.update(r);
-          collectAngle.update(r);
-        // fourbar.update(r);
+        //  collectAngle.update(r);
+        fourbar.update(r);
        // latchLeft.update(r);
         //    latchRight.update(r);
         //  pto.update(r);
@@ -147,7 +147,7 @@ public class TestOpMode extends LinearOpMode {
             double loop = System.nanoTime();
 
             telemetry.addData("hz ", 1000000000 / (loop - loopTime));
-            telemetry.addData("drone", collectAngle.CS);
+            telemetry.addData("drone", fourbar.CS);
 
             loopTime = loop;
 //            telemetry.addData("x", poseEstimate.getX());
