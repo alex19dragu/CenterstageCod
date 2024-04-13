@@ -184,17 +184,17 @@ public class liftController {
                 case PRELOAD_YELLOW:
                 {
                    // target = 10;
-                    activePID.targetValue = 269;
+                    activePID.targetValue = 320;
                     break;
                 }
 
                 case  YELLOW_NEAR:
                 {
                     if(BlueFar.caz == 0)
-                    {  activePID.targetValue = 210;}
+                    {  activePID.targetValue = 200;}
                     else
                     {
-                        activePID.targetValue = 210;
+                        activePID.targetValue = 200;
                     }
                     break;
                 }

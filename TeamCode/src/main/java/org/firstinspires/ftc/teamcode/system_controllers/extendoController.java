@@ -15,6 +15,7 @@ import com.acmerobotics.dashboard.config.Config;
 
 //import org.firstinspires.ftc.teamcode.Auto.RedFarBun;
 import org.firstinspires.ftc.teamcode.Auto.BlueFar;
+import org.firstinspires.ftc.teamcode.Auto.FUNNYBlueFar;
 import org.firstinspires.ftc.teamcode.Auto.RedFar;
 import org.firstinspires.ftc.teamcode.globals.SimplePIDController;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
@@ -28,20 +29,28 @@ public class extendoController {
         RETRACTED,
         EXTENDED,
         EXTENDED_NEAR,
+
         PURPLE,
+        PURPLEredfar,
+
         CYCLE,
         DRIVE,
         FAIL_SAFE,
         TRANSFER,
         RETRY,
+
         RERTRY_PURPLE,
         FAIL_SAFE_PURPLE,
+
+        RERTRY_PURPLEredfar,
+        FAIL_SAFE_PURPLEredfar,
+
         FAIL_SAFE_NEAR,
         RETRY_NEAR,
     }
 
     // PID constants for extension
-    public static double Kp_extend = 0.0015;
+    public static double Kp_extend = 0.0035;
     public static double Ki_extend = 0.0003;
     public static double Kd_extend = 0.005;
 
@@ -83,7 +92,8 @@ public class extendoController {
     public static double extended = 800;
     public static double drive = 800;
     public static double failsafe = 800;
-    public static double purple[] = {440, 175, 0};
+    public static double purple[] ={ 430, 235, 0};
+    public static double purpleredfar[] ={ 0, 195, 430};
     public static double cycle = 840;
     public static double cycle_far = 840;
     public static double x = 10;
@@ -94,8 +104,11 @@ public class extendoController {
     public static double retry_near = 800;
     public static double failsafe_near = 800;
 
-        public static double retry_purple[] = {580, 255, 0};
-    public static double fail_purple[] = {400, 150, 0};
+        public static double retry_purple[] = {445, 255, 0};
+    public static double fail_purple[] = {420, 150, 0};
+
+    public static double retry_purpleredfar[] = {0, 235, 445};
+    public static double fail_purpleredfar[] = {0, 150, 420};
 //    public static double retry_purple[] = {0, 290, 580};
 //    public static double fail_purple[] = {0, 150, 480};
 public SimplePIDController activePID;
@@ -135,7 +148,10 @@ public SimplePIDController activePID;
                 activePID = extendoPIDRetract;
                 break;
             case PURPLE:
-                activePID = extendoPIDDrive;
+                activePID = extendoPIDExtend;
+                break;
+            case PURPLEredfar:
+                activePID = extendoPIDExtend;
                 break;
             case CYCLE:
                 activePID = extendoPIDDrive;
@@ -235,6 +251,14 @@ public SimplePIDController activePID;
                     break;
                 }
 
+                case PURPLEredfar:
+                {
+                    activePID.targetValue = purpleredfar[caz];
+                    activePID.maxOutput = 0.9;
+                    //CS = SENSOR;
+                    break;
+                }
+
                 case CYCLE:
                 {
                     activePID.targetValue = cycle_far;
@@ -265,14 +289,28 @@ public SimplePIDController activePID;
 
                 case RERTRY_PURPLE:
                 {
-                    activePID.targetValue = retry_purple[BlueFar.caz];
+                    activePID.targetValue = retry_purple[FUNNYBlueFar.caz];
                     activePID.maxOutput =1;
                     break;
                 }
 
                 case FAIL_SAFE_PURPLE:
                 {
-                    activePID.targetValue = fail_purple[BlueFar.caz];
+                    activePID.targetValue = fail_purple[FUNNYBlueFar.caz];
+                    activePID.maxOutput =1;
+                    break;
+                }
+
+                case RERTRY_PURPLEredfar:
+                {
+                    activePID.targetValue = retry_purpleredfar[caz];
+                    activePID.maxOutput =1;
+                    break;
+                }
+
+                case FAIL_SAFE_PURPLEredfar:
+                {
+                    activePID.targetValue = fail_purpleredfar[caz];
                     activePID.maxOutput =1;
                     break;
                 }

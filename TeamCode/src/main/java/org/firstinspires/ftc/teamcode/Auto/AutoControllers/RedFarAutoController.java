@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Auto.BlueFar;
 import org.firstinspires.ftc.teamcode.Auto.BlueFarMTI;
 import org.firstinspires.ftc.teamcode.Auto.BlueNear;
+import org.firstinspires.ftc.teamcode.Auto.FUNNYBlueFar;
 import org.firstinspires.ftc.teamcode.Auto.FUNNYBlueNear;
 import org.firstinspires.ftc.teamcode.Auto.RedFar;
 
@@ -35,6 +36,7 @@ public class RedFarAutoController {
     {
         NOTHING,
         PURPLE,
+        PURPLE_REDFAR,
         PURPLE_funny,
         PURPLE_DONE,
 
@@ -103,6 +105,7 @@ public class RedFarAutoController {
 
 
         LATCH_DROP,
+        LATCH_DROP_UNGHI,
         LATCH_DROP_YELLOW,
         LATCH_DROP_YELLOWnear,
         DIMA_O_SUGE,
@@ -165,6 +168,20 @@ public class RedFarAutoController {
                 {
                     clawAngle.clawAngle_i = 2;
                 }
+//                if(RedFarBun.caz == 0){
+//                    clawAngleController.clawAngle_i = 0;
+//                    clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
+//                }
+                CurrentStatus = autoControllerStatus.PURPLE_DONE;
+                break;
+            }
+
+            case PURPLE_REDFAR:
+            {
+
+                fourbar.CS = fourbarController.fourbarStatus.PRELOAD;
+                clawFlip.CS = clawFlipController.clawFlipStatus.PURPLE;
+
 //                if(RedFarBun.caz == 0){
 //                    clawAngleController.clawAngle_i = 0;
 //                    clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
@@ -427,16 +444,16 @@ public class RedFarAutoController {
             {
                 if(claw_timer.seconds() > 0.2)
                 {
-                    switch (BlueFar.caz)
+                    switch (RedFar.caz)
                     {
                         case 0:
-                        { clawAngle.clawAngle_i = 1; //1
+                        { clawAngle.clawAngle_i = 4; //1
                             clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
                             break;
                         }
 
                         case 1:
-                        { clawAngle.clawAngle_i = 2;
+                        { clawAngle.clawAngle_i = 3;
                             clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
                             break;
                         }
@@ -459,7 +476,7 @@ public class RedFarAutoController {
             {
                 if(claw_timer.seconds() > 0.2)
                 {
-                    switch (BlueNear.caz)
+                    switch (FUNNYBlueFar.caz)
                     {
                         case 0:
                         { clawAngle.clawAngle_i = 1; //1
@@ -468,7 +485,7 @@ public class RedFarAutoController {
                         }
 
                         case 1:
-                        { clawAngle.clawAngle_i = 2;
+                        { clawAngle.clawAngle_i = 0;
                             clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
                             break;
                         }
@@ -516,13 +533,22 @@ public class RedFarAutoController {
             }
 
 
-            case LATCH_DROP:
+            case LATCH_DROP_UNGHI:
             {
                 latchLeft.CS = latchLeftController.LatchLeftStatus.CLOSED;
                 latchRight.CS = latchRightController.LatchRightStatus.CLOSED;
                 alibitup.reset();
                         CurrentStatus = autoControllerStatus.LIFT_ALILBITUP;
                         break;
+            }
+
+            case LATCH_DROP:
+            {
+                latchLeft.CS = latchLeftController.LatchLeftStatus.CLOSED;
+                latchRight.CS = latchRightController.LatchRightStatus.CLOSED;
+                alibitup.reset();
+                CurrentStatus = autoControllerStatus.NOTHING;
+                break;
             }
 
             case LATCH_DROP_YELLOW:
