@@ -18,7 +18,8 @@ public class clawFlipController {
         COLLECT,
         SCORE,
         DRIVE,
-        PURPLE
+        PURPLE,
+        YELLO_BAZI,
     }
 
     public clawFlipController() {
@@ -31,6 +32,7 @@ public class clawFlipController {
     public static  double init = 0.95;
     public static double collect = 0.76;
     public static double score = 0.3;
+    public static double yellow_bazi = 0.25;
     public static double drive = 0.95;
     public static double purple = 0.15;
 
@@ -64,6 +66,12 @@ public class clawFlipController {
                 case PURPLE:
                 {
                     r.clawFlip.setPosition(purple);
+                    break;
+                }
+
+                case YELLO_BAZI:
+                {
+                    r.clawFlip.setPosition(yellow_bazi);
                     break;
                 }
 

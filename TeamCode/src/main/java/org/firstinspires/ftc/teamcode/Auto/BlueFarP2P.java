@@ -4,6 +4,7 @@
 //
 //import com.acmerobotics.dashboard.config.Config;
 //
+//import com.arcrobotics.ftclib.geometry.Pose2d;
 //import com.outoftheboxrobotics.photoncore.Photon;
 //import com.qualcomm.hardware.lynx.LynxModule;
 //import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -18,6 +19,7 @@
 //import org.firstinspires.ftc.teamcode.Auto.AutoControllers.RedFarAutoController;
 //import org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe;
 //
+//import org.firstinspires.ftc.teamcode.Auto.P2P.funnypidtopoint;
 //import org.firstinspires.ftc.teamcode.Auto.Recognition.BluePipelineStackMaster;
 //
 //import org.firstinspires.ftc.teamcode.DistanceSensorCalibrator;
@@ -181,7 +183,7 @@
 //       // SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 //        robotMap r = new robotMap(hardwareMap);
 //
-//        funnypidtopoint funnypidtopoint = new funnypidtopoint(hardwareMap);
+//        funnypidtopoint pidtopoint = new funnypidtopoint(hardwareMap);
 //
 //
 //        List<LynxModule> allHubs = hardwareMap.getAll(LynxModule.class);
@@ -241,9 +243,9 @@
 //
 //        Pose start_pose = new Pose(x_start, y_start,Math.toRadians(angle_start));
 //
-//        Pose purpleRight = new Pose(x_purple_preload_right, y_purple_preload_right, Math.toRadians(angle_purple_preload_right));
-//        Pose purpleCenter = new Pose(x_purple_preload_center, y_purple_preload_center, Math.toRadians(angle_purple_preload_center));
-//        Pose purpleLeft = new Pose(x_purple_preload_left, y_purple_preload_left, Math.toRadians(angle_purple_preload_left));
+//        Pose2d purpleRight = new Pose2d(x_purple_preload_right, y_purple_preload_right, Math.toRadians(angle_purple_preload_right));
+//        Pose2d purpleCenter = new Pose2d(x_purple_preload_center, y_purple_preload_center, Math.toRadians(angle_purple_preload_center));
+//        Pose2d purpleLeft = new Pose2d(x_purple_preload_left, y_purple_preload_left, Math.toRadians(angle_purple_preload_left));
 //
 //        Pose interCollectFirstCycle = new Pose(x_inter_collect_first_cycle, y_inter_collect_first_cycle, Math.toRadians(angle_inter_collect_first_cycle));
 //        Pose interScoreFirstCycle = new Pose(x_inter_score_first_cycle, y_inter_score_first_cycle, Math.toRadians(angle_inter_score_first_cycle));
@@ -423,7 +425,7 @@
 //                        }
 //                        case 1:
 //                        {
-//                            funnypidtopoint.setTargetPose(purpleCenter);
+//                         pidtopoint.setTargetPose(purpleCenter);
 //                            extendo.caz = 1;
 //                            break;
 //

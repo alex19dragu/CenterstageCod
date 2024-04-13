@@ -2,6 +2,7 @@
 //
 //import com.acmerobotics.dashboard.config.Config;
 //import com.arcrobotics.ftclib.controller.PIDFController;
+//import com.arcrobotics.ftclib.geometry.Pose2d;
 //import com.outoftheboxrobotics.photoncore.Photon;
 //import com.qualcomm.robotcore.hardware.HardwareMap;
 //import com.qualcomm.robotcore.util.ElapsedTime;
@@ -17,8 +18,8 @@
 //public class funnypidtopoint {
 //    public SampleMecanumDrive drive;
 //    private PIDFController pidX, pidY, pidHeading;
-//    private LinkedList<Pose> targetPoses = new LinkedList<>();
-//    private Pose targetPose;
+//    private LinkedList<Pose2d> targetPoses = new LinkedList<>();
+//    private Pose2d targetPose;
 //    private boolean sequenceFinished = false;
 //    private ElapsedTime timer = new ElapsedTime();
 //    private ElapsedTime stable = new ElapsedTime();
@@ -63,7 +64,7 @@
 //        pidHeading = new PIDFController(KPANGLE, 0, KDANGLE, 0);
 //    }
 //
-//    public void setTargetPose(Pose targetPose) {
+//    public void setTargetPose(Pose2d targetPose) {
 //        this.targetPose = targetPose;
 //        hasReachedProximity = false;
 //        reset_timer = true;
@@ -92,7 +93,7 @@
 //
 //        if (targetPose == null) return;
 //
-//        Pose robotPose = drive.returnPose();
+//        Pose2d robotPose = drive.returnPose();
 //        double[] motorPowers = getMotorPowers(robotPose, targetPose);
 //        drive.setMotorPowers(motorPowers[0], motorPowers[1], motorPowers[2], motorPowers[3]);
 //        long currentMaxCloseDurationMs = targetPoses.isEmpty() ? FINAL_MAX_CLOSE_DURATION_MS : INTER_MAX_CLOSE_DURATION_MS;

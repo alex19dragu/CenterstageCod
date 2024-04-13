@@ -23,6 +23,7 @@ public class fourbarController {
         INTER,
         NEUTRAL,
         PRELOAD,
+        SCORE_BAZI,
     }
 
     public fourbarController() {
@@ -34,8 +35,9 @@ public class fourbarController {
 
     public static  double init = 0.8;
     public static double score = 0.18;
+    public static double scorebazi = 0.2;
     public static double collect = 0.93;
-    public static double drive = 0.8;
+    public static double drive = 0.82;
     public static double preload = 0.075;
     public static double neutral = 0.5;
 
@@ -87,6 +89,13 @@ public class fourbarController {
                 {
                     r.fourbarLeft.setPosition(preload);
                     r.fourbarRight.setPosition(preload);
+                    break;
+                }
+
+                case SCORE_BAZI:
+                {
+                    r.fourbarLeft.setPosition(scorebazi);
+                    r.fourbarRight.setPosition(scorebazi);
                     break;
                 }
 

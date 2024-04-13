@@ -3,6 +3,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
+import com.outoftheboxrobotics.photoncore.Photon;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -17,6 +18,7 @@ import java.util.List;
 /*
  * This is a simple routine to test translational drive capabilities.
  */
+@Photon
 @Config
 @Autonomous(group = "Testers")
 public class PidControllerTest extends LinearOpMode {

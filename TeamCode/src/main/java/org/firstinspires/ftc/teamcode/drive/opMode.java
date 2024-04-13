@@ -438,7 +438,7 @@ timer.reset();
 
                 if(!previousGamepad2.dpad_up && currentGamepad2.dpad_up)
             {
-                lift.i_up = Math.min(18, lift.i_up+1);
+                lift.i_up = Math.min(20, lift.i_up+1);
             }
 
             if(!previousGamepad2.dpad_down && currentGamepad2.dpad_down)
@@ -448,7 +448,7 @@ timer.reset();
 
                 if(!previousGamepad2.dpad_right && currentGamepad2.dpad_right)
                 {
-                    lift.i_up = Math.min(18, lift.i_up+2);
+                    lift.i_up = Math.min(20, lift.i_up+2);
                 }
 
                 if(!previousGamepad2.dpad_left && currentGamepad2.dpad_left)

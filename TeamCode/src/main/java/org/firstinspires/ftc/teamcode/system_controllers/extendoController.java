@@ -41,24 +41,29 @@ public class extendoController {
     }
 
     // PID constants for extension
-    public static double Kp_extend = 0.01;
-    public static double Ki_extend = 0.001;
-    public static double Kd_extend = 0.002;
+    public static double Kp_extend = 0.0015;
+    public static double Ki_extend = 0.0003;
+    public static double Kd_extend = 0.005;
 
     // PID constants for retraction
-    public static double Kp_retract = 0.015; // Example values, adjust based on your needs
+    public static double Kp_retract = 0.015;
     public static double Ki_retract = 0;
     public static double Kd_retract = 0;
 
-    public static double Kp_drive = 0.0025; // Example values, adjust as needed
+    public static double Kp_drive = 0.005;
     public static double Ki_drive = 0.001;
     public static double Kd_drive = 0.002;
+
+    public static double Kp_short = 0.017;
+    public static double Ki_short = 0.002;
+    public static double Kd_short = 0;
 
 
 
     SimplePIDController extendoPIDExtend;
     SimplePIDController extendoPIDRetract;
     SimplePIDController extendoPIDDrive;
+    SimplePIDController SHORTPID;
 
 //
 //    public static double Kp = 0.0031;
@@ -78,16 +83,16 @@ public class extendoController {
     public static double extended = 800;
     public static double drive = 800;
     public static double failsafe = 800;
-    public static double purple[] = {490, 230, 0};
-    public static double cycle = 800;
-    public static double cycle_far = 800;
+    public static double purple[] = {440, 175, 0};
+    public static double cycle = 840;
+    public static double cycle_far = 840;
     public static double x = 10;
     public static int caz = 0;
     public static double transfer = -40;
-    public static double retry = 800;
+    public static double retry = 900;
 
     public static double retry_near = 800;
-    public static double failsafe_near = 760;
+    public static double failsafe_near = 800;
 
         public static double retry_purple[] = {580, 255, 0};
     public static double fail_purple[] = {400, 150, 0};
@@ -102,6 +107,7 @@ public SimplePIDController activePID;
         extendoPIDExtend = new SimplePIDController(Kp_extend, Ki_extend, Kd_extend);
         extendoPIDRetract = new SimplePIDController(Kp_retract, Ki_retract, Kd_retract);
         extendoPIDDrive = new SimplePIDController(Kp_drive, Ki_drive, Kd_drive);
+        SHORTPID = new SimplePIDController(Kp_short, Ki_short, Kd_short);
 
         // Initially, we can set to retract as a default or based on your initial state
         extendoPIDExtend.targetValue = retracted; // Assuming you start with retraction
@@ -138,16 +144,16 @@ public SimplePIDController activePID;
                 activePID = extendoPIDDrive;
                 break;
             case FAIL_SAFE:
-                activePID = extendoPIDExtend;
+                activePID = SHORTPID;
                 break;
             case RETRY:
-                activePID = extendoPIDExtend;
+                activePID = SHORTPID;
                 break;
             case FAIL_SAFE_PURPLE:
-                activePID = extendoPIDExtend;
+                activePID = SHORTPID;
                 break;
             case RERTRY_PURPLE:
-                activePID = extendoPIDExtend;
+                activePID = SHORTPID;
                 break;
             default:
                 activePID = extendoPIDRetract; // Default to the first one or any you prefer
@@ -245,7 +251,7 @@ public SimplePIDController activePID;
 
                 case FAIL_SAFE:
                 {
-                    activePID.targetValue = failsafe + x;
+                    activePID.targetValue = failsafe;
                     activePID.maxOutput = 1;
                     break;
                 }

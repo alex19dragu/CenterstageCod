@@ -63,7 +63,7 @@ public class SampleMecanumDrive extends MecanumDrive {
     public static double VX_WEIGHT = 1;
     public static double VY_WEIGHT = 1;
     public static double OMEGA_WEIGHT = 1;
-    public static double timeOutBaby = 0.75;
+    public static double timeOutBaby = 0.7;
     private TrajectorySequenceRunner trajectorySequenceRunner;
 
     private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH);
@@ -288,6 +288,12 @@ public class SampleMecanumDrive extends MecanumDrive {
         for (DcMotorEx motor : motors) {
             wheelVelocities.add(encoderTicksToInches(motor.getVelocity()));
         }
+        return wheelVelocities;
+    }
+
+    public double getWheelVelocitie() {
+        double wheelVelocities = encoderTicksToInches(leftFront.getVelocity());
+
         return wheelVelocities;
     }
 

@@ -167,9 +167,9 @@ public class robotMap {
 //        extendoLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         extendoLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        DcMotor.RunMode prevMode = lift.getMode();
-        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lift.setMode(prevMode);
+//        DcMotor.RunMode prevMode = lift.getMode();
+//        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        lift.setMode(prevMode);
 
       //  lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
       //  lift.setMode(DcMotor.RunMode.RUN_AND_RESET_ENCODER);

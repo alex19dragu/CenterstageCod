@@ -29,6 +29,7 @@ public class BlueNearAutoController {
         PURPLE_DROP,
         PURPLE_DRIVE,
         PURPLE_DROP_DONE,
+        PURPLE_DROPnear,
 
         TRANSFER_BEGIN,
         TRANSFER_FOURBAR,
@@ -111,6 +112,14 @@ public class BlueNearAutoController {
             case PURPLE_DROP:
             {
                 latchRight.CS = latchRightController.LatchRightStatus.CLOSED;
+                purple_drive.reset();
+                CurrentStatus = autoControllerStatus.PURPLE_DRIVE;
+                break;
+            }
+
+            case PURPLE_DROPnear:
+            {
+                latchLeft.CS = latchLeftController.LatchLeftStatus.CLOSED;
                 purple_drive.reset();
                 CurrentStatus = autoControllerStatus.PURPLE_DRIVE;
                 break;

@@ -8,6 +8,7 @@ import static org.firstinspires.ftc.teamcode.system_controllers.liftController.l
 
 import com.acmerobotics.dashboard.config.Config;
 
+import org.firstinspires.ftc.teamcode.Auto.BlueFar;
 import org.firstinspires.ftc.teamcode.Auto.RedNearLinear;
 import org.firstinspires.ftc.teamcode.drive.opmode.BackAndForth;
 import org.firstinspires.ftc.teamcode.globals.SimplePIDController;
@@ -38,7 +39,7 @@ public class liftController {
      */
 
 
-    public static double PAUTO = 0.002;
+    public static double PAUTO = 0.0045;
     public static double IAUTO = 0;
     public static double DAUTO = 0.001;
     //
@@ -74,6 +75,7 @@ public class liftController {
     public static double i_multiplication = 54;
 
     public static double hang = 690;
+    public static double cycle = 400;
 
     public int CurrentPosition = 0;
     public int error = 2;
@@ -182,24 +184,24 @@ public class liftController {
                 case PRELOAD_YELLOW:
                 {
                    // target = 10;
-                    activePID.targetValue = 300;
+                    activePID.targetValue = 269;
                     break;
                 }
 
                 case  YELLOW_NEAR:
                 {
-                    if(RedNearLinear.caz == 0)
-                    {  activePID.targetValue = 108;}
+                    if(BlueFar.caz == 0)
+                    {  activePID.targetValue = 210;}
                     else
                     {
-                        activePID.targetValue = 108;
+                        activePID.targetValue = 210;
                     }
                     break;
                 }
 
                 case CYCLE:
                 {
-                    activePID.targetValue = 540;
+                    activePID.targetValue = cycle;
                     break;
                 }
 
@@ -218,7 +220,7 @@ public class liftController {
 
                 case ALILBIT_UP:
                 {
-                    activePID.targetValue = 690;
+                    activePID.targetValue = cycle + 100;
                     break;
                 }
             }
