@@ -191,10 +191,10 @@ public class liftController {
                 case  YELLOW_NEAR:
                 {
                     if(BlueFar.caz == 0)
-                    {  activePID.targetValue = 200;}
+                    {  activePID.targetValue = 190;}
                     else
                     {
-                        activePID.targetValue = 200;
+                        activePID.targetValue = 190;
                     }
                     break;
                 }

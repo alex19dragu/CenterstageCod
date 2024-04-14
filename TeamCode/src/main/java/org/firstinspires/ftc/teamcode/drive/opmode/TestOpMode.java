@@ -9,12 +9,14 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.internal.ftdi.eeprom.FT_EEPROM_232H;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
 import org.firstinspires.ftc.teamcode.system_controllers.clawAngleController;
 import org.firstinspires.ftc.teamcode.system_controllers.clawFlipController;
 import org.firstinspires.ftc.teamcode.system_controllers.collectAngleController;
 import org.firstinspires.ftc.teamcode.system_controllers.doorController;
 import org.firstinspires.ftc.teamcode.system_controllers.droneController;
+import org.firstinspires.ftc.teamcode.system_controllers.droneLatchController;
 import org.firstinspires.ftc.teamcode.system_controllers.extendoController;
 import org.firstinspires.ftc.teamcode.system_controllers.fourbarController;
 import org.firstinspires.ftc.teamcode.system_controllers.latchDropController;
@@ -40,18 +42,19 @@ public class TestOpMode extends LinearOpMode {
 
     //  clawAngleController clawAngle = new clawAngleController();
     //clawFlipController clawFlip = new clawFlipController();
-       collectAngleController collectAngle = new collectAngleController();
- doorController door = new doorController();
-       fourbarController fourbar = new fourbarController();
+      // collectAngleController collectAngle = new collectAngleController();
+ //doorController door = new doorController();
+      // fourbarController fourbar = new fourbarController();
    //  latchLeftController latchLeft = new latchLeftController();
- latchRightController latchRight = new latchRightController();
+ //latchRightController latchRight = new latchRightController();
  //    ptoController pto = new ptoController();
-     // droneController drone = new droneController();
+      droneController drone = new droneController();
 //        liftController lift = new liftController();
    //  extendoController extendo = new extendoController();
      //  transferController transfer = new transferController();
 //        outtakeController outtake = new outtakeController();
 //        latchDropController latchDrop = new latchDropController();
+        droneLatchController droneLatch = new droneLatchController();
 
 
 //lift.CS = lift_Controller.liftStatus.DOWN;
@@ -111,12 +114,12 @@ public class TestOpMode extends LinearOpMode {
 
             if(!previousGamepad1.circle && currentGamepad1.circle)
             {
-                if(fourbar.CS != fourbarController.fourbarStatus.COLLECT)
+                if(droneLatch.CS != droneLatchController.droneLatchStatus.SECURED)
                 {
-                    fourbar.CS = fourbarController.fourbarStatus.COLLECT;
+                    droneLatch.CS = droneLatchController.droneLatchStatus.SECURED;
                 } else
                 {
-                 fourbar.CS = fourbarController.fourbarStatus.DRIVE;
+                    droneLatch.CS = droneLatchController.droneLatchStatus.RELEASED;
                 }
             }
 
@@ -133,7 +136,7 @@ public class TestOpMode extends LinearOpMode {
 //            clawAngle.update(r);
         //  door.update(r);
         //  collectAngle.update(r);
-        fourbar.update(r);
+        droneLatch.update(r);
        // latchLeft.update(r);
         //    latchRight.update(r);
         //  pto.update(r);
@@ -147,7 +150,7 @@ public class TestOpMode extends LinearOpMode {
             double loop = System.nanoTime();
 
             telemetry.addData("hz ", 1000000000 / (loop - loopTime));
-            telemetry.addData("drone", fourbar.CS);
+            telemetry.addData("drone", droneLatch.CS);
 
             loopTime = loop;
 //            telemetry.addData("x", poseEstimate.getX());

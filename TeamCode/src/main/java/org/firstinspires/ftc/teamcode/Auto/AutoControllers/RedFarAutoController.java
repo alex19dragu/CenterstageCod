@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.Auto.BlueFarMTI;
 import org.firstinspires.ftc.teamcode.Auto.BlueNear;
 import org.firstinspires.ftc.teamcode.Auto.FUNNYBlueFar;
 import org.firstinspires.ftc.teamcode.Auto.FUNNYBlueNear;
+import org.firstinspires.ftc.teamcode.Auto.FUNNYRedNear;
 import org.firstinspires.ftc.teamcode.Auto.RedFar;
 
 import org.firstinspires.ftc.teamcode.Auto.RedNear;
@@ -38,16 +39,24 @@ public class RedFarAutoController {
         PURPLE,
         PURPLE_REDFAR,
         PURPLE_funny,
+        PURPLE_funnyred,
         PURPLE_DONE,
 
         PURPLE_DROP,
         PURPLE_DRIVE,
         PURPLE_DRIVE_NEAR,
         PURPLE_DROP_DONE,
+
         PURPLE_DROPnear,
         PURPLE_DRIVEnear,
         PURPLE_DROPnearnucentru,
         PURPLE_DRIVE_NEARnucentru,
+
+        PURPLE_DROPnearred,
+        PURPLE_DRIVEnearred,
+        PURPLE_DROPnearnucentrured,
+        PURPLE_DRIVE_NEARnucentrured,
+
 
         TRANSFER_BEGIN,
         TRANSFER_FOURBAR,
@@ -212,6 +221,27 @@ public class RedFarAutoController {
                 break;
             }
 
+            case PURPLE_funnyred:
+            {
+
+                fourbar.CS = fourbarController.fourbarStatus.PRELOAD;
+                clawFlip.CS = clawFlipController.clawFlipStatus.PURPLE;
+                clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
+                if(FUNNYRedNear.caz == 1)
+                {
+                    clawAngle.clawAngle_i = 1;
+                } else
+                {
+                    clawAngle.clawAngle_i = 2;
+                }
+//                if(RedFarBun.caz == 0){
+//                    clawAngleController.clawAngle_i = 0;
+//                    clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
+//                }
+                CurrentStatus = autoControllerStatus.PURPLE_DONE;
+                break;
+            }
+
             case PURPLE_DROP:
             {
                 latchLeft.CS = latchLeftController.LatchLeftStatus.CLOSED;
@@ -232,6 +262,22 @@ public class RedFarAutoController {
             case PURPLE_DROPnearnucentru:
             {
                 latchLeft.CS = latchLeftController.LatchLeftStatus.CLOSED;
+                purple_drive.reset();
+                CurrentStatus = autoControllerStatus.PURPLE_DRIVE_NEARnucentru;
+                break;
+            }
+
+            case PURPLE_DROPnearred:
+            {
+                latchRight.CS = latchRightController.LatchRightStatus.CLOSED;
+                purple_drive.reset();
+                CurrentStatus = autoControllerStatus.PURPLE_DRIVE_NEAR;
+                break;
+            }
+
+            case PURPLE_DROPnearnucentrured:
+            {
+                latchRight.CS = latchRightController.LatchRightStatus.CLOSED;
                 purple_drive.reset();
                 CurrentStatus = autoControllerStatus.PURPLE_DRIVE_NEARnucentru;
                 break;

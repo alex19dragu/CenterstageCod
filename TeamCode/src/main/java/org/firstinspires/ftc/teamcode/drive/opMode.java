@@ -43,7 +43,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.ejml.dense.fixed.MatrixFeatures_DDF2;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
+import org.firstinspires.ftc.teamcode.system_controllers.droneAssemblyController;
 import org.firstinspires.ftc.teamcode.system_controllers.droneController;
+import org.firstinspires.ftc.teamcode.system_controllers.droneLatchController;
 import org.firstinspires.ftc.teamcode.system_controllers.latchDropController;
 import org.firstinspires.ftc.teamcode.system_controllers.outtakeController;
 import org.firstinspires.ftc.teamcode.system_controllers.transferController;
@@ -149,6 +151,8 @@ public class opMode extends LinearOpMode {
         transferController transfer = new transferController();
         outtakeController outtake = new outtakeController();
         latchDropController latchDrop = new latchDropController();
+        droneAssemblyController droneAssembly = new droneAssemblyController();
+        droneLatchController droneLatch = new droneLatchController();
 
         double voltage;
         double loopTime = 0;
@@ -166,6 +170,9 @@ public class opMode extends LinearOpMode {
         lift.CS = DOWN;
         extendo.CS = extendoController.extendoStatus.INITIALIZE;
         drone.CS = droneController.droneStatus.INITIALIZE;
+        droneAssembly.CS = droneAssemblyController.droneAssemblyStatus.INITIALIZE;
+        droneLatch.CS = droneLatchController.droneLatchStatus.INITIALIZE;
+
 
 
         clawAngle.update(r);
@@ -183,6 +190,8 @@ public class opMode extends LinearOpMode {
         outtake.update(r, lift, fourbar, clawFlip, clawAngle, door, latchRight, latchLeft, transfer);
         latchDrop.update(r, latchRight, latchLeft, clawAngle);
         collectAngle.update(r);
+        droneAssembly.update(drone, droneLatch);
+        droneLatch.update(r);
 
         /**
          * OTHER INITS
@@ -195,7 +204,6 @@ public class opMode extends LinearOpMode {
 
 
         boolean drone_driver_1 = false;
-        boolean drone_driver_2 = false;
 
         collectAngle_i = 0;
 
@@ -567,19 +575,21 @@ timer.reset();
                 drone_driver_1 = !drone_driver_1;
             }
 
+
+            if(drone_driver_1 && droneAssembly.CS != droneAssemblyController.droneAssemblyStatus.DRONE_LATCH && droneAssembly.CS != droneAssemblyController.droneAssemblyStatus.DRONE_TIME_RESET && droneAssembly.CS != droneAssemblyController.droneAssemblyStatus.DRONE_LAUNCH && droneAssembly.CS != droneAssemblyController.droneAssemblyStatus.DRONE_DONE)
+            {
+                droneAssembly.CS = droneAssemblyController.droneAssemblyStatus.DRONE_LATCH;
+            }
+
             if(!previousGamepad2.touchpad && currentGamepad2.touchpad)
             {
-                drone_driver_2 = !drone_driver_2;
-            }
-
-            if(drone_driver_1 && drone_driver_2)
-            {
-                drone.CS = RELEASED;
+               clawFlip.CS = clawFlipController.clawFlipStatus.MOVE;
+               clawAngle.clawAngle_i =5;
+               clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
             }
 
 
-
-
+            droneLatch.update(r);
             clawAngle.update(r);
             clawFlip.update(r);
             clawAngle.update(r);
@@ -595,7 +605,7 @@ timer.reset();
             transfer.update(r, door, fourbar, clawAngle, clawFlip, latchLeft, latchRight, extendo, lift);
             outtake.update(r, lift, fourbar, clawFlip, clawAngle, door, latchRight, latchLeft, transfer);
             latchDrop.update(r, latchRight, latchLeft, clawAngle);
-
+            droneAssembly.update(drone, droneLatch);
             double loop = System.nanoTime();
 
             telemetry.addData("hz ", 1000000000 / (loop - loopTime));
@@ -613,6 +623,8 @@ timer.reset();
             telemetry.addData("transfer", transfer.CS);
             telemetry.addData("fourbarl", r.fourbarLeft.getPosition());
             telemetry.addData("fourbarr", r.fourbarRight.getPosition());
+            telemetry.addData("drone", droneAssembly.CS);
+            telemetry.addData("sec", droneAssembly.drone_launch.seconds());
          //   telemetry.addData("fourbar_score", fourbar.score);
 
 

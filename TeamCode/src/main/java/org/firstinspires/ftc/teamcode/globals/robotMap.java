@@ -65,6 +65,7 @@ public class robotMap {
 
     public Servo pto = null;
     public Servo drone = null;
+    public Servo droneLatch = null;
 
     public static robotMap instance = null ;
     private boolean enabled;
@@ -131,6 +132,7 @@ public class robotMap {
 
         pto = Init.get(Servo.class, "pto");
         drone = Init.get(Servo.class, "drone");
+        droneLatch = Init.get(Servo.class, "droneLatch");
 
         /**
          * PROPERTIES

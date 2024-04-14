@@ -7,47 +7,47 @@ import com.acmerobotics.dashboard.config.Config;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
 
 @Config
-public class droneController {
+public class droneLatchController {
 
-    public enum droneStatus
+    public enum droneLatchStatus
     {
         INITIALIZE,
         SECURED,
         RELEASED,
     }
 
-    public droneController()
+    public droneLatchController()
     {
-        CS = INITIALIZE;
-        PS = INITIALIZE;
+        CS = droneLatchStatus.INITIALIZE;
+        PS = droneLatchStatus.INITIALIZE;
     }
 
-    public static droneStatus CS = INITIALIZE, PS = INITIALIZE;
+    public static droneLatchStatus CS = droneLatchStatus.INITIALIZE, PS = droneLatchStatus.INITIALIZE;
 
-    public static double secured = 0.03;
-    public static double released = 0.33;
+    public static double secured = 0.247;
+    public static double released = 1;
 
     public void update(robotMap r)
     {
-        if(CS != PS || CS == INITIALIZE)
+        if(CS != PS || CS == droneLatchStatus.INITIALIZE)
         {
             switch (CS)
             {
                 case INITIALIZE:
                 {
-                    r.drone.setPosition(secured);
+                    r.droneLatch.setPosition(secured);
                     break;
                 }
 
                 case SECURED:
                 {
-                    r.drone.setPosition(secured);
+                    r.droneLatch.setPosition(secured);
                     break;
                 }
 
                 case RELEASED:
                 {
-                    r.drone.setPosition(released);
+                    r.droneLatch.setPosition(released);
                     break;
                 }
             }

@@ -46,14 +46,16 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 
 import java.io.BufferedReader;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.XMLFormatter;
 
 @Photon
 @Config
-@Autonomous(group = "Auto" , name = "RedNear")
+@Autonomous(group = "Auto" , name = "FUNNYRedNear")
 
-public class RedNear extends LinearOpMode {
+public class FUNNYRedNear extends LinearOpMode {
 
     enum STROBOT {
         START,
@@ -94,6 +96,14 @@ public class RedNear extends LinearOpMode {
         GO_PARK,
         GO_SCORE_ON_GROUND,
 
+        VERIF_FUNNY_MOMENT,
+        FUNNY_MOMENT_CASE_ONE,
+        FUNNY_MOMENT_CASE_TWO,
+
+        VERIF_FUNNY_MOMENT_SCORE,
+        FUNNY_MOMENT_CASE_ONE_SCORE,
+        FUNNY_MOMENT_CASE_TWO_SCORE,
+
         PARK,
 
 
@@ -106,7 +116,7 @@ public class RedNear extends LinearOpMode {
      * purple
      */
 
-    public static double x_purple_preload_right = 25, y_purple_preload_right = -48, angle_purple_preload_right = 270;
+    public static double x_purple_preload_right = 26, y_purple_preload_right = -45, angle_purple_preload_right = 270;
     public static double x_purple_preload_center = 7, y_purple_preload_center = -37, angle_purple_preload_center = 270;
     public static double x_purple_preload_left = 3, y_purple_preload_left = -40, angle_purple_preload_left = 290;
 
@@ -145,7 +155,7 @@ public class RedNear extends LinearOpMode {
     public static double x_inter_collect_cycle_3_left = 30, y_inter_collect_cycle_3_left = -7, angle_inter_collect_cycle_3_left = 180;
     public static double x_collect_cycle_3_left = -28, y_collect_cycle_3_left = -7, angle_collect_cycle_3_left = 180;
 
-    public static double retry_x = -24.5, retry_y = -10, retry_angle = 180;
+    public static double retry_x = -24.5, retry_y = 10, retry_angle = 180;
 
     /**
      * score
@@ -155,17 +165,17 @@ public class RedNear extends LinearOpMode {
     // Second cycle scoring positions
     public static double x_score_second_cycle_right = 50, y_score_second_cycle_right = -18, angle_score_second_angle_right = 150;
     public static double x_score_second_cycle_center = 50, y_score_second_cycle_center = -18, angle_score_second_angle_center = 150;
-    public static double x_score_second_cycle_left = 50, y_score_second_cycle_left = -18, angle_score_second_angle_left = 150;
+    public static double x_score_second_cycle_left = 50, y_score_second_cycle_left = -22.5, angle_score_second_angle_left = 150;
 
     // Third cycle scoring positions
     public static double x_score_third_cycle_right = 49.5, y_score_third_cycle_right = -16, angle_score_third_angle_right = 150;
     public static double x_score_third_cycle_center = 49.5, y_score_third_cycle_center = -16, angle_score_third_angle_center = 150;
-    public static double x_score_third_cycle_left = 49.5, y_score_third_cycle_left = -16, angle_score_third_angle_left = 150;
+    public static double x_score_third_cycle_left = 49.5, y_score_third_cycle_left = -21.5, angle_score_third_angle_left = 150;
 
 
     public static double x_score_forth_cycle_right = 49.5, y_score_forth_cycle_right = -16, angle_score_forth_angle_right = 150;
     public static double x_score_forth_cycle_center = 49.5, y_score_forth_cycle_center = -16, angle_score_forth_angle_center = 150;
-    public static double x_score_forth_cycle_left = 49.5, y_score_forth_cycle_left = -16, angle_score_forth_angle_left = 150;
+    public static double x_score_forth_cycle_left = 49.5, y_score_forth_cycle_left = -21.5, angle_score_forth_angle_left = 150;
 
 
 
@@ -197,10 +207,10 @@ public class RedNear extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        OpenCVMaster redNear = new OpenCVMaster(this);
-        redNear.observeStick();
+        OpenCVMaster funnyRedNear = new OpenCVMaster(this);
+        funnyRedNear.observeStick();
 
-        DistanceSensorCalibrator calibrator;
+      //  DistanceSensorCalibrator calibrator;
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         robotMap r = new robotMap(hardwareMap);
@@ -320,6 +330,7 @@ public class RedNear extends LinearOpMode {
         Pose2d score_forth_cycle_center = new Pose2d(x_score_forth_cycle_center, y_score_forth_cycle_center, Math.toRadians(angle_score_forth_angle_center));
         Pose2d score_forth_cycle_left = new Pose2d(x_score_forth_cycle_left, y_score_forth_cycle_left, Math.toRadians(angle_score_forth_angle_left));
 
+
         TrajectorySequence PURPLE_RIGHT = drive.trajectorySequenceBuilder(start_pose)
                 .lineToLinearHeading(purpleRight)
                 .build();
@@ -365,112 +376,192 @@ public class RedNear extends LinearOpMode {
 
         TrajectorySequence COLLECT_CYCLE_2_RIGHT = drive.trajectorySequenceBuilder(yellowRight)
                 .setTangent(Math.toRadians(250))
-                .splineToLinearHeading(new Pose2d(25, -11.5, Math.toRadians(180)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-20, -11.5, Math.toRadians(180)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(23, -59, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-23, -59, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-58.5, -37, Math.toRadians(162)), Math.toRadians(130))
                 .build();
 
         TrajectorySequence COLLECT_CYCLE_2_CENTER = drive.trajectorySequenceBuilder(yellowCenter)
                 .setTangent(Math.toRadians(250))
-                .splineToLinearHeading(new Pose2d(25, -10, Math.toRadians(180)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-20.5, -10, Math.toRadians(180)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(23, -59, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-23, -59, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-58.5, -37, Math.toRadians(162)), Math.toRadians(130))
                 .build();
+
 
         TrajectorySequence COLLECT_CYCLE_2_LEFT = drive.trajectorySequenceBuilder(yellowLeft)
                 .setTangent(Math.toRadians(250))
-                .splineToLinearHeading(new Pose2d(25, -11, Math.toRadians(180)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-21, -11, Math.toRadians(180)), Math.toRadians(180))
-                .build();
-
-        TrajectorySequence COLLECT_CYCLE_3_RIGHT = drive.trajectorySequenceBuilder(score_second_cycle_right)
-                .setTangent(Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-20, -11.5, Math.toRadians(180)), Math.toRadians(180))
-                .build();
-
-        TrajectorySequence COLLECT_CYCLE_3_CENTER = drive.trajectorySequenceBuilder(score_second_cycle_center)
-                .setTangent(Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-21.5, -10, Math.toRadians(180)), Math.toRadians(180))
-                .build();
-
-        TrajectorySequence COLLECT_CYCLE_3_LEFT = drive.trajectorySequenceBuilder(score_second_cycle_left)
-                .setTangent(Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-21.5, -11, Math.toRadians(180)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(23, -56, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-23, -56, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-58.5, -36, Math.toRadians(162)), Math.toRadians(130))
                 .build();
 
 
-        TrajectorySequence SCORE_SECOND_CYCLE_RIGHT = drive.trajectorySequenceBuilder(collect_cycle2_right)
-                .lineToLinearHeading(score_second_cycle_right)
+
+        TrajectorySequence SCORE_SECOND_CYCLE_RIGHT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_2_RIGHT.end())
+                .setTangent(Math.toRadians(300))
+                .splineToSplineHeading(new Pose2d(-23, -60, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(13, -60, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(49, -37, Math.toRadians(180)), Math.toRadians(0))
                 .build();
 
-        TrajectorySequence SCORE_SECOND_CYCLE_CENTER = drive.trajectorySequenceBuilder(collect_cycle2_center)
-                .lineToLinearHeading(score_second_cycle_center)
+        TrajectorySequence SCORE_SECOND_CYCLE_CENTER = drive.trajectorySequenceBuilder(COLLECT_CYCLE_2_CENTER.end())
+                .setTangent(Math.toRadians(300))
+                .splineToSplineHeading(new Pose2d(-23, -60, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(13, -60, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(49, -37, Math.toRadians(180)), Math.toRadians(0))
                 .build();
 
-        TrajectorySequence SCORE_SECOND_CYCLE_LEFT = drive.trajectorySequenceBuilder(collect_cycle2_left)
-                .lineToLinearHeading(score_second_cycle_left)
+        TrajectorySequence SCORE_SECOND_CYCLE_LEFT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_2_LEFT.end())
+                .setTangent(Math.toRadians(300))
+                .splineToSplineHeading(new Pose2d(-23, -59, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(13, -59, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(49, -37, Math.toRadians(180)), Math.toRadians(0))
                 .build();
 
-        TrajectorySequence SCORE_THIRD_CYCLE_RIGHT = drive.trajectorySequenceBuilder(collect_cycle3_right)
-                .lineToLinearHeading(score_third_cycle_right)
+        TrajectorySequence COLLECT_CYCLE_3_RIGHT = drive.trajectorySequenceBuilder(SCORE_SECOND_CYCLE_RIGHT.end())
+                .setTangent(Math.toRadians(220))
+                .splineToLinearHeading(new Pose2d(23, -58, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-23, -58, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-58.5, -37, Math.toRadians(162)), Math.toRadians(130))
                 .build();
 
-        TrajectorySequence SCORE_THIRD_CYCLE_CENTER = drive.trajectorySequenceBuilder(collect_cycle3_center)
-                .lineToLinearHeading(score_third_cycle_center)
+        TrajectorySequence COLLECT_CYCLE_3_CENTER = drive.trajectorySequenceBuilder(SCORE_SECOND_CYCLE_CENTER.end())
+                .setTangent(Math.toRadians(220))
+                .splineToLinearHeading(new Pose2d(23, -58, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-23, -58, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-58.5, -37, Math.toRadians(162)), Math.toRadians(130))
                 .build();
 
-        TrajectorySequence SCORE_THIRD_CYCLE_LEFT = drive.trajectorySequenceBuilder(collect_cycle3_left)
-                .lineToLinearHeading(score_third_cycle_left)
+        TrajectorySequence COLLECT_CYCLE_3_LEFT = drive.trajectorySequenceBuilder(SCORE_SECOND_CYCLE_RIGHT.end())
+                .setTangent(Math.toRadians(220))
+                .splineToLinearHeading(new Pose2d(23, -56, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-23, -56, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-58.5, -35, Math.toRadians(162)), Math.toRadians(130))
+                .build();
+
+        TrajectorySequence SCORE_THIRD_CYCLE_RIGHT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_3_RIGHT.end())
+                .setTangent(Math.toRadians(300))
+                .splineToSplineHeading(new Pose2d(-23, -60, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(13, -60, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(49, -36, Math.toRadians(180)), Math.toRadians(0))
+                .build();
+
+        TrajectorySequence SCORE_THIRD_CYCLE_CENTER = drive.trajectorySequenceBuilder(COLLECT_CYCLE_3_CENTER.end())
+                .setTangent(Math.toRadians(300))
+                .splineToSplineHeading(new Pose2d(-23, -60, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(13, -60, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(49, -36, Math.toRadians(180)), Math.toRadians(0))
+                .build();
+
+        TrajectorySequence SCORE_THIRD_CYCLE_LEFT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_3_LEFT.end())
+                .setTangent(Math.toRadians(300))
+                .splineToSplineHeading(new Pose2d(-23, -59, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(13, -59, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(49, -36, Math.toRadians(180)), Math.toRadians(0))
                 .build();
 
         TrajectorySequence COLLECT_CYCLE_4_RIGHT = drive.trajectorySequenceBuilder(SCORE_THIRD_CYCLE_RIGHT.end())
-                .setTangent(Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-22, -8, Math.toRadians(195)), Math.toRadians(180))
+                .setTangent(Math.toRadians(130))
+                .splineToSplineHeading(new Pose2d(23, -58, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-23, -58, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-58, -33, Math.toRadians(175)), Math.toRadians(210))
                 .build();
 
         TrajectorySequence COLLECT_CYCLE_4_CENTER = drive.trajectorySequenceBuilder(SCORE_THIRD_CYCLE_CENTER.end())
-                .setTangent(Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-23, -7, Math.toRadians(195)), Math.toRadians(180))
+                .setTangent(Math.toRadians(130))
+                .splineToSplineHeading(new Pose2d(23, -58, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-23, -58, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-58, -33, Math.toRadians(175)), Math.toRadians(210))
                 .build();
 
         TrajectorySequence COLLECT_CYCLE_4_LEFT = drive.trajectorySequenceBuilder(SCORE_THIRD_CYCLE_LEFT.end())
-                .setTangent(Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-22.3, -7, Math.toRadians(197)), Math.toRadians(180))
+                .setTangent(Math.toRadians(130))
+                .splineToSplineHeading(new Pose2d(23, -58, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-23, -58, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-58, -33, Math.toRadians(175)), Math.toRadians(210))
                 .build();
 
+
         TrajectorySequence SCORE_FORTH_CYCLE_RIGHT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_4_RIGHT.end())
-                .lineToLinearHeading(score_forth_cycle_right)
+                .setTangent(Math.toRadians(50))
+                .splineToSplineHeading(new Pose2d(-23, -55, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(13, -55, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(49, -42, Math.toRadians(195)), Math.toRadians(320))
                 .build();
 
         TrajectorySequence SCORE_FORTH_CYCLE_CENTER = drive.trajectorySequenceBuilder(COLLECT_CYCLE_4_CENTER.end())
-                .lineToLinearHeading(score_forth_cycle_center)
+                .setTangent(Math.toRadians(50))
+                .splineToSplineHeading(new Pose2d(-23, -53, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(13, -55, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(49, -42, Math.toRadians(195)), Math.toRadians(320))
                 .build();
 
         TrajectorySequence SCORE_FORTH_CYCLE_LEFT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_4_LEFT.end())
-                .lineToLinearHeading(score_forth_cycle_left)
+                .setTangent(Math.toRadians(50))
+                .splineToSplineHeading(new Pose2d(-23, -55, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(13, -55, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(49, -42, Math.toRadians(195)), Math.toRadians(320))
+                .build();
+
+        TrajectorySequence FUNNY_MOMENT_ONE = drive.trajectorySequenceBuilder(new Pose2d(7, -55, Math.toRadians(180)))
+                // .setTangent(Math.toRadians(130))
+                .lineToLinearHeading(new Pose2d(23, -56, Math.toRadians(180)))
+                .setTangent(0)
+                .splineToSplineHeading(new Pose2d(-23, -56, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-58, -33, Math.toRadians(195)), Math.toRadians(210))
+                .build();
+
+        TrajectorySequence FUNNY_MOMENT_TWO = drive.trajectorySequenceBuilder(new Pose2d(-13, -55, Math.toRadians(180)))
+                // .setTangent(Math.toRadians(130))
+                .lineToLinearHeading(new Pose2d(-7, -56, Math.toRadians(180)))
+                .setTangent(0)
+                .splineToSplineHeading(new Pose2d(-23, -56, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-58, -33, Math.toRadians(195)), Math.toRadians(210))
+                .build();
+
+        TrajectorySequence FUNNY_MOMENT_ONE_SCORE = drive.trajectorySequenceBuilder(new Pose2d(-16, -55, Math.toRadians(180)))
+                // .setTangent(Math.toRadians(130))
+                .lineToLinearHeading(new Pose2d(-23, -53, Math.toRadians(180)))
+                .setTangent(0)
+                .splineToSplineHeading(new Pose2d(13, -55, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(49, -42, Math.toRadians(165)), Math.toRadians(320))
+                .build();
+
+        TrajectorySequence FUNNY_MOMENT_TWO_SCORE = drive.trajectorySequenceBuilder(new Pose2d(-13, -55, Math.toRadians(180)))
+                // .setTangent(Math.toRadians(130))
+                .lineToLinearHeading(new Pose2d(-13, -53, Math.toRadians(180)))
+                .setTangent(0)
+                .splineToSplineHeading(new Pose2d(13, -55, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(49, -42, Math.toRadians(165)), Math.toRadians(320))
                 .build();
 
 
 
-
-        TrajectorySequence ParkBun = drive.trajectorySequenceBuilder(SCORE_FORTH_CYCLE_CENTER.end())
-                .lineToLinearHeading(new Pose2d(42,  -7, Math.toRadians(180)))
+        TrajectorySequence ParkBun = drive.trajectorySequenceBuilder(SCORE_THIRD_CYCLE_CENTER.end())
+                .lineToLinearHeading(new Pose2d(42,  -60, Math.toRadians(180)))
                 .build();
 
         TrajectorySequence ParkBun2 = drive.trajectorySequenceBuilder(COLLECT_CYCLE_3_CENTER.end())
-                .lineToLinearHeading(new Pose2d(42,  -7, Math.toRadians(180)))
+                .setTangent(Math.toRadians(300))
+                .splineToSplineHeading(new Pose2d(-23, -55, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(13, -55, Math.toRadians(180)), Math.toRadians(0))
+                .lineToLinearHeading(new Pose2d(42,  -60, Math.toRadians(180)))
                 .build();
 
         TrajectorySequence RETRY = drive.trajectorySequenceBuilder(COLLECT_CYCLE_2_CENTER.end())
-                .lineToLinearHeading(new Pose2d(retry_x, retry_y, Math.toRadians(retry_angle)))
+                .lineToLinearHeading(new Pose2d(-58, -32, Math.toRadians(185)))
                 .build();
 
 
         drive.setPoseEstimate(start_pose);
         STROBOT status = STROBOT.START;
 
+       // r.leftFront.setCurrentAlert(5, CurrentUnit.AMPS);
 
         int nrcicluri = 0;
         double loopTime = 0;
-        double extendo_timer_i[] = {1.9, 1.75, 2, 1.8};
+        double extendo_timer_i[] = {1.9, 1.75, 1.8, 1.8};
 
         double extendo_timer_i_purple[] = {0.95, 0.75, 1.9};
         double yellow_timer_i_purple[] = {0.95, 1.35, 1.9};
@@ -498,18 +589,23 @@ public class RedNear extends LinearOpMode {
         lift.i_up = 0;
         tries = 0;
         tries_purple =0;
+        List<Integer> constantsList = new ArrayList<>();
+        constantsList.add(20);
+        constantsList.add(20);
+        constantsList.add(20);
+        constantsList.add(20);
 
         while (!isStarted() && !isStopRequested()) {
 
             sleep(20);
-            if(redNear.opencv.getWhichSide() == "left"){
+            if(funnyRedNear.opencv.getWhichSide() == "left"){
                 caz = 0;
-            } else if (redNear.opencv.getWhichSide() == "center") {
+            } else if (funnyRedNear.opencv.getWhichSide() == "center") {
                 caz = 1;
             } else {
                 caz = 2;
             }
-            telemetry.addData("case", redNear.opencv.getWhichSide());
+            telemetry.addData("case", funnyRedNear.opencv.getWhichSide());
             telemetry.update();
             sleep(50);
         }
@@ -580,8 +676,8 @@ public class RedNear extends LinearOpMode {
                 {
                     if(preload.seconds() > 0.169)
                     {
-                        redNear.stopCamera();
-                        redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.PURPLE;
+                        funnyRedNear.stopCamera();
+                        redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.PURPLE_funnyred;
                         extendo_timer.reset();
                         status = STROBOT.PURPLE;
                     }
@@ -645,7 +741,7 @@ public class RedNear extends LinearOpMode {
 
                 case PREPARE_SCORE_YELLOW:
                 {
-                    if(transfer.seconds() > 0.35)
+                    if(transfer.seconds() > 0.15)
                     {
                         redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.SCORE_YELLOW_BEGIN_BLUEnear;
                         preload.reset();
@@ -717,51 +813,56 @@ public class RedNear extends LinearOpMode {
                         redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.COLLECT_PREPARE;
                         extendo_timer.reset();
                         status = STROBOT.COLLECT_EXTENDO;
+                        r.collect.setPower(1);
                     }
                     break;
                 }
 
+
+
                 case COLLECT_EXTENDO:
                 {
-                    if(park.seconds() < 26)
-                    {if(extendo_timer.seconds() > extendo_timer_i[nrcicluri] && drive.getPoseEstimate().getX() <=0)
-                    {
-                        collectAngle.CS = collectAngleController.collectAngleStatus.COLLECT;
-                        r.collect.setPower(-1);
-
+                    if(park.seconds() < 28)
+                    {collectAngle.CS = collectAngleController.collectAngleStatus.COLLECT;
                         switch (nrcicluri)
                         {
                             case 0:
                             {
                                 collectAngle.collectAngle_i = 4;
-                                extendo.CS = extendoController.extendoStatus.CYCLE;
+                                //   extendo.CS = extendoController.extendoStatus.CYCLE;
                                 failsafe.reset();
                                 break;
                             }
                             case 1:
                             {
                                 collectAngle.collectAngle_i = 2;
-                                extendo.CS = extendoController.extendoStatus.CYCLE;
+                                //  extendo.CS = extendoController.extendoStatus.CYCLE;
                                 failsafe.reset();
                                 break;
                             }
                             case 2:
                             {
-                                collectAngle.collectAngle_i = 4;
-                                extendo.CS = extendoController.extendoStatus.CYCLE;
+                                collectAngle.collectAngle_i = 0;
+                                //  extendo.CS = extendoController.extendoStatus.CYCLE;
                                 failsafe.reset();
                                 break;
                             }
                             case 3:
                             {
                                 collectAngle.collectAngle_i = 2;
-                                extendo.CS = extendoController.extendoStatus.CYCLE;
+                                // extendo.CS = extendoController.extendoStatus.CYCLE;
                                 failsafe.reset();
                                 break;
                             }
 
                         }
-                        status = STROBOT.COLLECT_VERIF_PIXLES;}
+
+
+
+                        if(!drive.isBusy() || (!r.pixelLeft.getState() || !r.pixelRight.getState()))
+                        {
+                            status = STROBOT.COLLECT_VERIF_PIXLES;
+                        }
 
                     }
                     else
@@ -775,9 +876,8 @@ public class RedNear extends LinearOpMode {
 
                 case COLLECT_VERIF_PIXLES:
                 {
-                    if(r.extendoLeft.getCurrentPosition() > 650)
-                    {r.collect.setPower(1);}
-                    if(park.seconds() < 26)
+                    r.collect.setPower(1);
+                    if(park.seconds() < 28)
                     {if((!r.pixelLeft.getState() || !r.pixelRight.getState()))
                     {
                         failsafe2.reset();
@@ -807,7 +907,7 @@ public class RedNear extends LinearOpMode {
 
                 case RETRACT_AND_RERTY:
                 {
-                    if(park.seconds() < 26)
+                    if(park.seconds() < 28)
                     { tries =0;
                         drive.followTrajectorySequenceAsync(RETRY);
                         retry.reset();
@@ -822,7 +922,7 @@ public class RedNear extends LinearOpMode {
 
                 case RETRY_TIMER_RESET:
                 {
-                    if(park.seconds() < 26)
+                    if(park.seconds() < 28)
                     {  if(retry.seconds() > 1)
                     {
                         r.collect.setPower(1);
@@ -831,21 +931,21 @@ public class RedNear extends LinearOpMode {
                             case 0:
                             {
                                 collectAngle.collectAngle_i = 4;
-                                extendo.CS = extendoController.extendoStatus.CYCLE;
+                                //  extendo.CS = extendoController.extendoStatus.CYCLE;
                                 failsafe.reset();
                                 break;
                             }
                             case 1:
                             {
                                 collectAngle.collectAngle_i = 2;
-                                extendo.CS = extendoController.extendoStatus.CYCLE;
+                                //  extendo.CS = extendoController.extendoStatus.CYCLE;
                                 failsafe.reset();
                                 break;
                             }
                             case 2:
                             {
                                 collectAngle.collectAngle_i = 0;
-                                extendo.CS = extendoController.extendoStatus.CYCLE;
+                                //   extendo.CS = extendoController.extendoStatus.CYCLE;
                                 failsafe.reset();
                                 break;
                             }
@@ -875,7 +975,7 @@ public class RedNear extends LinearOpMode {
 
 //                case FAIL_SAFE_HEADER_VERIF:
 //                {
-//                    if(park.seconds() < 26)
+//                    if(park.seconds() < 28)
 //                    {
 //                        if(header.seconds() > 0.3 && (r.pixelLeft.getState() && r.pixelRight.getState()) &&  collectAngle.collectAngle_i >= 0)
 //                        {
@@ -904,7 +1004,7 @@ public class RedNear extends LinearOpMode {
 
                 case COLLECT_VERIF_PIXLES_V2:
                 {
-                    if(park.seconds() < 26)
+                    if(park.seconds() < 28)
                     { if(!r.pixelLeft.getState() && !r.pixelRight.getState())
                     {
                         extendo.CS = extendoController.extendoStatus.RETRACTED;
@@ -933,7 +1033,7 @@ public class RedNear extends LinearOpMode {
 
                 case RETRACT_AND_RERTY_v2:
                 {
-                    if(park.seconds() < 26)
+                    if(park.seconds() < 28)
                     { tries =0;
                         drive.followTrajectorySequenceAsync(RETRY);
                         retry.reset();
@@ -948,7 +1048,7 @@ public class RedNear extends LinearOpMode {
 
                 case RETRY_TIMER_RESET_v2:
                 {
-                    if(park.seconds() < 26)
+                    if(park.seconds() < 28)
                     {  if(retry.seconds() > 1)
                     {
                         r.collect.setPower(1);
@@ -957,21 +1057,21 @@ public class RedNear extends LinearOpMode {
                             case 0:
                             {
                                 collectAngle.collectAngle_i = 3;
-                                extendo.CS = extendoController.extendoStatus.CYCLE;
+                                //  extendo.CS = extendoController.extendoStatus.CYCLE;
                                 failsafe.reset();
                                 break;
                             }
                             case 1:
                             {
                                 collectAngle.collectAngle_i = 1;
-                                extendo.CS = extendoController.extendoStatus.CYCLE;
+                                //  extendo.CS = extendoController.extendoStatus.CYCLE;
                                 failsafe.reset();
                                 break;
                             }
                             case 2:
                             {
                                 collectAngle.collectAngle_i = 4;
-                                extendo.CS = extendoController.extendoStatus.CYCLE;
+                                // extendo.CS = extendoController.extendoStatus.CYCLE;
                                 failsafe.reset();
                                 break;
                             }
@@ -1124,6 +1224,9 @@ public class RedNear extends LinearOpMode {
                     break;
                 }
 
+
+
+
                 case PREPARE_SCORE_CYCLE:
                 {r.collect.setPower(0);
                     if(redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.TRANSFER_DONE && drive.getPoseEstimate().getX() > 0)
@@ -1151,9 +1254,9 @@ public class RedNear extends LinearOpMode {
 
                 case SCORE_CYCLE:
                 {
-                    if( redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.SCORE_CYCLE_DONE && score.seconds() > 0.7469)
+                    if( redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.SCORE_CYCLE_DONE && score.seconds() > 1.1)
                     {
-                        redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.LATCH_DROP_UNGHI;
+                        redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.LATCH_DROP;
                         status = STROBOT.GO_COLLECT;
                     }
 
@@ -1175,7 +1278,7 @@ public class RedNear extends LinearOpMode {
                 case GO_COLLECT:
                 {
 
-                    if(redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.LIFT_ALILBITUP_DONE)
+                    if(redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.NOTHING)
                     { if(forced == false)
                     {  switch (nrcicluri) {
                         case 1:
@@ -1226,7 +1329,7 @@ public class RedNear extends LinearOpMode {
 
                     }
 
-                        if((nrcicluri <3 && park.seconds() <= 29) || nrcicluri<2 )
+                        if((nrcicluri <2 && park.seconds() <= 29) || nrcicluri<2 )
                         {  prepare_collect.reset();
                             status= STROBOT.PREPARE_COLLECT;}
                         else
@@ -1281,9 +1384,6 @@ public class RedNear extends LinearOpMode {
             telemetry.addData("hz ", 1000000000 / (loop - loopTime));
             telemetry.addData("status", status);
 //            telemetry.addData("robotcontroller", RedFarAutoController.CurrentStatus);
-            telemetry.addData("realpoz", r.extendoLeft.getCurrentPosition());
-            telemetry.addData("targetpoz", extendo.activePID.targetValue);
-            telemetry.addData("collectamps", r.collect.getCurrent(CurrentUnit.AMPS));
 //            telemetry.addData("extendo x", extendoController.x);
 //            telemetry.addData("extendi", extendo.CS);
 //            telemetry.addData("failsafe", org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.CurrentStatus);
