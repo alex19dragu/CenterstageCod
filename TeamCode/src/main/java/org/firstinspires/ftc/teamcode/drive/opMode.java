@@ -499,7 +499,7 @@ timer.reset();
 
             if(!previousGamepad2.circle && currentGamepad2.circle)
             {
-                if(clawAngle.clawAngle_i <=2)
+                if(clawAngle.clawAngle_i >2)
                 {
                     if(latchLeft.CS != latchLeftController.LatchLeftStatus.CLOSED)
                     {

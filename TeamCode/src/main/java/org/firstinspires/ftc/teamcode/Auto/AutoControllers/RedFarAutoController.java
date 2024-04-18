@@ -4,10 +4,6 @@ package org.firstinspires.ftc.teamcode.Auto.AutoControllers;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-import org.checkerframework.checker.units.qual.Current;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
-import org.firstinspires.ftc.teamcode.Auto.BlueFar;
 import org.firstinspires.ftc.teamcode.Auto.BlueFarMTI;
 import org.firstinspires.ftc.teamcode.Auto.BlueNear;
 import org.firstinspires.ftc.teamcode.Auto.FUNNYBlueFar;
@@ -15,8 +11,6 @@ import org.firstinspires.ftc.teamcode.Auto.FUNNYBlueNear;
 import org.firstinspires.ftc.teamcode.Auto.FUNNYRedNear;
 import org.firstinspires.ftc.teamcode.Auto.RedFar;
 
-import org.firstinspires.ftc.teamcode.Auto.RedNear;
-import org.firstinspires.ftc.teamcode.DistanceSensorCalibrator;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
 
 import org.firstinspires.ftc.teamcode.system_controllers.clawAngleController;
@@ -28,8 +22,6 @@ import org.firstinspires.ftc.teamcode.system_controllers.fourbarController;
 import org.firstinspires.ftc.teamcode.system_controllers.latchLeftController;
 import org.firstinspires.ftc.teamcode.system_controllers.latchRightController;
 import org.firstinspires.ftc.teamcode.system_controllers.liftController;
-
-import java.io.BufferedReader;
 
 
 public class RedFarAutoController {
@@ -135,7 +127,6 @@ public class RedFarAutoController {
     ElapsedTime funny_java = new ElapsedTime();
     ElapsedTime alibitup = new ElapsedTime();
 
-    DistanceSensorCalibrator calibratorExtendo;
 
     double distance_error = 14;
     double correct_distance = 0;
@@ -150,7 +141,7 @@ public class RedFarAutoController {
         double[] rawReadingsExtendo = {36.5, 33.1, 34.6, 34.4, 36.5, 37.1, 38.6, 30.8, 23.3, 40.2, 25.5, 27.8, 28.9, 29.6, 27.6, 26.3, 24.9, 36.8, 35.6, 37.3};
         double[] actualDistancesExtendo = {27, 25, 26, 25.5, 26.5, 27.5, 29, 24, 20, 30, 21, 22, 23, 23.5, 22.5, 21.5, 20, 28, 28.5, 29.5};
 
-        calibratorExtendo = new DistanceSensorCalibrator(rawReadingsExtendo, actualDistancesExtendo);
+        //calibratorExtendo = new DistanceSensorCalibrator(rawReadingsExtendo, actualDistancesExtendo);
 
 //        double rawReading = r.extendoDistance.getDistance(DistanceUnit.CM);
 //        double calibratedDistance = calibratorExtendo.calibrate(rawReading);

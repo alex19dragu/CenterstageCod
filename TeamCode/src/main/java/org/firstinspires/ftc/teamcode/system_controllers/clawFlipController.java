@@ -36,7 +36,7 @@ public class clawFlipController {
     public static double yellow_bazi = 0.25;
     public static double drive = 0.95;
     public static double purple = 0.15;
-    public static double move = 0.6;
+    public static double move = 0.7;
 
     public void update(robotMap r) {
 

@@ -4,26 +4,18 @@ package org.firstinspires.ftc.teamcode.Auto;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.outoftheboxrobotics.photoncore.Photon;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
-import com.qualcomm.robotcore.hardware.configuration.LynxConstants;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Auto.AutoControllers.RedFarAutoController;
 import org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe;
 import org.firstinspires.ftc.teamcode.Auto.Recognition.BluePipelineStackMaster;
-import org.firstinspires.ftc.teamcode.Auto.Recognition.RedPipelineStackMaster;
-import org.firstinspires.ftc.teamcode.Auto.Recognition.YellowPixelMaster;
 
-import org.firstinspires.ftc.teamcode.DistanceSensorCalibrator;
-import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.opmode.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
 
@@ -41,9 +33,7 @@ import org.firstinspires.ftc.teamcode.system_controllers.liftController;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 
-import java.io.BufferedReader;
 import java.util.List;
-import java.util.logging.XMLFormatter;
 
 @Photon
 @Config
@@ -194,7 +184,7 @@ public class BlueFar extends LinearOpMode {
         BluePipelineStackMaster blueRight = new BluePipelineStackMaster(this);
         blueRight.observeStick();
 
-        DistanceSensorCalibrator calibrator;
+        //DistanceSensorCalibrator calibrator;
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         robotMap r = new robotMap(hardwareMap);
@@ -369,89 +359,131 @@ public class BlueFar extends LinearOpMode {
 
         TrajectorySequence COLLECT_CYCLE_2_RIGHT = drive.trajectorySequenceBuilder(yellowRight)
                 .setTangent(Math.toRadians(250))
-                .splineToLinearHeading(new Pose2d(25, 11, Math.toRadians(180)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-23.5, 11, Math.toRadians(180)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(25, 5, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-22, 9, Math.toRadians(180)), Math.toRadians(180))
                 .build();
 
         TrajectorySequence COLLECT_CYCLE_2_CENTER = drive.trajectorySequenceBuilder(yellowCenter)
                 .setTangent(Math.toRadians(250))
-                .splineToLinearHeading(new Pose2d(25, 11, Math.toRadians(180)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-22.5, 11, Math.toRadians(180)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(25, 5, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-22, 9, Math.toRadians(180)), Math.toRadians(180))
                 .build();
 
         TrajectorySequence COLLECT_CYCLE_2_LEFT = drive.trajectorySequenceBuilder(yellowLeft)
                 .setTangent(Math.toRadians(250))
-                .splineToLinearHeading(new Pose2d(25, 11.5, Math.toRadians(180)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-24, 11.5, Math.toRadians(180)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(25, 5, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-22, 9, Math.toRadians(180)), Math.toRadians(180))
                 .build();
 
-        TrajectorySequence COLLECT_CYCLE_3_RIGHT = drive.trajectorySequenceBuilder(score_second_cycle_right)
-                .setTangent(Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-23.5, 11, Math.toRadians(180)), Math.toRadians(180))
+        TrajectorySequence SCORE_SECOND_CYCLE_RIGHT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_2_RIGHT.end())
+                .setTangent(0)
+                .splineToSplineHeading(new Pose2d(7, 9, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(46, 31, Math.toRadians(180)), Math.toRadians(0))
+                //  .lineToLinearHeading(score_second_cycle_right)
                 .build();
 
-        TrajectorySequence COLLECT_CYCLE_3_CENTER = drive.trajectorySequenceBuilder(score_second_cycle_center)
-                .setTangent(Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-22.5, 11, Math.toRadians(180)), Math.toRadians(180))
+        TrajectorySequence SCORE_SECOND_CYCLE_CENTER = drive.trajectorySequenceBuilder(COLLECT_CYCLE_2_CENTER.end())
+                .setTangent(0)
+                .splineToSplineHeading(new Pose2d(7, 9, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(46, 31, Math.toRadians(180)), Math.toRadians(0))
+                //  .lineToLinearHeading(score_second_cycle_center)
                 .build();
 
-        TrajectorySequence COLLECT_CYCLE_3_LEFT = drive.trajectorySequenceBuilder(score_second_cycle_left)
-                .setTangent(Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-24, 11.5, Math.toRadians(180)), Math.toRadians(180))
+        TrajectorySequence SCORE_SECOND_CYCLE_LEFT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_2_LEFT.end())
+                .setTangent(0)
+                .splineToSplineHeading(new Pose2d(7, 9, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(46, 31, Math.toRadians(180)), Math.toRadians(0))
+                // .lineToLinearHeading(score_second_cycle_left)
+                .build();
+
+        TrajectorySequence COLLECT_CYCLE_3_RIGHT = drive.trajectorySequenceBuilder(SCORE_SECOND_CYCLE_RIGHT.end())
+                .setTangent(Math.toRadians(250))
+                .splineToLinearHeading(new Pose2d(25, 7, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-22.5, 7, Math.toRadians(180)), Math.toRadians(180))
+                .build();
+
+        TrajectorySequence COLLECT_CYCLE_3_CENTER = drive.trajectorySequenceBuilder(SCORE_SECOND_CYCLE_CENTER.end())
+                .setTangent(Math.toRadians(250))
+                .splineToLinearHeading(new Pose2d(25, 7, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-22.5, 7, Math.toRadians(180)), Math.toRadians(180))
+                .build();
+
+        TrajectorySequence COLLECT_CYCLE_3_LEFT = drive.trajectorySequenceBuilder(SCORE_SECOND_CYCLE_LEFT.end())
+                .setTangent(Math.toRadians(250))
+                .splineToLinearHeading(new Pose2d(25, 7, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-22.5, 7, Math.toRadians(180)), Math.toRadians(180))
                 .build();
 
 
-        TrajectorySequence SCORE_SECOND_CYCLE_RIGHT = drive.trajectorySequenceBuilder(collect_cycle2_right)
-                .lineToLinearHeading(score_second_cycle_right)
+        TrajectorySequence SCORE_THIRD_CYCLE_RIGHT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_3_RIGHT.end())
+                .setTangent(0)
+                .splineToSplineHeading(new Pose2d(7, 9, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(46, 31, Math.toRadians(180)), Math.toRadians(0))
+                //  .lineToLinearHeading(score_third_cycle_right)
                 .build();
 
-        TrajectorySequence SCORE_SECOND_CYCLE_CENTER = drive.trajectorySequenceBuilder(collect_cycle2_center)
-                .lineToLinearHeading(score_second_cycle_center)
+        TrajectorySequence SCORE_THIRD_CYCLE_CENTER = drive.trajectorySequenceBuilder(COLLECT_CYCLE_3_CENTER.end())
+                .setTangent(0)
+                .splineToSplineHeading(new Pose2d(7, 9, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(46, 31, Math.toRadians(180)), Math.toRadians(0))
+                // .lineToLinearHeading(score_third_cycle_center)
                 .build();
 
-        TrajectorySequence SCORE_SECOND_CYCLE_LEFT = drive.trajectorySequenceBuilder(collect_cycle2_left)
-                .lineToLinearHeading(score_second_cycle_left)
-                .build();
-
-        TrajectorySequence SCORE_THIRD_CYCLE_RIGHT = drive.trajectorySequenceBuilder(collect_cycle3_right)
-                .lineToLinearHeading(score_third_cycle_right)
-                .build();
-
-        TrajectorySequence SCORE_THIRD_CYCLE_CENTER = drive.trajectorySequenceBuilder(collect_cycle3_center)
-                .lineToLinearHeading(score_third_cycle_center)
-                .build();
-
-        TrajectorySequence SCORE_THIRD_CYCLE_LEFT = drive.trajectorySequenceBuilder(collect_cycle3_left)
-                .lineToLinearHeading(score_third_cycle_left)
+        TrajectorySequence SCORE_THIRD_CYCLE_LEFT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_3_LEFT.end())
+                .setTangent(0)
+                .splineToSplineHeading(new Pose2d(7, 9, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(46, 31, Math.toRadians(180)), Math.toRadians(0))
+                //.lineToLinearHeading(score_third_cycle_left)
                 .build();
 
         TrajectorySequence COLLECT_CYCLE_4_RIGHT = drive.trajectorySequenceBuilder(SCORE_THIRD_CYCLE_RIGHT.end())
-                .setTangent(Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-25.5, 10, Math.toRadians(166.5)), Math.toRadians(180))
+//                .setTangent(Math.toRadians(180))
+//                .splineToSplineHeading(new Pose2d(-22.5, 7, Math.toRadians(168)), Math.toRadians(180))
+                .setTangent(250)
+                .splineToLinearHeading(new Pose2d(23, 3, Math.toRadians(180)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(0, 9, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-23.5, 9, Math.toRadians(171)), Math.toRadians(180))
                 .build();
 
         TrajectorySequence COLLECT_CYCLE_4_CENTER = drive.trajectorySequenceBuilder(SCORE_THIRD_CYCLE_CENTER.end())
-                .setTangent(Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-25.5, 8, Math.toRadians(166)), Math.toRadians(180))
+//                .setTangent(Math.toRadians(180))
+//                .splineToSplineHeading(new Pose2d(-22, 6.75, Math.toRadians(169)), Math.toRadians(180))
+                .setTangent(250)
+                .splineToLinearHeading(new Pose2d(23, 3, Math.toRadians(180)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(0, 9, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-23.5, 9, Math.toRadians(171)), Math.toRadians(180))
                 .build();
 
         TrajectorySequence COLLECT_CYCLE_4_LEFT = drive.trajectorySequenceBuilder(SCORE_THIRD_CYCLE_LEFT.end())
-                .setTangent(Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-25.5, 8, Math.toRadians(165)), Math.toRadians(180))
+//                .setTangent(Math.toRadians(180))
+//                .splineToSplineHeading(new Pose2d(-22, 4, Math.toRadians(165)), Math.toRadians(180))
+                .setTangent(250)
+                .splineToLinearHeading(new Pose2d(23, 3, Math.toRadians(180)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(0, 9, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-23.5, 9, Math.toRadians(171)), Math.toRadians(180))
                 .build();
 
+
         TrajectorySequence SCORE_FORTH_CYCLE_RIGHT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_4_RIGHT.end())
-                .lineToLinearHeading(score_forth_cycle_right)
+                //    .lineToLinearHeading(score_forth_cycle_right)
+                .setTangent(0)
+                .splineToSplineHeading(new Pose2d(7, 9, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(46, 31, Math.toRadians(180)), Math.toRadians(0))
                 .build();
 
         TrajectorySequence SCORE_FORTH_CYCLE_CENTER = drive.trajectorySequenceBuilder(COLLECT_CYCLE_4_CENTER.end())
-                .lineToLinearHeading(score_forth_cycle_center)
+                // .lineToLinearHeading(score_forth_cycle_center)
+                .setTangent(0)
+                .splineToSplineHeading(new Pose2d(7, 9, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(46, 31, Math.toRadians(180)), Math.toRadians(0))
                 .build();
 
         TrajectorySequence SCORE_FORTH_CYCLE_LEFT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_4_LEFT.end())
-                .lineToLinearHeading(score_forth_cycle_left)
+                //  .lineToLinearHeading(score_forth_cycle_left)
+                .setTangent(0)
+                .splineToSplineHeading(new Pose2d(7, 9, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(46, 31, Math.toRadians(180)), Math.toRadians(0))
                 .build();
-
 
 
 
@@ -583,7 +615,7 @@ park.reset();
                 {
                     if(preload.seconds() > 0.269)
                     {
-                        blueRight.stopCamera();
+                     //   blueRight.stopCamera();
                         redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.PURPLE;
                         extendo_timer.reset();
                         status = STROBOT.PURPLE;
@@ -1185,7 +1217,7 @@ park.reset();
                 {
                     if( redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.SCORE_CYCLE_DONE && score.seconds() > 0.55)
                     {
-                        redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.LATCH_DROP_UNGHI;
+                        redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.LATCH_DROP;
                         status = STROBOT.GO_COLLECT;
                     }
 
@@ -1207,7 +1239,7 @@ park.reset();
                 case GO_COLLECT:
                 {
 
-                    if(redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.LIFT_ALILBITUP_DONE)
+                    if(redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.NOTHING)
                     { if(forced == false)
                     {  switch (nrcicluri) {
                         case 1:

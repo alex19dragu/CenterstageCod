@@ -4,26 +4,18 @@ package org.firstinspires.ftc.teamcode.Auto;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.outoftheboxrobotics.photoncore.Photon;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
-import com.qualcomm.robotcore.hardware.configuration.LynxConstants;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Auto.AutoControllers.RedFarAutoController;
 import org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe;
 import org.firstinspires.ftc.teamcode.Auto.Recognition.BluePipelineStackMaster;
-import org.firstinspires.ftc.teamcode.Auto.Recognition.RedPipelineStackMaster;
-import org.firstinspires.ftc.teamcode.Auto.Recognition.YellowPixelMaster;
 
-import org.firstinspires.ftc.teamcode.DistanceSensorCalibrator;
-import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.opmode.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
 
@@ -41,10 +33,7 @@ import org.firstinspires.ftc.teamcode.system_controllers.liftController;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 
-import java.io.BufferedReader;
 import java.util.List;
-import java.util.Objects;
-import java.util.logging.XMLFormatter;
 
 @Photon
 @Config
@@ -203,7 +192,7 @@ public class FUNNYBlueFar extends LinearOpMode {
         BluePipelineStackMaster blueRight = new BluePipelineStackMaster(this);
         blueRight.observeStick();
 
-        DistanceSensorCalibrator calibrator;
+        //DistanceSensorCalibrator calibrator;
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         robotMap r = new robotMap(hardwareMap);
