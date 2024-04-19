@@ -101,9 +101,9 @@ public class RedFar extends LinearOpMode {
      * yellow
      */
 
-    public static double x_yellow_preload_right = 45, y_yellow_preload_right = -40.5, angle_yellow_preload_right = 180;
-    public static double x_yellow_preload_center = 45, y_yellow_preload_center = -34, angle_yellow_preload_center = 180;
-    public static double x_yellow_preload_left = 45, y_yellow_preload_left = -29.5, angle_yellow_preload_left = 180;
+    public static double x_yellow_preload_right = 45, y_yellow_preload_right = -38, angle_yellow_preload_right = 180;
+    public static double x_yellow_preload_center = 45, y_yellow_preload_center = -33, angle_yellow_preload_center = 180;
+    public static double x_yellow_preload_left = 45, y_yellow_preload_left = -29, angle_yellow_preload_left = 180;
     // public static double x_yellow_inter =
 
     /**
@@ -389,14 +389,14 @@ droneLatch.update(r);
 
         TrajectorySequence COLLECT_CYCLE_2_CENTER = drive.trajectorySequenceBuilder(yellowCenter)
                 .setTangent(Math.toRadians(120))
-                .splineToSplineHeading(new Pose2d(15, -12, Math.toRadians(180)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-24.5, -12, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(15, -11, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-24.5, -11, Math.toRadians(180)), Math.toRadians(180))
                 .build();
 
         TrajectorySequence COLLECT_CYCLE_2_LEFT = drive.trajectorySequenceBuilder(yellowLeft)
                 .setTangent(Math.toRadians(120))
-                .splineToSplineHeading(new Pose2d(15, -12, Math.toRadians(180)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-24.5, -12, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(15, -10, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-24.5, -10, Math.toRadians(180)), Math.toRadians(180))
                 .build();
 
         TrajectorySequence SCORE_SECOND_CYCLE_RIGHT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_2_RIGHT.end())
@@ -428,14 +428,14 @@ droneLatch.update(r);
 
         TrajectorySequence COLLECT_CYCLE_3_CENTER = drive.trajectorySequenceBuilder(SCORE_SECOND_CYCLE_CENTER.end())
                 .setTangent(Math.toRadians(120))
-                .splineToSplineHeading(new Pose2d(15, -12, Math.toRadians(180)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-24.5, -12, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(15, -11, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-24.5, -11, Math.toRadians(180)), Math.toRadians(180))
                 .build();
 
         TrajectorySequence COLLECT_CYCLE_3_LEFT = drive.trajectorySequenceBuilder(SCORE_SECOND_CYCLE_LEFT.end())
                 .setTangent(Math.toRadians(120))
-                .splineToSplineHeading(new Pose2d(15, -14, Math.toRadians(180)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-24.5, -14, Math.toRadians(182)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(15, -10, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-24.5, -10, Math.toRadians(182)), Math.toRadians(180))
                 .build();
 
 
@@ -504,7 +504,7 @@ droneLatch.update(r);
         TrajectorySequence SCORE_FORTH_CYCLE_LEFT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_4_LEFT.end())
                 //  .lineToLinearHeading(score_forth_cycle_left)
                 .setTangent(0)
-                .splineToSplineHeading(new Pose2d(7, -9, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(7, -12, Math.toRadians(180)), Math.toRadians(0))
                 .splineToLinearHeading(new Pose2d(45.5, -32, Math.toRadians(180)), Math.toRadians(0))
                 .build();
 
@@ -767,7 +767,7 @@ droneLatch.update(r);
 
                 case WAIT_alliance:
                 {
-                    if(!drive.isBusy())
+                    if(prepare_score_yellowqe.seconds() >1)
                     {
                         switch (caz)
                         {
@@ -1226,6 +1226,7 @@ droneLatch.update(r);
                     {
                         extendo.CS = extendoController.extendoStatus.RETRACTED;
                         drive.followTrajectorySequenceAsync(ParkBun2);
+                        extendo_timer.reset();
                         status = STROBOT.GO_SCORE_CYCLE_FUNNY_JAVA_GROUND;
                     }
                     break;
@@ -1301,7 +1302,7 @@ droneLatch.update(r);
 
                 case SCORE_CYCLE_GROUND:
                 {
-                    if(score.seconds() > 0.95)
+                    if(score.seconds() > 0.65)
                     {
                         redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.LATCH_DROP_YELLOW;
                         park_systems.reset();

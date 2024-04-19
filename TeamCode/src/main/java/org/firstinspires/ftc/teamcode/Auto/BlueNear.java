@@ -368,19 +368,19 @@ droneLatchController droneLatch = new droneLatchController();
 
         TrajectorySequence COLLECT_CYCLE_2_RIGHT = drive.trajectorySequenceBuilder(yellowRight)
                 .setTangent(Math.toRadians(250))
-                .splineToLinearHeading(new Pose2d(25, 5, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(25, 9, Math.toRadians(180)), Math.toRadians(180))
                 .splineToSplineHeading(new Pose2d(-20.5, 9, Math.toRadians(180)), Math.toRadians(180))
                 .build();
 
         TrajectorySequence COLLECT_CYCLE_2_CENTER = drive.trajectorySequenceBuilder(yellowCenter)
                 .setTangent(Math.toRadians(250))
-                .splineToLinearHeading(new Pose2d(25, 5, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(25, 9, Math.toRadians(180)), Math.toRadians(180))
                 .splineToSplineHeading(new Pose2d(-20.5, 9, Math.toRadians(180)), Math.toRadians(180))
                 .build();
 
         TrajectorySequence COLLECT_CYCLE_2_LEFT = drive.trajectorySequenceBuilder(yellowLeft)
                 .setTangent(Math.toRadians(250))
-                .splineToLinearHeading(new Pose2d(25, 5, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(25, 9, Math.toRadians(180)), Math.toRadians(180))
                 .splineToSplineHeading(new Pose2d(-20.5, 9, Math.toRadians(180)), Math.toRadians(180))
                 .build();
 
@@ -407,19 +407,19 @@ droneLatchController droneLatch = new droneLatchController();
 
         TrajectorySequence COLLECT_CYCLE_3_RIGHT = drive.trajectorySequenceBuilder(SCORE_SECOND_CYCLE_RIGHT.end())
                 .setTangent(Math.toRadians(250))
-                .splineToLinearHeading(new Pose2d(25, 7, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(25, 7, Math.toRadians(180)), Math.toRadians(180))
                 .splineToSplineHeading(new Pose2d(-21, 7, Math.toRadians(180)), Math.toRadians(180))
                 .build();
 
         TrajectorySequence COLLECT_CYCLE_3_CENTER = drive.trajectorySequenceBuilder(SCORE_SECOND_CYCLE_CENTER.end())
                 .setTangent(Math.toRadians(250))
-                .splineToLinearHeading(new Pose2d(25, 7, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(25, 7, Math.toRadians(180)), Math.toRadians(180))
                 .splineToSplineHeading(new Pose2d(-21, 7, Math.toRadians(180)), Math.toRadians(180))
                 .build();
 
         TrajectorySequence COLLECT_CYCLE_3_LEFT = drive.trajectorySequenceBuilder(SCORE_SECOND_CYCLE_LEFT.end())
                 .setTangent(Math.toRadians(250))
-                .splineToLinearHeading(new Pose2d(25, 7, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(25, 7, Math.toRadians(180)), Math.toRadians(180))
                 .splineToSplineHeading(new Pose2d(-21, 7, Math.toRadians(180)), Math.toRadians(180))
                 .build();
 
@@ -449,8 +449,8 @@ droneLatchController droneLatch = new droneLatchController();
 //                .setTangent(Math.toRadians(180))
 //                .splineToSplineHeading(new Pose2d(-22.5, 7, Math.toRadians(168)), Math.toRadians(180))
                 .setTangent(250)
-                .splineToLinearHeading(new Pose2d(23, 3, Math.toRadians(180)), Math.toRadians(180))
-                .splineToLinearHeading(new Pose2d(0, 9, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(23, 9, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(0, 9, Math.toRadians(180)), Math.toRadians(180))
                 .splineToSplineHeading(new Pose2d(-23, 9, Math.toRadians(171)), Math.toRadians(180))
                 .build();
 
@@ -458,8 +458,8 @@ droneLatchController droneLatch = new droneLatchController();
 //                .setTangent(Math.toRadians(180))
 //                .splineToSplineHeading(new Pose2d(-22, 6.75, Math.toRadians(169)), Math.toRadians(180))
                 .setTangent(250)
-                .splineToLinearHeading(new Pose2d(23, 3, Math.toRadians(180)), Math.toRadians(180))
-                .splineToLinearHeading(new Pose2d(0, 9, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(23, 9, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(0, 9, Math.toRadians(180)), Math.toRadians(180))
                 .splineToSplineHeading(new Pose2d(-23, 9, Math.toRadians(171)), Math.toRadians(180))
                 .build();
 
@@ -467,8 +467,8 @@ droneLatchController droneLatch = new droneLatchController();
 //                .setTangent(Math.toRadians(180))
 //                .splineToSplineHeading(new Pose2d(-22, 4, Math.toRadians(165)), Math.toRadians(180))
                 .setTangent(250)
-                .splineToLinearHeading(new Pose2d(23, 3, Math.toRadians(180)), Math.toRadians(180))
-                .splineToLinearHeading(new Pose2d(0, 9, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(23, 9, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(0, 9, Math.toRadians(180)), Math.toRadians(180))
                 .splineToSplineHeading(new Pose2d(-23, 9, Math.toRadians(171)), Math.toRadians(180))
                 .build();
 
