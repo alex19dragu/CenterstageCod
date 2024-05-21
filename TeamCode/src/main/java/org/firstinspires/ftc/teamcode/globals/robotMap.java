@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+
 public class robotMap {
 
     /**
@@ -70,7 +72,11 @@ public class robotMap {
     public static robotMap instance = null ;
     private boolean enabled;
 
+    /**
+     * AprilTag
+     */
 
+    private AprilTagProcessor aprilTag;
 
     /**
      * INIT

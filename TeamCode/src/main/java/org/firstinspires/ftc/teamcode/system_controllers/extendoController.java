@@ -97,19 +97,19 @@ public class extendoController {
     public static double extended = 800;
     public static double drive = 800;
     public static double failsafe = 800;
-    public static double purple[] ={ 465, 215, 0};
-    public static double purpleredfar[] ={ 0, 215, 400};
+    public static double purple[] ={ 515, 295, 0};
+    public static double purpleredfar[] ={ 0, 280, 505};
     public static double cycle = 840;
     public static double cycle_far = 835;
     public static double x = 10;
     public static int caz = 0;
-    public static double transfer = -40;
+    public static double transfer = -20;
     public static double retry = 900;
 
     public static double retry_near = 800;
     public static double failsafe_near = 800;
 
-        public static double retry_purple[] = {445, 320, 0};
+        public static double retry_purple[] = {445, 230, 0};
     public static double fail_purple[] = {420, 150, 0};
 
     public static double retry_purpleredfar[] = {0, 230, 445};
@@ -296,14 +296,14 @@ public SimplePIDController activePID;
 
                 case RERTRY_PURPLE:
                 {
-                    activePID.targetValue = retry_purple[BlueFar.caz];
+                    activePID.targetValue = retry_purple[caz];
                     activePID.maxOutput =1;
                     break;
                 }
 
                 case FAIL_SAFE_PURPLE:
                 {
-                    activePID.targetValue = fail_purple[BlueFar.caz];
+                    activePID.targetValue = fail_purple[caz];
                     activePID.maxOutput =1;
                     break;
                 }

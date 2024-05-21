@@ -8,25 +8,25 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-
-public class BlueOpenCVMaster {
+public class BluePipelineStackMasterFunny {
     private OpenCvWebcam webcam;
 
     private String itemStatus;
-    public BlueOpenCVPipeline opencv2 = null;
+    public BluePipelineStackFunny opencvstack = null;
     private LinearOpMode op;
-    public BlueOpenCVMaster(LinearOpMode p_op){
+    public BluePipelineStackMasterFunny(LinearOpMode p_op){
         //you can input  a hardwareMap instead of linearOpMode if you want
         op = p_op;
         //initialize webcam
         webcam = OpenCvCameraFactory.getInstance().createWebcam(op.hardwareMap.get(WebcamName.class, "Webcam 1"));
+        //FtcDashboard.getInstance().startCameraStream(webcam, 0);
     }
     public String getItemStatus() {
         return itemStatus;
     }
     public void observeStick(){
         //create the pipeline
-        opencv2 = new BlueOpenCVPipeline();
+        opencvstack = new BluePipelineStackFunny();
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
@@ -49,13 +49,13 @@ public class BlueOpenCVMaster {
                  * For a rear facing camera or a webcam, rotation is defined assuming the camera is facing
                  * away from the user.
                  */
-                webcam.setPipeline(opencv2);
+                webcam.setPipeline(opencvstack);
                 //start streaming the camera
                 webcam.startStreaming(640, 360, OpenCvCameraRotation.UPRIGHT);
 
-                while (!opencv2.hasProcessedFrame) op.sleep(50);
+                while (!opencvstack.hasProcessedFrame) op.sleep(50);
 
-                itemStatus = opencv2.getWhichSide();
+                itemStatus = opencvstack.getWhichSide();
 
                 //if you are using dashboard, update dashboard camera view
                 /*FtcDashboard.getInstance().startCameraStream(webcam, 5);*/

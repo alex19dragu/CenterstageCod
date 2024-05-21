@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Auto.Recognition;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -33,33 +34,33 @@ import java.util.List;
 
 
 @Config
-public class CustomOpenCVPipeline extends OpenCvPipeline {
+public class BluePipelineStackFunny extends OpenCvPipeline {
     //backlog of frames to average out to reduce noise
 
-    public String whichSide;
+    public String whichSide = null;
 
     public boolean hasProcessedFrame = false;
     public int max;
 
     ArrayList<double[]> frameList;
     //these are public static to be tuned in dashboard
-    public static double strictLowS = 140;
-    public static double strictHighS = 255;
+    public static double strictLowS = 140; //NEVER used
+    public static double strictHighS = 255; //NEVER used
 
-    public static double lowS  = 100;
+    public static double lowS  = 75;
     public static double highS = 255;
 
-    public static double lowV  = 20;
-    public static double highV = 255;
+    public static double lowV  = 75;
+    public static double highV = 150;
 
-    public CustomOpenCVPipeline() {
+    public BluePipelineStackFunny() {
         frameList = new ArrayList<>();
     }
 
     Mat YCbCr = new Mat();
     Mat region1_Cb, region2_Cb, region3_Cb;
     Mat outPut = new Mat();
-    Scalar rectColor = new Scalar(255.0, 0.0, 0.0); // red color in RGB
+    Scalar rectColor = new Scalar(0.0, 0.0, 255.0); // blue color in RGB
     Scalar rectColorFound = new Scalar(255.0, 100.0, 100.0); // light color
     Mat Cb = new Mat();
     public int avg1, avg2, avg3;
@@ -93,6 +94,10 @@ public class CustomOpenCVPipeline extends OpenCvPipeline {
          * buffer. Any changes to the child affect the parent, and the
          * reverse also holds true.
          */
+//        Rect leftRect = new Rect(1, 91, 294, 269);
+//        Rect centerRect = new Rect(295, 91, 226, 269);
+//        Rect rightRect = new Rect(521, 91, 119, 269); asta e ala bun
+
         Rect leftRect = new Rect(1, 160, 160, 200);
         Rect centerRect = new Rect(206, 160, 150, 200);
         Rect rightRect = new Rect(380, 160, 162, 200);
@@ -115,8 +120,8 @@ public class CustomOpenCVPipeline extends OpenCvPipeline {
         // lenient bounds will filter out near yellow, this should filter out all near yellow things(tune this if needed)
 //        Scalar lowHSV = new Scalar(0, 100, 100);
 //        Scalar highHSV = new Scalar(0, 255, 255);
-        Scalar lowHSV = new Scalar(160, lowS, lowV); //values are converted to HSV 160 50 20
-        Scalar highHSV = new Scalar(180, highS, highV); //values are converted to HSV
+        Scalar lowHSV = new Scalar(90, lowS, lowV); //values are converted to HSV 90 50 50
+        Scalar highHSV = new Scalar(150, highS, highV); //values are converted to HSV 130 255 255
 
         Mat thresh = new Mat();
 
@@ -132,15 +137,15 @@ public class CustomOpenCVPipeline extends OpenCvPipeline {
 
         Mat scaledMask = new Mat();
         //scale the average saturation to 150
-        //masked.convertTo(scaledMask, -1, 50 / average.val[1], 0);
+        //masked.convertTo(scaledMask, -1, 150 / average.val[1], 0);
 
 
         Mat scaledThresh = new Mat();
 
 //        Scalar strictLowHSV = new Scalar(0, 100, 100);
 //        Scalar strictHighHSV = new Scalar(0, 255, 255);
-        Scalar strictLowHSV = new Scalar(160, lowS, lowV); //values are converted to HSV 160 50 20
-        Scalar strictHighHSV = new Scalar(180, highS, highV); //values are converted to HSV
+        Scalar strictLowHSV = new Scalar(90, lowS, lowV); //values are converted to HSV 90 100 100
+        Scalar strictHighHSV = new Scalar(150, highS, highV); //values are converted to HSV 130 255 255
 
 
         //apply strict HSV filter onto scaledMask to get rid of any yellow other than pole
@@ -182,10 +187,6 @@ public class CustomOpenCVPipeline extends OpenCvPipeline {
         // return thresh;
         // note that you must not do thresh.release() if you want to return thresh
         // you also need to release the input if you return thresh(release as much as possible)
-
-//        Rect leftRect = new Rect(1, 91, 213, 269);
-//        Rect centerRect = new Rect(214, 91, 213, 269);
-//        Rect rightRect = new Rect(427, 91, 213, 269); asta e ala bun
 
         Rect leftRect = new Rect(1, 160, 160, 200);
         Rect centerRect = new Rect(206, 160, 150, 200);

@@ -45,8 +45,8 @@ public class TestOpMode extends LinearOpMode {
       // collectAngleController collectAngle = new collectAngleController();
  //doorController door = new doorController();
       // fourbarController fourbar = new fourbarController();
-   //  latchLeftController latchLeft = new latchLeftController();
- //latchRightController latchRight = new latchRightController();
+     latchLeftController latchLeft = new latchLeftController();
+ latchRightController latchRight = new latchRightController();
  //    ptoController pto = new ptoController();
       droneController drone = new droneController();
 //        liftController lift = new liftController();
@@ -114,14 +114,25 @@ public class TestOpMode extends LinearOpMode {
 
             if(!previousGamepad1.circle && currentGamepad1.circle)
             {
-                if(droneLatch.CS != droneLatchController.droneLatchStatus.SECURED)
-                {
-                    droneLatch.CS = droneLatchController.droneLatchStatus.SECURED;
-                } else
-                {
-                    droneLatch.CS = droneLatchController.droneLatchStatus.RELEASED;
-                }
+               if(latchLeft.CS != latchLeftController.LatchLeftStatus.SECURED)
+               {
+                   latchLeft.CS = latchLeftController.LatchLeftStatus.SECURED;
+               } else
+               {
+                   latchLeft.CS= latchLeftController.LatchLeftStatus.CLOSED;
+               }
             }
+            if(!previousGamepad1.triangle && currentGamepad1.triangle)
+            {
+              if(latchRight.CS != latchRightController.LatchRightStatus.SECURED)
+              {
+                  latchRight.CS = latchRightController.LatchRightStatus.SECURED;
+              } else
+              {
+                  latchRight.CS = latchRightController.LatchRightStatus.CLOSED;
+              }
+            }
+
 
               double power = gamepad2.right_trigger - gamepad2.left_trigger;
 
@@ -137,8 +148,8 @@ public class TestOpMode extends LinearOpMode {
         //  door.update(r);
         //  collectAngle.update(r);
         droneLatch.update(r);
-       // latchLeft.update(r);
-        //    latchRight.update(r);
+        latchLeft.update(r);
+            latchRight.update(r);
         //  pto.update(r);
   // drone.update(r);
 //            lift.update(r, 0, voltage);
@@ -150,7 +161,8 @@ public class TestOpMode extends LinearOpMode {
             double loop = System.nanoTime();
 
             telemetry.addData("hz ", 1000000000 / (loop - loopTime));
-            telemetry.addData("drone", droneLatch.CS);
+            telemetry.addData("latchLeft", latchLeft.CS);
+            telemetry.addData("latchRight", latchRight.CS);
 
             loopTime = loop;
 //            telemetry.addData("x", poseEstimate.getX());

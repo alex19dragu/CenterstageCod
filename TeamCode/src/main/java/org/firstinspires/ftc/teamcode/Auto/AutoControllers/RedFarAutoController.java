@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.Auto.AutoControllers;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
+import org.firstinspires.ftc.teamcode.Auto.BlueFar;
 import org.firstinspires.ftc.teamcode.Auto.BlueFarMTI;
 import org.firstinspires.ftc.teamcode.Auto.BlueNear;
 import org.firstinspires.ftc.teamcode.Auto.FUNNYBlueFar;
@@ -131,7 +132,9 @@ public class RedFarAutoController {
     double distance_error = 14;
     double correct_distance = 0;
     public double nr_cycle = 350;
-
+    public static int claw_caz = 0;
+    public static boolean funny_or_not = false;
+    public static boolean funny_or_notblue = false;
 
 
 
@@ -481,7 +484,7 @@ public class RedFarAutoController {
             {
                 if(claw_timer.seconds() > 0.2)
                 {
-                    switch (RedFar.caz)
+                    switch (claw_caz)
                     {
                         case 0:
                         { clawAngle.clawAngle_i = 4; //1
@@ -490,7 +493,12 @@ public class RedFarAutoController {
                         }
 
                         case 1:
-                        { clawAngle.clawAngle_i = 3;
+                        { if(funny_or_not == false)
+                        { clawAngle.clawAngle_i = 3;}
+                            else
+                        {
+                            clawAngle.clawAngle_i = 4;
+                        }
                             clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
                             break;
                         }
@@ -513,7 +521,7 @@ public class RedFarAutoController {
             {
                 if(claw_timer.seconds() > 0.2)
                 {
-                    switch (FUNNYBlueFar.caz)
+                    switch (claw_caz)
                     {
                         case 0:
                         { clawAngle.clawAngle_i = 1; //1
@@ -522,7 +530,13 @@ public class RedFarAutoController {
                         }
 
                         case 1:
-                        { clawAngle.clawAngle_i = 0;
+                        {
+                            if(funny_or_notblue == false)
+                            {  clawAngle.clawAngle_i = 0;}
+                            else
+                            {
+                                clawAngle.clawAngle_i = 1;
+                            }
                             clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
                             break;
                         }

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Auto.Recognition;
 
+import com.acmerobotics.dashboard.config.Config;
+
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -31,6 +33,7 @@ import java.util.List;
 
 // asta e autonomia cu dreptunghiurile corecte
 
+    @Config
 public class RedPipelineStack extends OpenCvPipeline {
     //backlog of frames to average out to reduce noise
 
@@ -43,6 +46,12 @@ public class RedPipelineStack extends OpenCvPipeline {
     //these are public static to be tuned in dashboard
     public static double strictLowS = 140;
     public static double strictHighS = 255;
+
+    public static double lowS  = 100;
+    public static double highS = 255;
+
+    public static double lowV  = 20;
+    public static double highV = 255;
 
     public RedPipelineStack() {
         frameList = new ArrayList<>();
@@ -107,8 +116,8 @@ public class RedPipelineStack extends OpenCvPipeline {
         // lenient bounds will filter out near yellow, this should filter out all near yellow things(tune this if needed)
 //        Scalar lowHSV = new Scalar(0, 100, 100);
 //        Scalar highHSV = new Scalar(0, 255, 255);
-        Scalar lowHSV = new Scalar(160, 100, 20); //values are converted to HSV 160 50 20
-        Scalar highHSV = new Scalar(180, 255, 255); //values are converted to HSV
+        Scalar lowHSV = new Scalar(160, lowS, lowV); //values are converted to HSV 160 50 20
+        Scalar highHSV = new Scalar(180, highS, highV); //values are converted to HSV
 
         Mat thresh = new Mat();
 
@@ -131,8 +140,8 @@ public class RedPipelineStack extends OpenCvPipeline {
 
 //        Scalar strictLowHSV = new Scalar(0, 100, 100);
 //        Scalar strictHighHSV = new Scalar(0, 255, 255);
-        Scalar strictLowHSV = new Scalar(160, 100, 20); //values are converted to HSV 160 50 20
-        Scalar strictHighHSV = new Scalar(180, 255, 255); //values are converted to HSV
+        Scalar strictLowHSV = new Scalar(160, lowS, lowV); //values are converted to HSV 160 50 20
+        Scalar strictHighHSV = new Scalar(180, highS, highV); //values are converted to HSV
 
 
         //apply strict HSV filter onto scaledMask to get rid of any yellow other than pole

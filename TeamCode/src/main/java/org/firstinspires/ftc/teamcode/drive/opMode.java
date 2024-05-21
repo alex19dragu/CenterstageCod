@@ -431,14 +431,23 @@ timer.reset();
             {
                 if(lift.CS != UP)
                 {
-                     PrecisionDenominatorAngle = 0.5;
                     outtake.CS = SCORE_FOURBAR;
                 }
                 else
                 {
-                    PrecisionDenominatorAngle = 1;
                  outtake.CS = COLLECT_FOURBAR;
                 }
+            }
+
+            if(lift.CS == UP && clawFlip.CS != clawFlipController.clawFlipStatus.MOVE)
+            {
+                PrecisionDenominatorAngle = 0.5;
+            } else if (clawFlip.CS == clawFlipController.clawFlipStatus.MOVE)
+            {
+                PrecisionDenominatorAngle = 0.35;
+            } else
+            {
+                PrecisionDenominatorAngle = 1;
             }
 
             if(lift.CS == UP)

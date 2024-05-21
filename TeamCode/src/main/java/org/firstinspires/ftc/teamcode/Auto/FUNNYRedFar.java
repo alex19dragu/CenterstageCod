@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.Auto.AutoControllers.RedFarAutoController;
 import org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe;
 import org.firstinspires.ftc.teamcode.Auto.Recognition.RedPipelineStackMaster;
 
+import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.opmode.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
 
@@ -56,6 +57,7 @@ public class FUNNYRedFar extends LinearOpMode {
         YELLOW_DROP,
 
         PREPARE_COLLECT,
+        PREPARE_COLLECT_YELLOW,
         COLLECT_EXTENDO,
         COLLECT_VERIF_PIXLES,
         COLLECT_VERIF_PIXLES_V2,
@@ -93,16 +95,16 @@ public class FUNNYRedFar extends LinearOpMode {
      */
 
     public static double x_purple_preload_right = -43, y_purple_preload_right = -30, angle_purple_preload_right = 173;
-    public static double x_purple_preload_center = -53, y_purple_preload_center = -24, angle_purple_preload_center = 183;
+    public static double x_purple_preload_center = -50, y_purple_preload_center = -24, angle_purple_preload_center = 183;
     public static double x_purple_preload_left = -63, y_purple_preload_left = -34, angle_purple_preload_left = 186;
 
     /**
      * yellow
      */
 
-    public static double x_yellow_preload_right = 45, y_yellow_preload_right = -36, angle_yellow_preload_right = 180;
-    public static double x_yellow_preload_center = 45, y_yellow_preload_center = -31, angle_yellow_preload_center = 180;
-    public static double x_yellow_preload_left = 46, y_yellow_preload_left = -24.5, angle_yellow_preload_left = 180;
+    public static double x_yellow_preload_right = 45, y_yellow_preload_right = -33.5, angle_yellow_preload_right = 180;
+    public static double x_yellow_preload_center = 45, y_yellow_preload_center = -31.5, angle_yellow_preload_center = 180;
+    public static double x_yellow_preload_left = 47, y_yellow_preload_left = -25.5, angle_yellow_preload_left = 180;
     // public static double x_yellow_inter =
 
     /**
@@ -175,7 +177,7 @@ public class FUNNYRedFar extends LinearOpMode {
     public static double x_inter_score_first_cycle_left = 23, y_inter_score_first_cycle_left = -7, angle_inter_score_first_cycle_left =180;
 
     public static int caz = 0;
-    public static double limit = 2;
+    public static double limit = 0.9;
     boolean forced = false;
     public static int tries = 0;
     public static int tries_purple = 0;
@@ -321,19 +323,27 @@ public class FUNNYRedFar extends LinearOpMode {
 
         TrajectorySequence YELLOW_LEFT = drive.trajectorySequenceBuilder(purpleLeft)
                 .setTangent(Math.toRadians(280))
-                .splineToSplineHeading(new Pose2d(-23, -61, Math.toRadians(180)), Math.toRadians(0))
-                .splineToSplineHeading(new Pose2d(13, -61, Math.toRadians(180)), Math.toRadians(0))
-                .splineToLinearHeading(yellowLeft, Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(-23, -59, Math.toRadians(180)), Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(13, -59, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(yellowLeft, Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
 //                .lineTo(new Vector2d(x_inter_score_first_cycle,y_inter_score_first_cycle))
 //                .splineToConstantHeading(new Vector2d(x_yellow_preload_center,y_yellow_preload_center),Math.toRadians(0))
                 .build();
 
         TrajectorySequence YELLOW_CENTER = drive.trajectorySequenceBuilder(purpleCenter)
                 .setTangent(Math.toRadians(280))
-                .splineToLinearHeading(new Pose2d(-35, -58.5, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(-35, -58.5, Math.toRadians(180)), Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .setTangent(0)
                 .splineToSplineHeading(new Pose2d(13, -58.5, Math.toRadians(180)), Math.toRadians(0))
-                .splineToLinearHeading(yellowCenter, Math.toRadians(0))
+                .splineToLinearHeading(yellowCenter, Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
 //                .lineToLinearHeading(interCollectFirstCycleCenter)
 //                .lineTo(new Vector2d(x_inter_score_first_cycle,y_inter_score_first_cycle))
 //                .splineToConstantHeading(new Vector2d(x_yellow_preload_center,y_yellow_preload_center),Math.toRadians(0))
@@ -341,10 +351,14 @@ public class FUNNYRedFar extends LinearOpMode {
 
         TrajectorySequence YELLOW_RIGHT = drive.trajectorySequenceBuilder(purpleRight)
                 .setTangent(Math.toRadians(280))
-                .splineToLinearHeading(new Pose2d(-35, -58.5, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(-35, -58, Math.toRadians(180)), Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .setTangent(0)
-                .splineToSplineHeading(new Pose2d(13, -58.5, Math.toRadians(180)), Math.toRadians(0))
-                .splineToLinearHeading(yellowRight, Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(13, -58, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(yellowRight, Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
 
@@ -363,89 +377,137 @@ public class FUNNYRedFar extends LinearOpMode {
 
         TrajectorySequence COLLECT_CYCLE_2_RIGHT = drive.trajectorySequenceBuilder(yellowRight)
                 .setTangent(Math.toRadians(250))
-                .splineToLinearHeading(new Pose2d(23, -57, Math.toRadians(180)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-23, -57, Math.toRadians(180)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-60.7, -36, Math.toRadians(162)), Math.toRadians(130))
+                .splineToLinearHeading(new Pose2d(23, -59, Math.toRadians(180)), Math.toRadians(180),
+                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(-23, -59, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-61.2, -36, Math.toRadians(162)), Math.toRadians(130),
+                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         TrajectorySequence COLLECT_CYCLE_2_CENTER = drive.trajectorySequenceBuilder(yellowCenter)
                 .setTangent(Math.toRadians(250))
-                .splineToLinearHeading(new Pose2d(23, -57, Math.toRadians(180)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(23, -57, Math.toRadians(180)), Math.toRadians(180),
+                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .splineToSplineHeading(new Pose2d(-23, -57, Math.toRadians(180)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-60.7, -36, Math.toRadians(162)), Math.toRadians(130))
+                .splineToSplineHeading(new Pose2d(-61.2, -36, Math.toRadians(162)), Math.toRadians(130),
+                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
 
         TrajectorySequence COLLECT_CYCLE_2_LEFT = drive.trajectorySequenceBuilder(yellowLeft)
                 .setTangent(Math.toRadians(250))
-                .splineToLinearHeading(new Pose2d(23, -57, Math.toRadians(180)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(23, -57, Math.toRadians(180)), Math.toRadians(180),
+                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .splineToSplineHeading(new Pose2d(-23, -57, Math.toRadians(180)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-60.7, -36, Math.toRadians(162)), Math.toRadians(130))
+                .splineToSplineHeading(new Pose2d(-61.2, -36, Math.toRadians(162)), Math.toRadians(130),
+                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
 
 
         TrajectorySequence SCORE_SECOND_CYCLE_RIGHT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_2_RIGHT.end())
                 .setTangent(Math.toRadians(300))
-                .splineToSplineHeading(new Pose2d(-23, -59, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(-23, -59, Math.toRadians(180)), Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .splineToSplineHeading(new Pose2d(13, -59, Math.toRadians(180)), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(49, -35.5, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(45, -32.5, Math.toRadians(180)), Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(50, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         TrajectorySequence SCORE_SECOND_CYCLE_CENTER = drive.trajectorySequenceBuilder(COLLECT_CYCLE_2_CENTER.end())
                 .setTangent(Math.toRadians(300))
-                .splineToSplineHeading(new Pose2d(-23, -59, Math.toRadians(180)), Math.toRadians(0))
-                .splineToSplineHeading(new Pose2d(13, -59, Math.toRadians(180)), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(49, -35.5, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(-27, -58, Math.toRadians(180)), Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(13, -58, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(45, -31.5, Math.toRadians(180)), Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(50, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         TrajectorySequence SCORE_SECOND_CYCLE_LEFT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_2_LEFT.end())
                 .setTangent(Math.toRadians(300))
-                .splineToSplineHeading(new Pose2d(-23, -59, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(-23, -59, Math.toRadians(180)), Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .splineToSplineHeading(new Pose2d(13, -59, Math.toRadians(180)), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(49, -35.5, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(45, -31, Math.toRadians(180)), Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(50, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         TrajectorySequence COLLECT_CYCLE_3_RIGHT = drive.trajectorySequenceBuilder(SCORE_SECOND_CYCLE_RIGHT.end())
                 .setTangent(Math.toRadians(220))
-                .splineToLinearHeading(new Pose2d(23, -56, Math.toRadians(180)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-23, -56, Math.toRadians(180)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-60.7, -35, Math.toRadians(162)), Math.toRadians(130))
+                .splineToLinearHeading(new Pose2d(23, -58, Math.toRadians(180)), Math.toRadians(180),
+                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(-23, -58, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-61.2, -35, Math.toRadians(162)), Math.toRadians(130),
+                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         TrajectorySequence COLLECT_CYCLE_3_CENTER = drive.trajectorySequenceBuilder(SCORE_SECOND_CYCLE_CENTER.end())
                 .setTangent(Math.toRadians(220))
-                .splineToLinearHeading(new Pose2d(23, -56, Math.toRadians(180)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(23, -56, Math.toRadians(180)), Math.toRadians(180),
+                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .splineToSplineHeading(new Pose2d(-23, -56, Math.toRadians(180)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-60.7, -35, Math.toRadians(162)), Math.toRadians(130))
+                .splineToSplineHeading(new Pose2d(-61.2, -35, Math.toRadians(162)), Math.toRadians(130),
+                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         TrajectorySequence COLLECT_CYCLE_3_LEFT = drive.trajectorySequenceBuilder(SCORE_SECOND_CYCLE_RIGHT.end())
                 .setTangent(Math.toRadians(220))
-                .splineToLinearHeading(new Pose2d(23, -56, Math.toRadians(180)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(23, -56, Math.toRadians(180)), Math.toRadians(180),
+                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .splineToSplineHeading(new Pose2d(-23, -56, Math.toRadians(180)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-60.7, -35, Math.toRadians(162)), Math.toRadians(130))
+                .splineToSplineHeading(new Pose2d(-61.2, -35, Math.toRadians(162)), Math.toRadians(130),
+                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         TrajectorySequence SCORE_THIRD_CYCLE_RIGHT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_3_RIGHT.end())
                 .setTangent(Math.toRadians(300))
-                .splineToSplineHeading(new Pose2d(-23, -59, Math.toRadians(180)), Math.toRadians(0))
-                .splineToSplineHeading(new Pose2d(13, -59, Math.toRadians(180)), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(49, -35, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(-23, -57, Math.toRadians(180)), Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(13, -57, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(45, -32, Math.toRadians(180)), Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(50, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         TrajectorySequence SCORE_THIRD_CYCLE_CENTER = drive.trajectorySequenceBuilder(COLLECT_CYCLE_3_CENTER.end())
                 .setTangent(Math.toRadians(300))
-                .splineToSplineHeading(new Pose2d(-23, -59, Math.toRadians(180)), Math.toRadians(0))
-                .splineToSplineHeading(new Pose2d(13, -59, Math.toRadians(180)), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(49, -35, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(-27, -58, Math.toRadians(180)), Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(13, -58, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(45, -31, Math.toRadians(180)), Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(50, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         TrajectorySequence SCORE_THIRD_CYCLE_LEFT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_3_LEFT.end())
                 .setTangent(Math.toRadians(300))
-                .splineToSplineHeading(new Pose2d(-23, -59, Math.toRadians(180)), Math.toRadians(0))
-                .splineToSplineHeading(new Pose2d(13, -59, Math.toRadians(180)), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(49, -35, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(-23, -58, Math.toRadians(180)), Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(13, -58, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(45, -31, Math.toRadians(180)), Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(50, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         TrajectorySequence COLLECT_CYCLE_4_RIGHT = drive.trajectorySequenceBuilder(SCORE_THIRD_CYCLE_RIGHT.end())
@@ -531,13 +593,15 @@ public class FUNNYRedFar extends LinearOpMode {
 
         TrajectorySequence ParkBun2 = drive.trajectorySequenceBuilder(COLLECT_CYCLE_3_CENTER.end())
                 .setTangent(Math.toRadians(300))
-                .splineToSplineHeading(new Pose2d(-23, -55, Math.toRadians(180)), Math.toRadians(0))
-                .splineToSplineHeading(new Pose2d(13, -55, Math.toRadians(180)), Math.toRadians(0))
-                .lineToLinearHeading(new Pose2d(42,  -60, Math.toRadians(180)))
+                .splineToSplineHeading(new Pose2d(-23, -58, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(13, -58, Math.toRadians(180)), Math.toRadians(0))
+                .lineToLinearHeading(new Pose2d(42,  -58, Math.toRadians(180)))
                 .build();
 
         TrajectorySequence RETRY = drive.trajectorySequenceBuilder(COLLECT_CYCLE_2_CENTER.end())
-                .lineToLinearHeading(new Pose2d(-58, -32, Math.toRadians(185)))
+                .turn(Math.toRadians(5))
+                .turn(Math.toRadians(-10))
+                .turn(Math.toRadians(5))
                 .build();
 
 
@@ -633,12 +697,16 @@ public class FUNNYRedFar extends LinearOpMode {
                         {
                             drive.followTrajectorySequenceAsync(PURPLE_LEFT);
                             extendo.caz = 0;
+                            redFarAutoController.funny_or_not = true;
+                            redFarAutoController.claw_caz = 0;
                             break;
                         }
                         case 1:
                         {
                             drive.followTrajectorySequenceAsync(PURPLE_CENTER);
                             extendo.caz = 1;
+                            redFarAutoController.funny_or_not = true;
+                            redFarAutoController.claw_caz = 1;
                             break;
 
                         }
@@ -646,6 +714,8 @@ public class FUNNYRedFar extends LinearOpMode {
                         {
                             drive.followTrajectorySequenceAsync(PURPLE_RIGHT);
                             extendo.caz = 2;
+                            redFarAutoController.funny_or_not = true;
+                            redFarAutoController.claw_caz = 2;
                             break;
                         }
                     }
@@ -843,7 +913,7 @@ public class FUNNYRedFar extends LinearOpMode {
 
                 case PREPARE_COLLECT:
                 {
-                    if(prepare_collect.seconds() > 0.3)
+                    if(prepare_collect.seconds() > 0.7)
                     {
                         redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.COLLECT_PREPARE;
                         extendo_timer.reset();
@@ -975,14 +1045,14 @@ public class FUNNYRedFar extends LinearOpMode {
                         {
                             case 0:
                             {
-                                collectAngle.collectAngle_i = 3;
+                                collectAngle.collectAngle_i = 1;
                               //  extendo.CS = extendoController.extendoStatus.CYCLE;
                                 failsafe.reset();
                                 break;
                             }
                             case 1:
                             {
-                                collectAngle.collectAngle_i = 1;
+                                collectAngle.collectAngle_i = 0;
                                // extendo.CS = extendoController.extendoStatus.CYCLE;
                                 failsafe.reset();
                                 break;
@@ -1010,7 +1080,7 @@ public class FUNNYRedFar extends LinearOpMode {
                 case FAIL_SAFE: {
                     if(failsafecontroller.CurrentStatus == org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE_DONE)
                     {
-                        limit = 1;
+                        limit = 0.65;
                         tries += 1;
                         failsafe.reset();
                         status = STROBOT.COLLECT_VERIF_PIXLES;
@@ -1257,7 +1327,7 @@ public class FUNNYRedFar extends LinearOpMode {
 
                 case PREPARE_SCORE_CYCLE:
                 {r.collect.setPower(0);
-                    if(redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.TRANSFER_DONE && drive.getPoseEstimate().getX() > 0)
+                    if(redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.TRANSFER_DONE && drive.getPoseEstimate().getX() > 10)
                     {
                         redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.SCORE_CYCLE_BEGIN;
                         nrcicluri +=1;
@@ -1282,7 +1352,7 @@ public class FUNNYRedFar extends LinearOpMode {
 
                 case SCORE_CYCLE:
                 {
-                    if( redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.SCORE_CYCLE_DONE && score.seconds() > 1.1)
+                    if( redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.SCORE_CYCLE_DONE && score.seconds() > 1.5)
                     {
                         redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.LATCH_DROP;
                         status = STROBOT.GO_COLLECT;
