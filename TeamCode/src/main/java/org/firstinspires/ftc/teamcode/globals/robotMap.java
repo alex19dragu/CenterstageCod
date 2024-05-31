@@ -69,14 +69,6 @@ public class robotMap {
     public Servo drone = null;
     public Servo droneLatch = null;
 
-    public static robotMap instance = null ;
-    private boolean enabled;
-
-    /**
-     * AprilTag
-     */
-
-    private AprilTagProcessor aprilTag;
 
     /**
      * INIT

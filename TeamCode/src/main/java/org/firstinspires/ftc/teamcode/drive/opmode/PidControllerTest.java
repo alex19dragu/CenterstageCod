@@ -59,7 +59,7 @@ public class PidControllerTest extends LinearOpMode {
             double powerColectare = hello.update(ColectarePosition);
             powerColectare = Math.max(-1,Math.min(powerColectare,1));
             robot.extendoLeft.setPower(powerColectare);
-            robot.extendoRight.setPower(powerColectare);
+           // robot.extendoRight.setPower(powerColectare);
             if (changePositions.seconds()>4)
             {
                 if (hello.targetValue == RetractedPosition )

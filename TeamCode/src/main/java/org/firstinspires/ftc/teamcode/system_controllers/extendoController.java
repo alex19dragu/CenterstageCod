@@ -63,9 +63,9 @@ public class extendoController {
     public static double Ki_retract = 0;
     public static double Kd_retract = 0;
 
-    public static double Kp_drive = 0.005;
-    public static double Ki_drive = 0.001;
-    public static double Kd_drive = 0.002;
+    public static double Kp_drive = 0.0064;
+    public static double Ki_drive = 0;
+    public static double Kd_drive = 0.003;
 
     public static double Kp_short = 0.017;
     public static double Ki_short = 0.002;
@@ -188,7 +188,7 @@ public SimplePIDController activePID;
         powerColectare = Math.max(-powerCap, Math.min(powerColectare * 14 / voltage, powerCap));
 
         r.extendoLeft.setPower(powerColectare);
-        r.extendoRight.setPower(powerColectare);
+      //  r.extendoRight.setPower(powerColectare);
 
         if(CS == EXTENDED)
         {
