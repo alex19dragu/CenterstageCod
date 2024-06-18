@@ -6,18 +6,18 @@ import static java.lang.Math.sin;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
-import org.openftc.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 @Config
 public class AtagMath {
     public static double distanceToCenter = 18.6 / 2.54;
     public static double AprilTagToINCHES = 25.4; // assume distance is in meters
-    public static double[] TAG_X_OFFSET = {0, 20.9, 26.9, 33.4, 34.9, 28.9, 24.9};
-    public static double[] TAG_Y_OFFSET = {0, 0, 0, 0, -43, -43, -43};
-
+    public static double[] TAG_X_OFFSET = {0, 59.8, 59.8, 59.8, 59.8, 59.8, 59.8};
+    public static double[] TAG_Y_OFFSET = {0, 39.8, 39.8, 39.8, 39.8, 33.8, 27.8};
     public static Pose2d poseFromTag(Pose2d robotPose, AprilTagDetection detection) {
-        double tagX = detection.pose.z * AprilTagToINCHES;
-        double tagY = detection.pose.x * AprilTagToINCHES;
+        double tagX = detection.rawPose.z;
+        double tagY = detection.rawPose.x;
 
         double robotHeading = robotPose.getHeading();
 
@@ -27,6 +27,6 @@ public class AtagMath {
         double x_to_center = cos(robotHeading) * distanceToCenter;
         double y_to_center = sin(robotHeading) * distanceToCenter;
 
-        return new Pose2d(-(x_displacement + x_to_center) + TAG_X_OFFSET[detection.id], -(y_displacement + y_to_center) + TAG_Y_OFFSET[detection.id], robotHeading);
+        return new Pose2d((x_displacement + x_to_center) + TAG_X_OFFSET[detection.id], -(y_displacement + y_to_center) + TAG_Y_OFFSET[detection.id], robotHeading);
     }
 }

@@ -154,7 +154,7 @@ public class robotMap {
         rightBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        extendoLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        extendoLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         extendoRight.setDirection(DcMotorSimple.Direction.REVERSE);
         lift.setDirection(DcMotorSimple.Direction.REVERSE);
        // collect.setDirection(DcMotorSimple.Direction.REVERSE);

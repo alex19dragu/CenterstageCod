@@ -460,7 +460,7 @@ timer.reset();
 
             if(!previousGamepad2.dpad_down && currentGamepad2.dpad_down)
             {
-                lift.i_up = Math.max(0, lift.i_up-1);
+                lift.i_up = Math.max(-4, lift.i_up-1);
             }
 
                 if(!previousGamepad2.dpad_right && currentGamepad2.dpad_right)
@@ -470,7 +470,7 @@ timer.reset();
 
                 if(!previousGamepad2.dpad_left && currentGamepad2.dpad_left)
                 {
-                    lift.i_up = Math.max(0, lift.i_up-2);
+                    lift.i_up = Math.max(-4, lift.i_up-2);
                 }
 
             }
@@ -624,16 +624,19 @@ timer.reset();
 //            telemetry.addData("amps_extendoleft", r.extendoLeft.getCurrent(CurrentUnit.AMPS));
 //            telemetry.addData("extendoright", r.extendoRight.getCurrent(CurrentUnit.AMPS));
             telemetry.addData("liftamps", r.lift.getCurrent(CurrentUnit.AMPS));
-            telemetry.addData("liftcp", r.lift.getCurrentPosition());
-            telemetry.addData("lift", lift.activePID.targetValue );
-            telemetry.addData("extendo", extendo.activePID.targetValue);
-            telemetry.addData("status", outtake.CS);
-            telemetry.addData("lift", lift.CS);
-            telemetry.addData("transfer", transfer.CS);
-            telemetry.addData("fourbarl", r.fourbarLeft.getPosition());
-            telemetry.addData("fourbarr", r.fourbarRight.getPosition());
-            telemetry.addData("drone", droneAssembly.CS);
-            telemetry.addData("sec", droneAssembly.drone_launch.seconds());
+            telemetry.addData("extendo_right", r.extendoRight.getCurrent(CurrentUnit.AMPS));
+            telemetry.addData("extendo_left", r.extendoLeft.getCurrent(CurrentUnit.AMPS));
+
+           // telemetry.addData("liftcp", r.lift.getCurrentPosition());
+            //telemetry.addData("lift", lift.activePID.targetValue );
+           // telemetry.addData("extendo", extendo.activePID.targetValue);
+           // telemetry.addData("status", outtake.CS);
+           // telemetry.addData("lift", lift.CS);
+          ///  telemetry.addData("transfer", transfer.CS);
+            //telemetry.addData("fourbarl", r.fourbarLeft.getPosition());
+           // telemetry.addData("fourbarr", r.fourbarRight.getPosition());
+           // telemetry.addData("drone", droneAssembly.CS);
+           // telemetry.addData("sec", droneAssembly.drone_launch.seconds());
          //   telemetry.addData("fourbar_score", fourbar.score);
 
 

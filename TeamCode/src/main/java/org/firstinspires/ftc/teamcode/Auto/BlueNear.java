@@ -562,7 +562,7 @@ droneLatchController droneLatch = new droneLatchController();
         while (opModeIsActive() && !isStopRequested()) {
 
             int position = r.lift.getCurrentPosition();
-            int extendopos = r.extendoLeft.getCurrentPosition();
+            int extendopos = r.extendoRight.getCurrentPosition();
 
 
             MotorConfigurationType motorConfigurationType = r.extendoRight.getMotorType().clone();

@@ -30,6 +30,7 @@ public class liftController {
         NOTHING,
         TRANSFER,
         ALILBIT_UP,
+        YELLOW_MID,
     }
 
     public double CurrentSpeed = 0;
@@ -121,6 +122,9 @@ public class liftController {
             case PRELOAD_YELLOW:
                 activePID = LiftPID_AUTO;
                 break;
+            case YELLOW_MID:
+                activePID = LiftPID_AUTO;
+                break;
             case YELLOW_NEAR:
                 activePID = LiftPID_AUTO;
                 break;
@@ -184,17 +188,25 @@ public class liftController {
                 case PRELOAD_YELLOW:
                 {
                    // target = 10;
-                    activePID.targetValue = 300;
+                    activePID.targetValue = 370;
                     break;
                 }
+
+                case YELLOW_MID:
+                {
+                    activePID.targetValue = 150;
+                    activePID.maxOutput = 0.5;
+                    break;
+                }
+
 
                 case  YELLOW_NEAR:
                 {
                     if(BlueFar.caz == 0)
-                    {  activePID.targetValue = 190;}
+                    {  activePID.targetValue = 220;}
                     else
                     {
-                        activePID.targetValue = 190;
+                        activePID.targetValue = 220;
                     }
                     break;
                 }

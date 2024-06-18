@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.Auto.BlueNear;
 import org.firstinspires.ftc.teamcode.Auto.FUNNYBlueFar;
 import org.firstinspires.ftc.teamcode.Auto.FUNNYBlueNear;
 import org.firstinspires.ftc.teamcode.Auto.FUNNYRedNear;
+import org.firstinspires.ftc.teamcode.Auto.Recognition.Globals;
 import org.firstinspires.ftc.teamcode.Auto.RedFar;
 
 import org.firstinspires.ftc.teamcode.globals.robotMap;
@@ -23,6 +24,8 @@ import org.firstinspires.ftc.teamcode.system_controllers.fourbarController;
 import org.firstinspires.ftc.teamcode.system_controllers.latchLeftController;
 import org.firstinspires.ftc.teamcode.system_controllers.latchRightController;
 import org.firstinspires.ftc.teamcode.system_controllers.liftController;
+
+import java.io.BufferedReader;
 
 
 public class RedFarAutoController {
@@ -51,6 +54,7 @@ public class RedFarAutoController {
         PURPLE_DRIVE_NEARnucentrured,
 
 
+
         TRANSFER_BEGIN,
         TRANSFER_FOURBAR,
         TRANSFER_CLAW,
@@ -69,6 +73,8 @@ public class RedFarAutoController {
         SCORE_YELLOW_LIFT_BLUE,
         SCORE_YELLOW_CLAW_BLUE,
         SCORE_YELLOW_DONE_BLUE,
+        LIFT_DOWN_BABY,
+        LIFT_DOWN_BABY_OK,
 
         SCORE_YELLOW_BEGIN_BLUEnear,
         TIMER_RESET_BLUEnear,
@@ -121,12 +127,13 @@ public class RedFarAutoController {
 
     ElapsedTime purple_drive = new ElapsedTime();
     ElapsedTime fourbar_timer = new ElapsedTime();
-    ElapsedTime claw_timer = new ElapsedTime();
+    public ElapsedTime claw_timer = new ElapsedTime();
     ElapsedTime latches_timer = new ElapsedTime();
     ElapsedTime pulamea = new ElapsedTime();
     ElapsedTime failsafe_header = new ElapsedTime();
     ElapsedTime funny_java = new ElapsedTime();
     ElapsedTime alibitup = new ElapsedTime();
+    ElapsedTime lift_down_baby = new ElapsedTime();
 
 
     double distance_error = 14;
@@ -462,7 +469,7 @@ public class RedFarAutoController {
                     lift.pid = 1;
                     lift.CS = liftController.liftStatus.PRELOAD_YELLOW;
                     claw_timer.reset();
-                    CurrentStatus = autoControllerStatus.SCORE_YELLOW_CLAW_BLUE;
+                    CurrentStatus = autoControllerStatus.SCORE_YELLOW_DONE_BLUE;
                 }
                 break;
             }
@@ -487,31 +494,55 @@ public class RedFarAutoController {
                     switch (claw_caz)
                     {
                         case 0:
-                        { clawAngle.clawAngle_i = 4; //1
-                            clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
+                        { clawAngle.clawAngle_i = BlueFar.clawanglefrompipeline; //1
+                            clawAngle.CS = clawAngleController.clawAngleStatus.AUTO;
                             break;
                         }
 
                         case 1:
                         { if(funny_or_not == false)
-                        { clawAngle.clawAngle_i = 3;}
+                        { clawAngle.clawAngle_i = BlueFar.clawanglefrompipeline;}
                             else
                         {
-                            clawAngle.clawAngle_i = 4;
+                            clawAngle.clawAngle_i = BlueFar.clawanglefrompipeline;
                         }
-                            clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
+                            clawAngle.CS = clawAngleController.clawAngleStatus.AUTO;
                             break;
                         }
 
                         case 2:
                         {
-                            clawAngle.clawAngle_i = 3;
-                            clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
+                            clawAngle.clawAngle_i = BlueFar.clawanglefrompipeline;
+                            clawAngle.CS = clawAngleController.clawAngleStatus.AUTO;
                             break;
                         }
                     }
-                    CurrentStatus = autoControllerStatus.SCORE_YELLOW_DONE;
+
+                    if(Globals.isItMiddle == true)
+                    {
+                        CurrentStatus = autoControllerStatus.LIFT_DOWN_BABY;
+                    }
+                    else
+                    {
+                        CurrentStatus = autoControllerStatus.SCORE_YELLOW_DONE;
+                    }
                 }
+                break;
+            }
+
+            case LIFT_DOWN_BABY:
+            {
+                if(Globals.waitformiddle == true)
+                {  lift.CS = liftController.liftStatus.YELLOW_MID;
+                lift_down_baby.reset();
+                CurrentStatus = autoControllerStatus.LIFT_DOWN_BABY_OK;}
+                break;
+            }
+
+            case LIFT_DOWN_BABY_OK:
+            {
+                if(lift_down_baby.seconds() > 0.3)
+                { CurrentStatus =  autoControllerStatus.SCORE_YELLOW_DONE;}
                 break;
             }
 

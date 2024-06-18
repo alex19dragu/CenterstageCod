@@ -101,42 +101,42 @@ public class TestOpMode extends LinearOpMode {
 
         while (opModeIsActive() && !isStopRequested()) {
 
-            int position = r.extendoLeft.getCurrentPosition();
+            int position = r.extendoRight.getCurrentPosition();
 
 
 
-
-            previousGamepad1.copy(currentGamepad1);
-            previousGamepad2.copy(currentGamepad2);
-
-            currentGamepad1.copy(gamepad1);
-            currentGamepad2.copy(gamepad2);
-
-            if(!previousGamepad1.circle && currentGamepad1.circle)
-            {
-               if(latchLeft.CS != latchLeftController.LatchLeftStatus.SECURED)
-               {
-                   latchLeft.CS = latchLeftController.LatchLeftStatus.SECURED;
-               } else
-               {
-                   latchLeft.CS= latchLeftController.LatchLeftStatus.CLOSED;
-               }
-            }
-            if(!previousGamepad1.triangle && currentGamepad1.triangle)
-            {
-              if(latchRight.CS != latchRightController.LatchRightStatus.SECURED)
-              {
-                  latchRight.CS = latchRightController.LatchRightStatus.SECURED;
-              } else
-              {
-                  latchRight.CS = latchRightController.LatchRightStatus.CLOSED;
-              }
-            }
-
-
-              double power = gamepad2.right_trigger - gamepad2.left_trigger;
-
-              r.collect.setPower(power);
+//
+//            previousGamepad1.copy(currentGamepad1);
+//            previousGamepad2.copy(currentGamepad2);
+//
+//            currentGamepad1.copy(gamepad1);
+//            currentGamepad2.copy(gamepad2);
+//
+//            if(!previousGamepad1.circle && currentGamepad1.circle)
+//            {
+//               if(latchLeft.CS != latchLeftController.LatchLeftStatus.SECURED)
+//               {
+//                   latchLeft.CS = latchLeftController.LatchLeftStatus.SECURED;
+//               } else
+//               {
+//                   latchLeft.CS= latchLeftController.LatchLeftStatus.CLOSED;
+//               }
+//            }
+//            if(!previousGamepad1.triangle && currentGamepad1.triangle)
+//            {
+//              if(latchRight.CS != latchRightController.LatchRightStatus.SECURED)
+//              {
+//                  latchRight.CS = latchRightController.LatchRightStatus.SECURED;
+//              } else
+//              {
+//                  latchRight.CS = latchRightController.LatchRightStatus.CLOSED;
+//              }
+//            }
+//
+//
+//              double power = gamepad2.right_trigger - gamepad2.left_trigger;
+//
+//              r.collect.setPower(power);
 
 
 
@@ -147,9 +147,9 @@ public class TestOpMode extends LinearOpMode {
 //            clawAngle.update(r);
         //  door.update(r);
         //  collectAngle.update(r);
-        droneLatch.update(r);
-        latchLeft.update(r);
-            latchRight.update(r);
+//        droneLatch.update(r);
+//        latchLeft.update(r);
+//            latchRight.update(r);
         //  pto.update(r);
   // drone.update(r);
 //            lift.update(r, 0, voltage);
@@ -164,6 +164,7 @@ public class TestOpMode extends LinearOpMode {
             telemetry.addData("latchLeft", latchLeft.CS);
             telemetry.addData("latchRight", latchRight.CS);
 
+            telemetry.addData("position", position);
             loopTime = loop;
 //            telemetry.addData("x", poseEstimate.getX());
 //            telemetry.addData("y", poseEstimate.getY());

@@ -669,7 +669,7 @@ public class FUNNYBlueFar extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
 
             int position = r.lift.getCurrentPosition();
-            int extendopos = r.extendoLeft.getCurrentPosition();
+            int extendopos = r.extendoRight.getCurrentPosition();
 
 
             MotorConfigurationType motorConfigurationType = r.extendoRight.getMotorType().clone();

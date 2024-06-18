@@ -50,22 +50,22 @@ public class extendoController {
     }
 
     // PID constants for extension
-    public static double Kp_extend = 0.0035;
-    public static double Ki_extend = 0.0003;
-    public static double Kd_extend = 0.005;
+    public static double Kp_extend = 0.0015;
+    public static double Ki_extend = 0.0002;
+    public static double Kd_extend = 0.002;
 
-    public static double Kp_purple = 0.003;
+    public static double Kp_purple = 0.0015;
     public static double Ki_purple = 0.0002;
-    public static double Kd_purple = 0.003;
+    public static double Kd_purple = 0.002;
 
     // PID constants for retraction
     public static double Kp_retract = 0.015;
     public static double Ki_retract = 0;
     public static double Kd_retract = 0;
 
-    public static double Kp_drive = 0.0064;
-    public static double Ki_drive = 0;
-    public static double Kd_drive = 0.003;
+    public static double Kp_drive = 0.003;
+    public static double Ki_drive = 0.002;
+    public static double Kd_drive = 0.001;
 
     public static double Kp_short = 0.017;
     public static double Ki_short = 0.002;
@@ -93,11 +93,11 @@ public class extendoController {
     //   SimplePIDController extendoPID = null;
 
     public static double CurrentPosition = 0;
-    public static double retracted = -5;
+    public static double retracted = -2;
     public static double extended = 800;
     public static double drive = 800;
     public static double failsafe = 800;
-    public static double purple[] ={ 515, 295, 0};
+    public static double purple[] ={ 515, 315, 0};
     public static double purpleredfar[] ={ 0, 280, 505};
     public static double cycle = 840;
     public static double cycle_far = 835;
@@ -188,7 +188,7 @@ public SimplePIDController activePID;
         powerColectare = Math.max(-powerCap, Math.min(powerColectare * 14 / voltage, powerCap));
 
         r.extendoLeft.setPower(powerColectare);
-      //  r.extendoRight.setPower(powerColectare);
+       r.extendoRight.setPower(powerColectare);
 
         if(CS == EXTENDED)
         {
