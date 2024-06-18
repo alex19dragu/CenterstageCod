@@ -96,8 +96,8 @@ public class AtagYellowOpMode extends LinearOpMode {
 
             for (AprilTagDetection detection : detectionList) {
                 if (detection.id == 2) {
-                    telemetry.addData("pose x", atagYellow.CorectedDetecion(detection).getX());
-                    telemetry.addData("pose y", atagYellow.CorectedDetecion(detection).getY());
+                    telemetry.addData("pose x", atagYellow.poseFromTag(pose2d, detection).getX());
+                    telemetry.addData("pose y", atagYellow.poseFromTag(pose2d, detection).getY());
                     telemetry.addData("pose angle", Math.toDegrees(atagYellow.CorectedDetecion(detection).getHeading()));
                 }}
 //            telemetry.addData("Location", atagYellow.location);

@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.Auto;
 
 
-
 import static org.firstinspires.ftc.teamcode.Auto.Recognition.YellowPipeline.Side.blue;
 
 import android.util.Size;
@@ -51,7 +50,7 @@ import java.util.concurrent.TimeUnit;
 
 @Photon
 @Config
-@Autonomous(group = "Auto" , name = "BlueFar")
+@Autonomous(group = "Auto", name = "BlueFar")
 
 public class BlueFar extends LinearOpMode {
 
@@ -101,7 +100,7 @@ public class BlueFar extends LinearOpMode {
         NOTHING
     }
 
-    public static int clawanglefrompipeline  = 0;
+    public static int clawanglefrompipeline = 0;
 
     public static double x_start = -43, y_start = 61, angle_start = 90;
 
@@ -118,14 +117,13 @@ public class BlueFar extends LinearOpMode {
      */
 
     public static double x_yellow_preload_right = 45, y_yellow_preload_right = 36, angle_yellow_preload_right = 180;
-    public static double x_yellow_preload_center = 45, y_yellow_preload_center = 35.5, angle_yellow_preload_center = 180;
+    public static double x_yellow_preload_center = 45, y_yellow_preload_center = 34.7, angle_yellow_preload_center = 180;
     public static double x_yellow_preload_left = 46, y_yellow_preload_left = 29.9, angle_yellow_preload_left = 180;
     // public static double x_yellow_inter =
 
     /**
      * collect
      */
-
 
 
     // Cycle 2
@@ -171,9 +169,6 @@ public class BlueFar extends LinearOpMode {
     public static double x_score_forth_cycle_left = 49.5, y_score_forth_cycle_left = 21.5, angle_score_forth_angle_left = 197;
 
 
-
-
-
     /**
      * intern collect
      */
@@ -188,8 +183,8 @@ public class BlueFar extends LinearOpMode {
      * intern score
      */
 
-    public static double x_inter_score_first_cycle = 23, y_inter_score_first_cycle = 7, angle_inter_score_first_cycle =180;
-    public static double x_inter_score_first_cycle_left = 23, y_inter_score_first_cycle_left = 7, angle_inter_score_first_cycle_left =180;
+    public static double x_inter_score_first_cycle = 23, y_inter_score_first_cycle = 7, angle_inter_score_first_cycle = 180;
+    public static double x_inter_score_first_cycle_left = 23, y_inter_score_first_cycle_left = 7, angle_inter_score_first_cycle_left = 180;
 
     public static int caz = 0;
     public static double limit = 2;
@@ -199,6 +194,7 @@ public class BlueFar extends LinearOpMode {
     private YellowPipeline yellowPipeline;
     //public static int desieredtag = 0;
     public static boolean checkatag = false;
+    public static boolean traj_failsafe = false;
 
 
     @Override
@@ -259,8 +255,8 @@ public class BlueFar extends LinearOpMode {
         drone.update(r);
         lift.update(r, 0, voltage);
         extendo.update(r, 0, 1, voltage);
-        redFarAutoController.update(r, lift, fourbar,clawAngle,clawFlip,collectAngle,door,extendo,latchLeft,latchRight);
-        failsafecontroller.update(r, lift, fourbar,clawAngle,clawFlip,collectAngle,door,extendo,latchLeft,latchRight);
+        redFarAutoController.update(r, lift, fourbar, clawAngle, clawFlip, collectAngle, door, extendo, latchLeft, latchRight);
+        failsafecontroller.update(r, lift, fourbar, clawAngle, clawFlip, collectAngle, door, extendo, latchLeft, latchRight);
         droneLatch.update(r);
 
         collectAngle.update(r);
@@ -271,64 +267,17 @@ public class BlueFar extends LinearOpMode {
 
         }
 
-        Pose2d start_pose = new Pose2d(x_start, y_start,Math.toRadians(angle_start));
+        Pose2d start_pose = new Pose2d(x_start, y_start, Math.toRadians(angle_start));
 
         Pose2d purpleRight = new Pose2d(x_purple_preload_right, y_purple_preload_right, Math.toRadians(angle_purple_preload_right));
         Pose2d purpleCenter = new Pose2d(x_purple_preload_center, y_purple_preload_center, Math.toRadians(angle_purple_preload_center));
         Pose2d purpleLeft = new Pose2d(x_purple_preload_left, y_purple_preload_left, Math.toRadians(angle_purple_preload_left));
 
-        Pose2d interCollectFirstCycle = new Pose2d(x_inter_collect_first_cycle, y_inter_collect_first_cycle, Math.toRadians(angle_inter_collect_first_cycle));
-        Pose2d interScoreFirstCycle = new Pose2d(x_inter_score_first_cycle, y_inter_score_first_cycle, Math.toRadians(angle_inter_score_first_cycle));
-
         Pose2d interCollectFirstCycleleft = new Pose2d(x_inter_collect_first_cycle_left, y_inter_collect_first_cycle_left, Math.toRadians(angle_inter_collect_first_cycle_left));
-        Pose2d interScoreFirstCycleleft = new Pose2d(x_inter_score_first_cycle_left, y_inter_score_first_cycle_left, Math.toRadians(angle_inter_score_first_cycle_left));
-
-        Pose2d interCollectFirstCycleCenter = new Pose2d(x_inter_collect_first_cycle_center, y_inter_collect_first_cycle_center, Math.toRadians(angle_inter_collect_first_cycle_center));
 
         Pose2d yellowRight = new Pose2d(x_yellow_preload_right, y_yellow_preload_right, Math.toRadians(angle_yellow_preload_right));
         Pose2d yellowCenter = new Pose2d(x_yellow_preload_center, y_yellow_preload_center, Math.toRadians(angle_yellow_preload_center));
         Pose2d yellowLeft = new Pose2d(x_yellow_preload_left, y_yellow_preload_left, Math.toRadians(angle_yellow_preload_left));
-
-        // Cycle 2 Right
-        Pose2d collect_inter_cycle2_right = new Pose2d(x_inter_collect_cycle_2_right, y_inter_collect_cycle_2_right, Math.toRadians(angle_inter_collect_cycle_2_right));
-        Pose2d collect_cycle2_right = new Pose2d(x_collect_cycle_2_right, y_collect_cycle_2_right, Math.toRadians(angle_collect_cycle_2_right));
-
-// Cycle 2 Center
-        Pose2d collect_inter_cycle2_center = new Pose2d(x_inter_collect_cycle_2_center, y_inter_collect_cycle_2_center, Math.toRadians(angle_inter_collect_cycle_2_center));
-        Pose2d collect_cycle2_center = new Pose2d(x_collect_cycle_2_center, y_collect_cycle_2_center, Math.toRadians(angle_collect_cycle_2_center));
-
-// Cycle 2 Left
-        Pose2d collect_inter_cycle2_left = new Pose2d(x_inter_collect_cycle_2_left, y_inter_collect_cycle_2_left, Math.toRadians(angle_inter_collect_cycle_2_left));
-        Pose2d collect_cycle2_left = new Pose2d(x_collect_cycle_2_left, y_collect_cycle_2_left, Math.toRadians(angle_collect_cycle_2_left));
-
-// Cycle 3 Right
-        Pose2d collect_inter_cycle3_right = new Pose2d(x_inter_collect_cycle_3_right, y_inter_collect_cycle_3_right, Math.toRadians(angle_inter_collect_cycle_3_right));
-        Pose2d collect_cycle3_right = new Pose2d(x_collect_cycle_3_right, y_collect_cycle_3_right, Math.toRadians(angle_collect_cycle_3_right));
-
-// Cycle 3 Center
-        Pose2d collect_inter_cycle3_center = new Pose2d(x_inter_collect_cycle_3_center, y_inter_collect_cycle_3_center, Math.toRadians(angle_inter_collect_cycle_3_center));
-        Pose2d collect_cycle3_center = new Pose2d(x_collect_cycle_3_center, y_collect_cycle_3_center, Math.toRadians(angle_collect_cycle_3_center));
-
-// Cycle 3 Left
-        Pose2d collect_inter_cycle3_left = new Pose2d(x_inter_collect_cycle_3_left, y_inter_collect_cycle_3_left, Math.toRadians(angle_inter_collect_cycle_3_left));
-        Pose2d collect_cycle3_left = new Pose2d(x_collect_cycle_3_left, y_collect_cycle_3_left, Math.toRadians(angle_collect_cycle_3_left));
-
-
-
-        // Second cycle scoring positions
-        Pose2d score_second_cycle_right = new Pose2d(x_score_second_cycle_right, y_score_second_cycle_right, Math.toRadians(angle_score_second_angle_right));
-        Pose2d score_second_cycle_center = new Pose2d(x_score_second_cycle_center, y_score_second_cycle_center, Math.toRadians(angle_score_second_angle_center));
-        Pose2d score_second_cycle_left = new Pose2d(x_score_second_cycle_left, y_score_second_cycle_left, Math.toRadians(angle_score_second_angle_left));
-
-// Third cycle scoring positions
-        Pose2d score_third_cycle_right = new Pose2d(x_score_third_cycle_right, y_score_third_cycle_right, Math.toRadians(angle_score_third_angle_right));
-        Pose2d score_third_cycle_center = new Pose2d(x_score_third_cycle_center, y_score_third_cycle_center, Math.toRadians(angle_score_third_angle_center));
-        Pose2d score_third_cycle_left = new Pose2d(x_score_third_cycle_left, y_score_third_cycle_left, Math.toRadians(angle_score_third_angle_left));
-
-
-        Pose2d score_forth_cycle_right = new Pose2d(x_score_forth_cycle_right, y_score_forth_cycle_right, Math.toRadians(angle_score_forth_angle_right));
-        Pose2d score_forth_cycle_center = new Pose2d(x_score_forth_cycle_center, y_score_forth_cycle_center, Math.toRadians(angle_score_forth_angle_center));
-        Pose2d score_forth_cycle_left = new Pose2d(x_score_forth_cycle_left, y_score_forth_cycle_left, Math.toRadians(angle_score_forth_angle_left));
 
 
         TrajectorySequence PURPLE_RIGHT = drive.trajectorySequenceBuilder(start_pose)
@@ -373,11 +322,13 @@ public class BlueFar extends LinearOpMode {
         TrajectorySequence YELLOW_CENTER2 = drive.trajectorySequenceBuilder(YELLOW_CENTER.end())
                 .setTangent(0)
                 .splineToSplineHeading(new Pose2d(0, 9, Math.toRadians(180)), Math.toRadians(0))
-              //  .UNSTABLE_addTemporalMarkerOffset(-0.5, ()  -> {checkatag = true;})
-               // .waitSeconds(0.01)
-                .splineToLinearHeading(new Pose2d(35, 35.5, Math.toRadians(180)), Math.toRadians(80),  SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                //  .UNSTABLE_addTemporalMarkerOffset(-0.5, ()  -> {checkatag = true;})
+                // .waitSeconds(0.01)
+                .splineToLinearHeading(new Pose2d(35, 34.7, Math.toRadians(180)), Math.toRadians(80), SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .UNSTABLE_addTemporalMarkerOffset(-0.1, ()  -> {checkatag = true;})
+                .UNSTABLE_addTemporalMarkerOffset(-0.05, () -> {
+                    checkatag = true;
+                })
                 //.waitSeconds(0.1)
                 .lineToLinearHeading(yellowCenter,
                         SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
@@ -397,19 +348,6 @@ public class BlueFar extends LinearOpMode {
                 .build();
 
 
-        TrajectorySequence YELLOW_DROP_RIGHT = drive.trajectorySequenceBuilder(yellowRight)
-                .back(12)
-                .build();
-
-        TrajectorySequence YELLOW_DROP_CENTER = drive.trajectorySequenceBuilder(yellowCenter)
-                .back(12)
-                .build();
-
-
-        TrajectorySequence YELLOW_DROP_LEFT = drive.trajectorySequenceBuilder(yellowLeft)
-                .back(12)
-                .build();
-
         TrajectorySequence COLLECT_CYCLE_2_RIGHT = drive.trajectorySequenceBuilder(yellowRight)
                 .setTangent(Math.toRadians(240))
                 .splineToLinearHeading(new Pose2d(15, 10, Math.toRadians(180)), Math.toRadians(180),
@@ -422,10 +360,10 @@ public class BlueFar extends LinearOpMode {
 
         TrajectorySequence COLLECT_CYCLE_2_CENTER = drive.trajectorySequenceBuilder(yellowCenter)
                 .setTangent(Math.toRadians(240))
-                .splineToLinearHeading(new Pose2d(15, 14.5, Math.toRadians(180)), Math.toRadians(180),
+                .splineToLinearHeading(new Pose2d(15, 11.5, Math.toRadians(180)), Math.toRadians(180),
                         SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-25, 14.5, Math.toRadians(180)), Math.toRadians(180),
+                .splineToSplineHeading(new Pose2d(-25, 11.5, Math.toRadians(180)), Math.toRadians(180),
                         SampleMecanumDrive.getVelocityConstraint(70, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
@@ -449,7 +387,7 @@ public class BlueFar extends LinearOpMode {
 
         TrajectorySequence SCORE_SECOND_CYCLE_CENTER = drive.trajectorySequenceBuilder(COLLECT_CYCLE_2_CENTER.end())
                 .setTangent(0)
-                .splineToSplineHeading(new Pose2d(7, 14.5, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(7, 11.5, Math.toRadians(180)), Math.toRadians(0))
                 .splineToLinearHeading(new Pose2d(46, 31, Math.toRadians(180)), Math.toRadians(0))
                 //  .lineToLinearHeading(score_second_cycle_center)
                 .build();
@@ -473,10 +411,10 @@ public class BlueFar extends LinearOpMode {
 
         TrajectorySequence COLLECT_CYCLE_3_CENTER = drive.trajectorySequenceBuilder(SCORE_SECOND_CYCLE_CENTER.end())
                 .setTangent(Math.toRadians(240))
-                .splineToSplineHeading(new Pose2d(15, 14.5, Math.toRadians(180)), Math.toRadians(180),
+                .splineToSplineHeading(new Pose2d(15, 11.5, Math.toRadians(180)), Math.toRadians(180),
                         SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-25, 14.5, Math.toRadians(180)), Math.toRadians(180),
+                .splineToSplineHeading(new Pose2d(-25, 11.5, Math.toRadians(180)), Math.toRadians(180),
                         SampleMecanumDrive.getVelocityConstraint(70, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
@@ -501,7 +439,7 @@ public class BlueFar extends LinearOpMode {
 
         TrajectorySequence SCORE_THIRD_CYCLE_CENTER = drive.trajectorySequenceBuilder(COLLECT_CYCLE_3_CENTER.end())
                 .setTangent(0)
-                .splineToSplineHeading(new Pose2d(7, 14.5, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(7, 11.5, Math.toRadians(180)), Math.toRadians(0))
                 .splineToLinearHeading(new Pose2d(46, 31, Math.toRadians(180)), Math.toRadians(0))
                 // .lineToLinearHeading(score_third_cycle_center)
                 .build();
@@ -530,11 +468,11 @@ public class BlueFar extends LinearOpMode {
 //                .setTangent(Math.toRadians(180))
 //                .splineToSplineHeading(new Pose2d(-22, 6.75, Math.toRadians(169)), Math.toRadians(180))
                 .setTangent(Math.toRadians(250))
-                .splineToSplineHeading(new Pose2d(15, 12.2, Math.toRadians(180)), Math.toRadians(180),
+                .splineToSplineHeading(new Pose2d(15, 9.2, Math.toRadians(180)), Math.toRadians(180),
                         SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(0, 12.2, Math.toRadians(180)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-26.8, 12.2, Math.toRadians(166)), Math.toRadians(180),
+                .splineToSplineHeading(new Pose2d(0, 9.2, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-26.8, 9.2, Math.toRadians(166)), Math.toRadians(180),
                         SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
@@ -552,6 +490,26 @@ public class BlueFar extends LinearOpMode {
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
+        TrajectorySequence Fail_safe_case_2 = drive.trajectorySequenceBuilder(COLLECT_CYCLE_4_CENTER.end())
+//                .lineToLinearHeading(new Pose2d(-26.8, 9.2, Math.toRadians(156)))
+//                .lineToLinearHeading(new Pose2d(-27, 9.3, Math.toRadians(176)))
+//                .lineToLinearHeading(new Pose2d(-27.1, 9.4, Math.toRadians(166)))
+                .turn(Math.toRadians(-40))
+                .turn(Math.toRadians(60))
+                .turn(Math.toRadians(-20))
+                .build();
+
+        TrajectorySequence Fail_safe_case_1 = drive.trajectorySequenceBuilder(COLLECT_CYCLE_2_CENTER.end())
+                .turn(Math.toRadians(-40))
+                .turn(Math.toRadians(60))
+                .turn(Math.toRadians(-20))
+//                .lineToLinearHeading(new Pose2d(-25, 14.6, Math.toRadians(170)))
+//                .waitSeconds(1)
+//                .lineToLinearHeading(new Pose2d(-25, 14.7, Math.toRadians(190)))
+//                .waitSeconds(1)
+//                .lineToLinearHeading(new Pose2d(-25, 14.8, Math.toRadians(180)))
+                .build();
+
 
         TrajectorySequence SCORE_FORTH_CYCLE_RIGHT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_4_RIGHT.end())
                 //    .lineToLinearHeading(score_forth_cycle_right)
@@ -563,7 +521,7 @@ public class BlueFar extends LinearOpMode {
         TrajectorySequence SCORE_FORTH_CYCLE_CENTER = drive.trajectorySequenceBuilder(COLLECT_CYCLE_4_CENTER.end())
                 // .lineToLinearHeading(score_forth_cycle_center)
                 .setTangent(0)
-                .splineToSplineHeading(new Pose2d(7, 12, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(7, 9, Math.toRadians(180)), Math.toRadians(0))
                 .splineToLinearHeading(new Pose2d(46, 31, Math.toRadians(180)), Math.toRadians(0))
                 .build();
 
@@ -575,13 +533,12 @@ public class BlueFar extends LinearOpMode {
                 .build();
 
 
-
         TrajectorySequence ParkBun = drive.trajectorySequenceBuilder(SCORE_FORTH_CYCLE_CENTER.end())
-                .lineToLinearHeading(new Pose2d(42,  7, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(42, 7, Math.toRadians(180)))
                 .build();
 
         TrajectorySequence ParkBun2 = drive.trajectorySequenceBuilder(COLLECT_CYCLE_3_CENTER.end())
-                .lineToLinearHeading(new Pose2d(42,  7, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(42, 7, Math.toRadians(180)))
                 .build();
 
         TrajectorySequence RETRY = drive.trajectorySequenceBuilder(COLLECT_CYCLE_2_CENTER.end())
@@ -621,14 +578,14 @@ public class BlueFar extends LinearOpMode {
         collectAngle.collectAngle_i = 4;
         lift.i_up = 0;
         tries = 0;
-        tries_purple =0;
+        tries_purple = 0;
 
 
         AprilTagProcessor aprilTag = new AprilTagProcessor.Builder()
                 .setDrawTagID(true)
                 .setDrawCubeProjection(true)
                 .setDrawTagOutline(true)
-              .setLensIntrinsics(520.035, 520.035, 288.093, 269.186)
+                .setLensIntrinsics(520.035, 520.035, 288.093, 269.186)
                 .build();
 
         yellowPipeline = new YellowPipeline(aprilTag, Globals.desieredtag);
@@ -645,7 +602,8 @@ public class BlueFar extends LinearOpMode {
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .build();
 
-        while(visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {}
+        while (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
+        }
 
         ExposureControl exposure = visionPortal.getCameraControl(ExposureControl.class);
         exposure.setMode(ExposureControl.Mode.Manual);
@@ -658,9 +616,9 @@ public class BlueFar extends LinearOpMode {
         while (!isStarted() && !isStopRequested()) {
 
             sleep(20);
-            if(blueRight.opencvstack.getWhichSide() == "left"){
+            if (blueRight.opencvstack.getWhichSide() == "left") {
                 caz = 0;
-               Globals.desieredtag = 1;
+                Globals.desieredtag = 1;
             } else if (blueRight.opencvstack.getWhichSide() == "center") {
                 caz = 1;
                 Globals.desieredtag = 2;
@@ -707,20 +665,17 @@ public class BlueFar extends LinearOpMode {
             switch (status) {
 
                 case START: {
-                     visionPortal.stopStreaming();
+                    visionPortal.stopStreaming();
 
-                    switch (caz)
-                    {
-                        case 0:
-                        {
+                    switch (caz) {
+                        case 0: {
                             drive.followTrajectorySequenceAsync(PURPLE_RIGHT);
                             RedFarAutoController.claw_caz = 0;
                             RedFarAutoController.funny_or_notblue = false;
                             extendo.caz = 0;
                             break;
                         }
-                        case 1:
-                        {
+                        case 1: {
                             drive.followTrajectorySequenceAsync(PURPLE_CENTER);
                             RedFarAutoController.funny_or_notblue = false;
                             RedFarAutoController.claw_caz = 1;
@@ -729,8 +684,7 @@ public class BlueFar extends LinearOpMode {
                             break;
 
                         }
-                        case 2:
-                        {
+                        case 2: {
                             drive.followTrajectorySequenceAsync(PURPLE_LEFT);
                             RedFarAutoController.funny_or_notblue = false;
                             RedFarAutoController.claw_caz = 2;
@@ -745,11 +699,9 @@ public class BlueFar extends LinearOpMode {
                     break;
                 }
 
-                case SYSTEMS_PURPLE:
-                {
-                    if(preload.seconds() > 0.269)
-                    {
-                      //  blueRight.stopCamera();
+                case SYSTEMS_PURPLE: {
+                    if (preload.seconds() > 0.269) {
+                        //  blueRight.stopCamera();
                         redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.PURPLE;
                         extendo_timer.reset();
                         status = STROBOT.PURPLE;
@@ -757,10 +709,8 @@ public class BlueFar extends LinearOpMode {
                     break;
                 }
 
-                case PURPLE:
-                {
-                    if(extendo_timer.seconds() > extendo_timer_i_purple[caz])
-                    {
+                case PURPLE: {
+                    if (extendo_timer.seconds() > extendo_timer_i_purple[caz]) {
                         r.collect.setPower(1);
                         preload.reset();
                         extendo.CS = extendoController.extendoStatus.PURPLE;
@@ -771,21 +721,18 @@ public class BlueFar extends LinearOpMode {
                     break;
                 }
 
-                case COLLECT_PURPLE:
-                {
-                    if((!r.pixelLeft.getState() && !r.pixelRight.getState()))
-                    {
+                case COLLECT_PURPLE: {
+                    if ((!r.pixelLeft.getState() && !r.pixelRight.getState())) {
 
                         collectAngle.CS = collectAngleController.collectAngleStatus.DRIVE;
                         extendo.CS = extendoController.extendoStatus.RETRACTED;
                         verif.reset();
                         status = STROBOT.GO_SCORE_YELLOW;
-                    } else if(preload.seconds() > 1 && tries <3 && (r.pixelLeft.getState() || r.pixelRight.getState()))
-                    {                        failsafecontroller.CurrentStatus = org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE_PURPLE;
+                    } else if (preload.seconds() > 1 && tries < 3 && (r.pixelLeft.getState() || r.pixelRight.getState())) {
+                        failsafecontroller.CurrentStatus = org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE_PURPLE;
 
                         status = STROBOT.FAILSAFE_PURPLE;
-                    } else if(tries_purple >= 3)
-                    {
+                    } else if (tries_purple >= 3) {
                         collectAngle.CS = collectAngleController.collectAngleStatus.DRIVE;
                         extendo.CS = extendoController.extendoStatus.RETRACTED;
                         verif.reset();
@@ -796,8 +743,7 @@ public class BlueFar extends LinearOpMode {
                 }
 
                 case FAILSAFE_PURPLE: {
-                    if(failsafecontroller.CurrentStatus == org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE_DONE_PURPLE)
-                    {
+                    if (failsafecontroller.CurrentStatus == org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE_DONE_PURPLE) {
                         tries_purple += 1;
                         preload.reset();
                         status = STROBOT.COLLECT_PURPLE;
@@ -805,28 +751,21 @@ public class BlueFar extends LinearOpMode {
                     break;
                 }
 
-                case GO_SCORE_YELLOW:
-                {
+                case GO_SCORE_YELLOW: {
 
-                    switch (caz)
-                    {
-                        case 0:
-
-                        {
+                    switch (caz) {
+                        case 0: {
                             drive.followTrajectorySequenceAsync(YELLOW_RIGHT);
-                            if(verif.seconds() > 0.1)
-                            {
+                            if (verif.seconds() > 0.1) {
                                 r.collect.setPower(-1);
                             }
                             transfer.reset();
                             status = STROBOT.PREPARE_SCORE_YELLOW;
                             break;
                         }
-                        case 1:
-                        {
+                        case 1: {
                             drive.followTrajectorySequenceAsync(YELLOW_CENTER);
-                            if(verif.seconds() > 0.1)
-                            {
+                            if (verif.seconds() > 0.1) {
                                 r.collect.setPower(-1);
                             }
                             transfer.reset();
@@ -834,11 +773,9 @@ public class BlueFar extends LinearOpMode {
                             break;
 
                         }
-                        case 2:
-                        {
+                        case 2: {
                             drive.followTrajectorySequenceAsync(YELLOW_LEFT);
-                            if(verif.seconds() > 0.1)
-                            {
+                            if (verif.seconds() > 0.1) {
                                 r.collect.setPower(-1);
                             }
                             transfer.reset();
@@ -851,20 +788,16 @@ public class BlueFar extends LinearOpMode {
 
                 }
 
-                case PREPARE_SCORE_YELLOW:
-                {
-                    if(transfer.seconds() > 0.7)
-                    {
+                case PREPARE_SCORE_YELLOW: {
+                    if (transfer.seconds() > 0.7) {
                         r.collect.setPower(-1);
                     }
 
-                    if(transfer.seconds() > 1)
-                    {
+                    if (transfer.seconds() > 1) {
                         r.collect.setPower(0);
                     }
 
-                    if(transfer.seconds() > 1.5)
-                    {
+                    if (transfer.seconds() > 1.5) {
                         redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.TRANSFER_BEGIN;
                         prepare_score_yellowqe.reset();
                         status = STROBOT.WAIT_alliance;
@@ -872,28 +805,21 @@ public class BlueFar extends LinearOpMode {
                     break;
                 }
 
-                case WAIT_alliance:
-                {//visionPortal.resumeStreaming();
-                    if(!drive.isBusy())
-                    {
-                        switch (caz)
-                        {
-                            case 0:
-
-                            {
+                case WAIT_alliance: {//visionPortal.resumeStreaming();
+                    if (!drive.isBusy()) {
+                        switch (caz) {
+                            case 0: {
                                 drive.followTrajectorySequenceAsync(YELLOW_RIGHT2);
                                 status = STROBOT.PREPARE_SCORE_YELLOW_v2;
                                 break;
                             }
-                            case 1:
-                            {
+                            case 1: {
                                 drive.followTrajectorySequenceAsync(YELLOW_CENTER2);
                                 status = STROBOT.PREPARE_SCORE_YELLOW_v2;
                                 break;
 
                             }
-                            case 2:
-                            {
+                            case 2: {
                                 drive.followTrajectorySequenceAsync(YELLOW_LEFT2);
 
                                 status = STROBOT.PREPARE_SCORE_YELLOW_v2;
@@ -905,10 +831,8 @@ public class BlueFar extends LinearOpMode {
                     break;
                 }
 
-                case PREPARE_SCORE_YELLOW_v2:
-                {
-                    if(drive.getPoseEstimate().getX() >= 15 && redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.TRANSFER_DONE)
-                    {
+                case PREPARE_SCORE_YELLOW_v2: {
+                    if (drive.getPoseEstimate().getX() >= 15 && redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.TRANSFER_DONE) {
                         redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.SCORE_YELLOW_BEGIN_BLUE;
                         status = STROBOT.atag_bby;
                     }
@@ -916,90 +840,76 @@ public class BlueFar extends LinearOpMode {
                     break;
                 }
 
-                case atag_bby:
-                {
-                    if(checkatag = true)
-                    {
-                        try
-                        {  visionPortal.resumeStreaming();} catch (Exception e) {
+                case atag_bby: {
+                    if (checkatag = true) {
+                        try {
+                            visionPortal.resumeStreaming();
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
-                    if(yellowPipeline.diditsee == true)
-                    {
-                        try
-                    { //drive.setPoseEstimate(yellowPipeline.poseFromTag(drive.getPoseEstimate(), Globals.aprilTagDetection));
-                        drive.setPoseEstimate(new Pose2d(drive.getPoseEstimate().getX(), yellowPipeline.poseFromTag(drive.getPoseEstimate(), Globals.aprilTagDetection).getY(), drive.getPoseEstimate().getHeading()));
-                       // drive.setPoseEstimate(new Pose2d(10, 10, Math.toRadians(180)));
-                        visionPortal.stopStreaming();
+                    if (yellowPipeline.diditsee == true) {
+                        try { //drive.setPoseEstimate(yellowPipeline.poseFromTag(drive.getPoseEstimate(), Globals.aprilTagDetection));
+                            drive.setPoseEstimate(new Pose2d(drive.getPoseEstimate().getX(), yellowPipeline.poseFromTag(drive.getPoseEstimate(), Globals.aprilTagDetection).getY(), drive.getPoseEstimate().getHeading()));
+                            // drive.setPoseEstimate(new Pose2d(10, 10, Math.toRadians(180)));
+                            visionPortal.stopStreaming();
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
                     }
-                    if(yellowPipeline.diditsee == true  &&  redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.SCORE_YELLOW_DONE_BLUE)
-                    {
-                       // visionPortal.stopStreaming();
+                    if (yellowPipeline.diditsee == true && redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.SCORE_YELLOW_DONE_BLUE) {
+                        // visionPortal.stopStreaming();
                         redFarAutoController.claw_timer.reset();
-                        redFarAutoController.CurrentStatus =RedFarAutoController.autoControllerStatus.SCORE_YELLOW_CLAW;
+                        redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.SCORE_YELLOW_CLAW;
                         status = STROBOT.VERIF_PURPLE_SCORE;
                     }
                     break;
                 }
 
-                case VERIF_PURPLE_SCORE:
-                {
-                 if(drive.getPoseEstimate().getX() >= 44.4)
-                 {
-                     Globals.waitformiddle = true;
-                 }
-                    if(drive.getPoseEstimate().getX() >= 44.4 && redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.SCORE_YELLOW_DONE)
-                    {
+                case VERIF_PURPLE_SCORE: {
+                    if (drive.getPoseEstimate().getX() >= 44.4) {
+                        Globals.waitformiddle = true;
+                    }
+                    if (drive.getPoseEstimate().getX() >= 44.4 && redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.SCORE_YELLOW_DONE) {
 
                         status = STROBOT.YELLOW_DROP;
                     }
                     break;
                 }
 
-                case YELLOW_DROP:
-                {
+                case YELLOW_DROP: {
 
                     redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.LATCH_DROP_YELLOW;
 
-                    switch (caz)
-                    {
-                        case 0:
-                        {
+                    switch (caz) {
+                        case 0: {
                             drive.followTrajectorySequenceAsync(COLLECT_CYCLE_2_RIGHT);
                             prepare_collect.reset();
-                            status= STROBOT.PREPARE_COLLECT_YELLOW;
+                            status = STROBOT.PREPARE_COLLECT_YELLOW;
                             break;
                         }
 
-                        case 1:
-                        {
+                        case 1: {
                             drive.followTrajectorySequenceAsync(COLLECT_CYCLE_2_CENTER);
                             prepare_collect.reset();
-                            status= STROBOT.PREPARE_COLLECT_YELLOW;
+                            status = STROBOT.PREPARE_COLLECT_YELLOW;
                             break;
                         }
 
-                        case 2:
-                        {
+                        case 2: {
                             drive.followTrajectorySequenceAsync(COLLECT_CYCLE_2_LEFT);
                             prepare_collect.reset();
-                            status= STROBOT.PREPARE_COLLECT_YELLOW;
+                            status = STROBOT.PREPARE_COLLECT_YELLOW;
                             break;
                         }
                     }
 
                     break;
                 }
-                case PREPARE_COLLECT_YELLOW:
-                {
-                    if(prepare_collect.seconds() > 0.65)
-                    {
+                case PREPARE_COLLECT_YELLOW: {
+                    if (prepare_collect.seconds() > 0.65) {
                         redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.COLLECT_PREPARE;
                         extendo_timer.reset();
                         status = STROBOT.COLLECT_EXTENDO;
@@ -1007,10 +917,8 @@ public class BlueFar extends LinearOpMode {
                     break;
                 }
 
-                case PREPARE_COLLECT:
-                {
-                    if(prepare_collect.seconds() > 0.5)
-                    {
+                case PREPARE_COLLECT: {
+                    if (prepare_collect.seconds() > 0.5) {
                         redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.COLLECT_PREPARE;
                         extendo_timer.reset();
                         status = STROBOT.COLLECT_EXTENDO;
@@ -1018,49 +926,41 @@ public class BlueFar extends LinearOpMode {
                     break;
                 }
 
-                case COLLECT_EXTENDO:
-                {
-                    if(park.seconds() < 27)
-                    {if(extendo_timer.seconds() > extendo_timer_i[nrcicluri] && drive.getPoseEstimate().getX() <=0)
-                    {
-                        collectAngle.CS = collectAngleController.collectAngleStatus.COLLECT;
-                        r.collect.setPower(1);
+                case COLLECT_EXTENDO: {
+                    if (park.seconds() < 27) {
+                        if (extendo_timer.seconds() > extendo_timer_i[nrcicluri] && drive.getPoseEstimate().getX() <= 0) {
+                            collectAngle.CS = collectAngleController.collectAngleStatus.COLLECT;
+                            r.collect.setPower(1);
 
-                        switch (nrcicluri)
-                        {
-                            case 0:
-                            {
-                                collectAngle.collectAngle_i = 4;
-                                extendo.CS = extendoController.extendoStatus.CYCLE;
-                                failsafe.reset();
-                                break;
-                            }
-                            case 1:
-                            {
-                                collectAngle.collectAngle_i = 2;
-                                extendo.CS = extendoController.extendoStatus.CYCLE;
-                                failsafe.reset();
-                                break;
-                            }
-                            case 2:
-                            {
-                                if(caz == 2)
-                                { collectAngle.collectAngle_i = 4;}
-                                else
-                                {
-                                    collectAngle.collectAngle_i = 3;
+                            switch (nrcicluri) {
+                                case 0: {
+                                    collectAngle.collectAngle_i = 4;
+                                    extendo.CS = extendoController.extendoStatus.CYCLE;
+                                    failsafe.reset();
+                                    break;
                                 }
-                                extendo.CS = extendoController.extendoStatus.CYCLE;
-                                failsafe.reset();
-                                break;
+                                case 1: {
+                                    collectAngle.collectAngle_i = 2;
+                                    extendo.CS = extendoController.extendoStatus.CYCLE;
+                                    failsafe.reset();
+                                    break;
+                                }
+                                case 2: {
+                                    if (caz == 2) {
+                                        collectAngle.collectAngle_i = 4;
+                                    } else {
+                                        collectAngle.collectAngle_i = 3;
+                                    }
+                                    extendo.CS = extendoController.extendoStatus.CYCLE;
+                                    failsafe.reset();
+                                    break;
+                                }
+
                             }
-
+                            status = STROBOT.COLLECT_VERIF_PIXLES;
                         }
-                        status = STROBOT.COLLECT_VERIF_PIXLES;}
 
-                    }
-                    else
-                    {
+                    } else {
                         forced = true;
                         goscrcycl.reset();
                         status = STROBOT.GO_PARK;
@@ -1068,86 +968,33 @@ public class BlueFar extends LinearOpMode {
                     break;
                 }
 
-                case COLLECT_VERIF_PIXLES:
-                {
-                    if(park.seconds() < 27)
-                    {if((!r.pixelLeft.getState() || !r.pixelRight.getState()))
-                    {
-                        failsafe2.reset();
-                        collectAngle.collectAngle_i = Math.max(0, collectAngle.collectAngle_i-1);
-                        status = STROBOT.COLLECT_VERIF_PIXLES_V2;
-                    } else if(failsafe.seconds() > limit && tries <3 && (r.pixelLeft.getState() && r.pixelRight.getState()))
-                    {
-                        // redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.FAIL_SAFE;
-                        failsafecontroller.CurrentStatus = org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE;
-                        status = STROBOT.FAIL_SAFE;
-                    } else if (tries >=3)
-                    {
-                        // forced = true;
-                        r.collect.setPower(0);
-                        extendo.CS = extendoController.extendoStatus.RETRACTED;
-                        status = STROBOT.RETRACT_AND_RERTY;
-                    }
+                case COLLECT_VERIF_PIXLES: {
+                    if (park.seconds() < 27) {
+                        if ((!r.pixelLeft.getState() || !r.pixelRight.getState())) {
+                            failsafe2.reset();
+                            collectAngle.collectAngle_i = Math.max(0, collectAngle.collectAngle_i - 1);
+                            tries = 0;
+                            status = STROBOT.COLLECT_VERIF_PIXLES_V2;
+                        } else if (failsafe.seconds() > limit && tries <=2 && (r.pixelLeft.getState() && r.pixelRight.getState()) && traj_failsafe == false) {
+                            failsafecontroller.CurrentStatus = org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE;
+                            status = STROBOT.FAIL_SAFE;
+                        } else if (tries > 2 && traj_failsafe == false) {
 
-                    }
-                    else
-                    { forced = true;
-                        goscrcycl.reset();
-                        status = STROBOT.GO_PARK;
-                    }
-                    break;
-                }
-
-                case RETRACT_AND_RERTY:
-                {
-                    if(park.seconds() < 27)
-                    { tries =0;
-                        drive.followTrajectorySequenceAsync(RETRY);
-                        retry.reset();
-                        status = STROBOT.RETRY_TIMER_RESET;} else
-                    {
-                        forced = true;
-                        goscrcycl.reset();
-                        status = STROBOT.GO_SCORE_CYCLE;
-                    }
-                    break;
-                }
-
-                case RETRY_TIMER_RESET:
-                {
-                    if(park.seconds() < 27)
-                    {  if(retry.seconds() > 1)
-                    {
-                        r.collect.setPower(1);
-                        switch (nrcicluri)
+                            traj_failsafe = true;
+                           // failsafecontroller.CurrentStatus = org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE;
+                            status = STROBOT.RETRACT_AND_RERTY;
+                        } else if(failsafe.seconds() > limit && tries <=4 && (r.pixelLeft.getState() && r.pixelRight.getState()) && traj_failsafe == true)
                         {
-                            case 0:
-                            {
-                                collectAngle.collectAngle_i = 4;
-                                extendo.CS = extendoController.extendoStatus.CYCLE;
-                                failsafe.reset();
-                                break;
-                            }
-                            case 1:
-                            {
-                                collectAngle.collectAngle_i = 2;
-                                extendo.CS = extendoController.extendoStatus.CYCLE;
-                                failsafe.reset();
-                                break;
-                            }
-                            case 2:
-                            {
-                                collectAngle.collectAngle_i = 0;
-                                extendo.CS = extendoController.extendoStatus.CYCLE;
-                                failsafe.reset();
-                                break;
-                            }
-
+                            failsafecontroller.CurrentStatus = org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE;
+                            status = STROBOT.FAIL_SAFE;
                         }
-                        status = STROBOT.COLLECT_VERIF_PIXLES;
-                    }
-                    } else
-                    {
+
+                        else if (tries > 4 && !drive.isBusy()) {
+                            traj_failsafe = false;
+                            tries = 0;
+                            status = STROBOT.GO_SCORE_CYCLE;
+                        }
+                    } else {
                         forced = true;
                         goscrcycl.reset();
                         status = STROBOT.GO_PARK;
@@ -1156,118 +1003,77 @@ public class BlueFar extends LinearOpMode {
                 }
 
                 case FAIL_SAFE: {
-                    if(failsafecontroller.CurrentStatus == org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE_DONE)
-                    {
-                        limit = 1;
-                        tries += 1;
+                    if (failsafecontroller.CurrentStatus == org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE_DONE) {
+                        limit = 1.5;
+                        tries +=1;
                         failsafe.reset();
+                        failsafe2.reset();
                         status = STROBOT.COLLECT_VERIF_PIXLES;
                     }
                     break;
                 }
 
-                case COLLECT_VERIF_PIXLES_V2:
+                case RETRACT_AND_RERTY:
                 {
-                    if(park.seconds() < 27)
-                    { if(!r.pixelLeft.getState() && !r.pixelRight.getState())
+                    switch (nrcicluri)
                     {
-                        extendo.CS = extendoController.extendoStatus.RETRACTED;
-                        extendo_timer.reset();
-                        goscrcycl.reset();
-                        status = STROBOT.GO_SCORE_CYCLE;
-                    } else if(failsafe2.seconds() > 1 && tries <3 && (r.pixelLeft.getState() || r.pixelRight.getState()))
-                    {                        failsafecontroller.CurrentStatus = org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE;
-
-                        status = STROBOT.FAIL_SAFE_2;
-                    } else if(tries >=3)
-                    {
-                        r.collect.setPower(0);
-                        extendo.CS = extendoController.extendoStatus.RETRACTED;
-                        status = STROBOT.RETRACT_AND_RERTY_v2;
-                    }
-
-                    }
-                    else
-                    { forced = true;
-                        goscrcycl.reset();
-                        status = STROBOT.GO_SCORE_ON_GROUND;
-                    }
-                    break;
-                }
-
-                case RETRACT_AND_RERTY_v2:
-                {
-                    if(park.seconds() < 27)
-                    { tries =0;
-                        drive.followTrajectorySequenceAsync(RETRY);
-                        retry.reset();
-                        status = STROBOT.RETRY_TIMER_RESET_v2;} else
-                    {
-                        goscrcycl.reset();
-                        forced = true;
-                        status = STROBOT.GO_SCORE_ON_GROUND;
-                    }
-                    break;
-                }
-
-                case RETRY_TIMER_RESET_v2:
-                {
-                    if(park.seconds() < 27)
-                    {  if(retry.seconds() > 1)
-                    {
-                        r.collect.setPower(1);
-                        switch (nrcicluri)
+                        case 2:
                         {
-                            case 0:
-                            {
-                                collectAngle.collectAngle_i = 3;
-                                extendo.CS = extendoController.extendoStatus.CYCLE;
-                                failsafe.reset();
-                                break;
-                            }
-                            case 1:
-                            {
-                                collectAngle.collectAngle_i = 1;
-                                extendo.CS = extendoController.extendoStatus.CYCLE;
-                                failsafe.reset();
-                                break;
-                            }
-                            case 2:
-                            {
-                                collectAngle.collectAngle_i = 4;
-                                extendo.CS = extendoController.extendoStatus.CYCLE;
-                                failsafe.reset();
-                                break;
-                            }
-
+                            drive.followTrajectorySequenceAsync(Fail_safe_case_2);
                         }
-                        status = STROBOT.COLLECT_VERIF_PIXLES_V2;
+                        default:
+                        {
+                            drive.followTrajectorySequenceAsync(Fail_safe_case_1);
+                        }
+                        break;
                     }
-                    } else
-                    {
-                        goscrcycl.reset();
+                    status = STROBOT.COLLECT_VERIF_PIXLES;
+                    break;
+                }
+
+                case COLLECT_VERIF_PIXLES_V2: {
+                    if (park.seconds() < 27) {
+                        if (!r.pixelLeft.getState() && !r.pixelRight.getState()) {
+                            extendo.CS = extendoController.extendoStatus.RETRACTED;
+                            extendo_timer.reset();
+                            goscrcycl.reset();
+                            status = STROBOT.GO_SCORE_CYCLE;
+                        } else if (failsafe2.seconds() > 1 && tries <= 2 && (r.pixelLeft.getState() || r.pixelRight.getState())) {
+                            failsafecontroller.CurrentStatus = org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE;
+                            status = STROBOT.FAIL_SAFE;
+                        } else if (tries > 2 && traj_failsafe == false) {
+                            switch (nrcicluri)
+                            {
+                                case 2:
+                                {
+                                    drive.followTrajectorySequenceAsync(Fail_safe_case_2);
+                                }
+                                default:
+                                {
+                                    drive.followTrajectorySequenceAsync(Fail_safe_case_1);
+                                }
+                                break;
+                            }
+                            failsafecontroller.CurrentStatus = org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE;
+                            traj_failsafe = true;
+                            status = STROBOT.FAIL_SAFE;
+                        } else if (tries > 4 && !drive.isBusy()) {
+                            traj_failsafe = false;
+                            tries = 0;
+                            status = STROBOT.GO_SCORE_CYCLE;
+                        }
+
+                    } else {
                         forced = true;
+                        goscrcycl.reset();
                         status = STROBOT.GO_SCORE_ON_GROUND;
                     }
                     break;
                 }
 
-
-                case FAIL_SAFE_2: {
-                    if(failsafecontroller.CurrentStatus == org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.failsafeStatus.FAIL_SAFE_DONE)
-                    {
-                        failsafe2.reset();
-                        tries +=1;
-                        status = STROBOT.COLLECT_VERIF_PIXLES_V2;
-                    }
-                    break;
-                }
-
-
-                case GO_SCORE_CYCLE:
-                {
-                    if(goscrcycl.seconds() > 0.25)
-                    {extendo.CS = extendoController.extendoStatus.RETRACTED;
+                case GO_SCORE_CYCLE: {
+                    if (goscrcycl.seconds() > 0.25) {
+                        extendo.CS = extendoController.extendoStatus.RETRACTED;
 
                         switch (nrcicluri) {
                             case 0:
@@ -1315,26 +1121,21 @@ public class BlueFar extends LinearOpMode {
 
                         }
                         extendo_timer.reset();
-                        status = STROBOT.GO_SCORE_CYCLE_FUNNY_JAVA;}
-                    //   r.collect.setPower(-1);
-                    //  redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.TRANSFER_BEGIN;
-
+                        status = STROBOT.GO_SCORE_CYCLE_FUNNY_JAVA;
+                    }
 
                     break;
                 }
 
-                case GO_PARK:
-                {
+                case GO_PARK: {
                     extendo.CS = extendoController.extendoStatus.RETRACTED;
                     drive.followTrajectorySequenceAsync(ParkBun2);
                     status = STROBOT.NOTHING;
                     break;
                 }
 
-                case GO_SCORE_ON_GROUND:
-                {
-                    if(goscrcycl.seconds() > 0.25)
-                    {
+                case GO_SCORE_ON_GROUND: {
+                    if (goscrcycl.seconds() > 0.25) {
                         extendo.CS = extendoController.extendoStatus.RETRACTED;
                         drive.followTrajectorySequenceAsync(ParkBun2);
                         status = STROBOT.GO_SCORE_CYCLE_FUNNY_JAVA_GROUND;
@@ -1342,14 +1143,11 @@ public class BlueFar extends LinearOpMode {
                     break;
                 }
 
-                case GO_SCORE_CYCLE_FUNNY_JAVA_GROUND:
-                {
-                    if(extendo_timer.seconds() > 0.35)
-                    {
+                case GO_SCORE_CYCLE_FUNNY_JAVA_GROUND: {
+                    if (extendo_timer.seconds() > 0.35) {
                         r.collect.setPower(-0.8);
                     }
-                    if(extendo_timer.seconds() > 0.65)
-                    {
+                    if (extendo_timer.seconds() > 0.65) {
                         r.collect.setPower(0);
                         redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.TRANSFER_BEGIN;
                         status = STROBOT.PREPARE_SCORE_CYCLE_ON_GROUND;
@@ -1358,14 +1156,11 @@ public class BlueFar extends LinearOpMode {
                     break;
                 }
 
-                case GO_SCORE_CYCLE_FUNNY_JAVA:
-                {
-                    if(extendo_timer.seconds() > 0.35)
-                    {
+                case GO_SCORE_CYCLE_FUNNY_JAVA: {
+                    if (extendo_timer.seconds() > 0.35) {
                         r.collect.setPower(-0.8);
                     }
-                    if(extendo_timer.seconds() > 0.65)
-                    {
+                    if (extendo_timer.seconds() > 0.65) {
                         r.collect.setPower(0);
                         redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.TRANSFER_BEGIN;
                         status = STROBOT.PREPARE_SCORE_CYCLE;
@@ -1374,12 +1169,11 @@ public class BlueFar extends LinearOpMode {
                     break;
                 }
 
-                case PREPARE_SCORE_CYCLE:
-                {r.collect.setPower(0);
-                    if(redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.TRANSFER_DONE && drive.getPoseEstimate().getX() > 0)
-                    {
+                case PREPARE_SCORE_CYCLE: {
+                    r.collect.setPower(0);
+                    if (redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.TRANSFER_DONE && drive.getPoseEstimate().getX() > 0) {
                         redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.SCORE_CYCLE_BEGIN;
-                        nrcicluri +=1;
+                        nrcicluri += 1;
                         redFarAutoController.nr_cycle += 100;
                         score.reset();
                         status = STROBOT.SCORE_CYCLE;
@@ -1387,22 +1181,19 @@ public class BlueFar extends LinearOpMode {
                     break;
                 }
 
-                case PREPARE_SCORE_CYCLE_ON_GROUND:
-                {r.collect.setPower(0);
-                    if(redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.TRANSFER_DONE && drive.getPoseEstimate().getX() > 0)
-                    {
+                case PREPARE_SCORE_CYCLE_ON_GROUND: {
+                    r.collect.setPower(0);
+                    if (redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.TRANSFER_DONE && drive.getPoseEstimate().getX() > 0) {
                         redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.SCORE_ON_GROUND;
-                        nrcicluri +=1;
+                        nrcicluri += 1;
                         score.reset();
                         status = STROBOT.SCORE_CYCLE_GROUND;
                     }
                     break;
                 }
 
-                case SCORE_CYCLE:
-                {
-                    if( redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.SCORE_CYCLE_DONE && drive.getPoseEstimate().getX() > 45.1)
-                    {
+                case SCORE_CYCLE: {
+                    if (redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.SCORE_CYCLE_DONE && drive.getPoseEstimate().getX() > 45.1) {
                         redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.LATCH_DROP;
                         status = STROBOT.GO_COLLECT;
                     }
@@ -1410,10 +1201,8 @@ public class BlueFar extends LinearOpMode {
                     break;
                 }
 
-                case SCORE_CYCLE_GROUND:
-                {
-                    if(score.seconds() > 0.95)
-                    {
+                case SCORE_CYCLE_GROUND: {
+                    if (score.seconds() > 0.95) {
                         redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.LATCH_DROP_YELLOW;
                         park_systems.reset();
                         status = STROBOT.PARK;
@@ -1422,69 +1211,68 @@ public class BlueFar extends LinearOpMode {
                     break;
                 }
 
-                case GO_COLLECT:
-                {
+                case GO_COLLECT: {
 
-                    if(redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.NOTHING)
-                    { if(forced == false)
-                    {  switch (nrcicluri) {
-                        case 1:
-                            switch (caz) {
-                                case 0:
-                                    drive.followTrajectorySequenceAsync(COLLECT_CYCLE_3_RIGHT);
-                                    break;
+                    if (redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.NOTHING) {
+                        if (forced == false) {
+                            switch (nrcicluri) {
                                 case 1:
-                                    drive.followTrajectorySequenceAsync(COLLECT_CYCLE_3_CENTER);
+                                    switch (caz) {
+                                        case 0:
+                                            drive.followTrajectorySequenceAsync(COLLECT_CYCLE_3_RIGHT);
+                                            break;
+                                        case 1:
+                                            drive.followTrajectorySequenceAsync(COLLECT_CYCLE_3_CENTER);
+                                            break;
+                                        case 2:
+                                            drive.followTrajectorySequenceAsync(COLLECT_CYCLE_3_LEFT);
+                                            break;
+                                    }
                                     break;
-                                case 2:
-                                    drive.followTrajectorySequenceAsync(COLLECT_CYCLE_3_LEFT);
-                                    break;
-                            }
-                            break;
 
-                        case 2:
-                            switch (caz) {
-                                case 0:
-                                    drive.followTrajectorySequenceAsync(COLLECT_CYCLE_4_RIGHT);
-                                    break;
-                                case 1:
-                                    drive.followTrajectorySequenceAsync(COLLECT_CYCLE_4_CENTER);
-                                    break;
                                 case 2:
-                                    drive.followTrajectorySequenceAsync(COLLECT_CYCLE_4_LEFT);
+                                    switch (caz) {
+                                        case 0:
+                                            drive.followTrajectorySequenceAsync(COLLECT_CYCLE_4_RIGHT);
+                                            break;
+                                        case 1:
+                                            drive.followTrajectorySequenceAsync(COLLECT_CYCLE_4_CENTER);
+                                            break;
+                                        case 2:
+                                            drive.followTrajectorySequenceAsync(COLLECT_CYCLE_4_LEFT);
+                                            break;
+                                    }
                                     break;
-                            }
-                            break;
 
-                        default:
+                                default:
+                                    drive.followTrajectorySequenceAsync(ParkBun);
+                                    break;
+
+                            }
+
+                            if ((nrcicluri < 3 && park.seconds() <= 24) || nrcicluri < 2) {
+                                prepare_collect.reset();
+                                status = STROBOT.PREPARE_COLLECT;
+                            } else {
+                                drive.followTrajectorySequenceAsync(ParkBun);
+                                park_systems.reset();
+                                status = STROBOT.PARK;
+                            }
+                        } else {
                             drive.followTrajectorySequenceAsync(ParkBun);
-                            break;
-
-                    }
-
-                        if((nrcicluri <3 && park.seconds() <= 24) || nrcicluri<2 )
-                        {  prepare_collect.reset();
-                            status= STROBOT.PREPARE_COLLECT;}
-                        else
-                        { drive.followTrajectorySequenceAsync(ParkBun);
-                            park_systems.reset();
                             status = STROBOT.PARK;
-                        }}
-                    else
-                    { drive.followTrajectorySequenceAsync(ParkBun);
-                        status = STROBOT.PARK;
-                    }}
+                        }
+                    }
                     break;
                 }
 
-                case PARK:
-                {
-                    if(park_systems.seconds() > 0.5)
-                    { redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.COLLECT_PREPARE;
-                        status = STROBOT.NOTHING;}
+                case PARK: {
+                    if (park_systems.seconds() > 0.5) {
+                        redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.COLLECT_PREPARE;
+                        status = STROBOT.NOTHING;
+                    }
                     break;
                 }
-
 
 
             }
@@ -1500,8 +1288,8 @@ public class BlueFar extends LinearOpMode {
             lift.update(r, position, voltage);
             extendo.update(r, extendopos, 1, voltage);
             collectAngle.update(r);
-            redFarAutoController.update(r, lift, fourbar,clawAngle,clawFlip,collectAngle,door,extendo,latchLeft,latchRight);
-            failsafecontroller.update(r, lift, fourbar,clawAngle,clawFlip,collectAngle,door,extendo,latchLeft,latchRight);
+            redFarAutoController.update(r, lift, fourbar, clawAngle, clawFlip, collectAngle, door, extendo, latchLeft, latchRight);
+            failsafecontroller.update(r, lift, fourbar, clawAngle, clawFlip, collectAngle, door, extendo, latchLeft, latchRight);
             droneLatch.update(r);
 
 
@@ -1510,22 +1298,12 @@ public class BlueFar extends LinearOpMode {
             telemetry.addData("hz ", 1000000000 / (loop - loopTime));
             telemetry.addData("status", status);
 //            telemetry.addData("robotcontroller", RedFarAutoController.CurrentStatus);
-            telemetry.addData("realpoz", r.extendoLeft.getCurrentPosition());
-            telemetry.addData("targetpoz", extendo.activePID.targetValue);
+            // telemetry.addData("realpoz", r.extendoLeft.getCurrentPosition());
+            // telemetry.addData("targetpoz", extendo.activePID.targetValue);
             telemetry.addData("targetAprilTag", Globals.desieredtag);
             telemetry.addData("did it see?", yellowPipeline.diditsee);
             telemetry.addData("side", Globals.side);
-//            telemetry.addData("extendo x", extendoController.x);
-//            telemetry.addData("extendi", extendo.CS);
-//            telemetry.addData("failsafe", org.firstinspires.ftc.teamcode.Auto.AutoControllers.failsafe.CurrentStatus);
-//            telemetry.addData("tries", tries);
-//            telemetry.addData("limit", limit);
-//            telemetry.addData("targaet", lift.activePID.targetValue);
-
-            //  telemetry.addData("distance", r.extendoDistance.getDistance(DistanceUnit.CM));
-            //  telemetry.addData("position", extendopos);
-            //   telemetry.addData("target", extendo.target);
-            //    telemetry.addData("distance", r.extendoDistance.getDistance(DistanceUnit.MM));
+//
 
             loopTime = loop;
 

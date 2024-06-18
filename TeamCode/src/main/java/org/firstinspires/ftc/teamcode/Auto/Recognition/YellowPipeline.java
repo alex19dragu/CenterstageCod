@@ -56,7 +56,7 @@ public class YellowPipeline implements VisionProcessor {
     public static double distanceToCenter = 19.5 / 2.54;
     public static double AprilTagToINCHES = 25.4; // assume distance is in meters
     public static double[] TAG_X_OFFSET = {0, 29.5, 35.5, 41.5, 57.7, 59, 57.7};
-    public static double[] TAG_Y_OFFSET = {0, 40.9, 40.9, 40.9, 40.9, 39.2, 40.9};
+    public static double[] TAG_Y_OFFSET = {0, 40.9, 35, 40.9, 40.9, 39.2, 40.9};
 
     public location preloadedZone = nothing; //default
     public boolean diditsee = false;
@@ -95,7 +95,7 @@ public class YellowPipeline implements VisionProcessor {
         try{
         if (currentDetections != null) {
             for (AprilTagDetection detection : currentDetections) {
-                if (detection.id == targetAprilTagID && detection.metadata != null) {
+                if (detection.id == Globals.desieredtag && detection.metadata != null) {
                     int leftX = Integer.MAX_VALUE;
                     int rightX = Integer.MIN_VALUE;
                     int topY = Integer.MIN_VALUE;
