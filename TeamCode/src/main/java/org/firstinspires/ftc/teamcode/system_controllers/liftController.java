@@ -8,8 +8,7 @@ import static org.firstinspires.ftc.teamcode.system_controllers.liftController.l
 
 import com.acmerobotics.dashboard.config.Config;
 
-import org.firstinspires.ftc.teamcode.Auto.BlueFar;
-import org.firstinspires.ftc.teamcode.Auto.RedNearLinear;
+
 import org.firstinspires.ftc.teamcode.drive.opmode.BackAndForth;
 import org.firstinspires.ftc.teamcode.globals.SimplePIDController;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
@@ -188,7 +187,7 @@ public class liftController {
                 case PRELOAD_YELLOW:
                 {
                    // target = 10;
-                    activePID.targetValue = 370;
+                    activePID.targetValue = 320;
                     break;
                 }
 
@@ -200,16 +199,16 @@ public class liftController {
                 }
 
 
-                case  YELLOW_NEAR:
-                {
-                    if(BlueFar.caz == 0)
-                    {  activePID.targetValue = 220;}
-                    else
-                    {
-                        activePID.targetValue = 220;
-                    }
-                    break;
-                }
+//                case  YELLOW_NEAR:
+//                {
+//                    if(BlueFar.caz == 0)
+//                    {  activePID.targetValue = 220;}
+//                    else
+//                    {
+//                        activePID.targetValue = 220;
+//                    }
+//                    break;
+//                }
 
                 case CYCLE:
                 {

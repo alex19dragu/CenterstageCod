@@ -27,8 +27,8 @@ public class doorController {
 
     public static doorStatus CS = INITIALIZE, PS = INITIALIZE;
 
-    public static double opened = 0.84;
-    public static double closed = 0.4;
+    public static double opened = 0.525;
+    public static double closed = 0.27;
     public static double closed_collect = 0.425;
 
     public void update(robotMap r)

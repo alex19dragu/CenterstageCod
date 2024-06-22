@@ -142,9 +142,11 @@ public class YellowPipeline implements VisionProcessor {
                     } else if(leftZoneAverage > 500 && rightZoneAverage <= 250)
                     {
                         Globals.side = Globals.Side.LEFT;
+                        Globals.isItMiddle = true;
                     } else
                     {
                         Globals.side = Globals.Side.RIGHT;
+                        Globals.isItMiddle = true;
                     }
 
                     Globals.returnAutoClawPoz(Globals.alliance, Globals.side);

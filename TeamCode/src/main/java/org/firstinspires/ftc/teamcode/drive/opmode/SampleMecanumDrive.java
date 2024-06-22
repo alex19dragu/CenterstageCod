@@ -210,6 +210,10 @@ public class SampleMecanumDrive extends MecanumDrive {
         waitForIdle();
     }
 
+    public void breakFollowing() {
+        trajectorySequenceRunner.breakFollowing();
+    }
+
     public Pose2d getLastError() {
         return trajectorySequenceRunner.getLastPoseError();
     }
@@ -291,12 +295,6 @@ public class SampleMecanumDrive extends MecanumDrive {
         return wheelVelocities;
     }
 
-    public double getWheelVelocitie() {
-        double wheelVelocities = encoderTicksToInches(leftFront.getVelocity());
-
-        return wheelVelocities;
-    }
-
     @Override
     public void setMotorPowers(double v, double v1, double v2, double v3) {
         leftFront.setPower(v);
@@ -312,7 +310,12 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     @Override
     public Double getExternalHeadingVelocity() {
-        return (double) imu.getAngularVelocity().zRotationRate;
+        // To work around an SDK bug, use -zRotationRate in place of xRotationRate
+        // and -xRotationRate in place of zRotationRate (yRotationRate behaves as
+        // expected). This bug does NOT affect orientation.
+        //
+        // See https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/251 for details.
+        return (double) -imu.getAngularVelocity().xRotationRate;
     }
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {

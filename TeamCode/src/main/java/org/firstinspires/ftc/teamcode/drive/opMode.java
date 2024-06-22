@@ -8,12 +8,9 @@ import static org.firstinspires.ftc.teamcode.system_controllers.extendoControlle
 import static org.firstinspires.ftc.teamcode.system_controllers.extendoController.extendoStatus.EXTENDED;
 import static org.firstinspires.ftc.teamcode.system_controllers.extendoController.extendoStatus.RETRACTED;
 import static org.firstinspires.ftc.teamcode.system_controllers.latchDropController.latchDropStatus.DROP_BOTH;
-import static org.firstinspires.ftc.teamcode.system_controllers.latchDropController.latchDropStatus.DROP_ONE;
-import static org.firstinspires.ftc.teamcode.system_controllers.latchDropController.latchDropStatus.DROP_ONE_LEFT;
-import static org.firstinspires.ftc.teamcode.system_controllers.latchDropController.latchDropStatus.DROP_ONE_RIGHT;
+
 import static org.firstinspires.ftc.teamcode.system_controllers.liftController.liftStatus.DOWN;
 import static org.firstinspires.ftc.teamcode.system_controllers.liftController.liftStatus.INITIALIZE;
-import static org.firstinspires.ftc.teamcode.system_controllers.liftController.liftStatus.NOTHING;
 import static org.firstinspires.ftc.teamcode.system_controllers.liftController.liftStatus.UP;
 import static org.firstinspires.ftc.teamcode.system_controllers.outtakeController.outtakeStatus.COLLECT_DONE;
 import static org.firstinspires.ftc.teamcode.system_controllers.outtakeController.outtakeStatus.COLLECT_FOURBAR;
@@ -43,6 +40,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.ejml.dense.fixed.MatrixFeatures_DDF2;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
+//import org.firstinspires.ftc.teamcode.system_controllers.SensorPublisher;
+import org.firstinspires.ftc.teamcode.system_controllers.SensorPublisher;
 import org.firstinspires.ftc.teamcode.system_controllers.droneAssemblyController;
 import org.firstinspires.ftc.teamcode.system_controllers.droneController;
 import org.firstinspires.ftc.teamcode.system_controllers.droneLatchController;
@@ -137,6 +136,8 @@ public class opMode extends LinearOpMode {
          * SYSTEM CONTROLLERS
          */
 
+      //  SensorPublisher sensorPublisher = new SensorPublisher(hardwareMap);
+
         clawAngleController clawAngle = new clawAngleController();
         clawFlipController clawFlip = new clawFlipController();
         collectAngleController collectAngle = new collectAngleController();
@@ -158,6 +159,8 @@ public class opMode extends LinearOpMode {
         double loopTime = 0;
         VoltageSensor batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
         voltage = batteryVoltageSensor.getVoltage();
+
+        SensorPublisher sensorPublisher = new SensorPublisher(r);
 
         clawAngle.CS = clawAngleController.clawAngleStatus.INITIALIZE;
         clawFlip.CS = clawFlipController.clawFlipStatus.INITIALIZE;
@@ -185,7 +188,7 @@ public class opMode extends LinearOpMode {
         pto.update(r);
         drone.update(r);
         lift.update(r, 0, voltage);
-        extendo.update(r, 0, 1, voltage);
+        extendo.update(r, 0, 1, voltage, sensorPublisher);
         transfer.update(r, door, fourbar, clawAngle, clawFlip, latchLeft, latchRight, extendo,lift);
         outtake.update(r, lift, fourbar, clawFlip, clawAngle, door, latchRight, latchLeft, transfer);
         latchDrop.update(r, latchRight, latchLeft, clawAngle);
@@ -201,7 +204,7 @@ public class opMode extends LinearOpMode {
         boolean pto_ON = false;
         boolean ok = false;
 
-
+       // sensorPublisher.startPublishing();
 
         boolean drone_driver_1 = false;
 
@@ -251,6 +254,8 @@ public class opMode extends LinearOpMode {
         telemetry.update();
 
 timer.reset();
+
+sensorPublisher.startPublishing();
 
         waitForStart();
 
@@ -610,7 +615,7 @@ timer.reset();
             drone.update(r);
             collectAngle.update(r);
             lift.update(r, position_lift, voltage);
-            extendo.update(r, position_extendo, 1, voltage);
+           extendo.update(r, position_extendo, 1, voltage, sensorPublisher);
             transfer.update(r, door, fourbar, clawAngle, clawFlip, latchLeft, latchRight, extendo, lift);
             outtake.update(r, lift, fourbar, clawFlip, clawAngle, door, latchRight, latchLeft, transfer);
             latchDrop.update(r, latchRight, latchLeft, clawAngle);
@@ -623,9 +628,14 @@ timer.reset();
 //            telemetry.addData("drone", drone.CS);
 //            telemetry.addData("amps_extendoleft", r.extendoLeft.getCurrent(CurrentUnit.AMPS));
 //            telemetry.addData("extendoright", r.extendoRight.getCurrent(CurrentUnit.AMPS));
-            telemetry.addData("liftamps", r.lift.getCurrent(CurrentUnit.AMPS));
+          //  telemetry.addData("liftamps", r.lift.getCurrent(CurrentUnit.AMPS));
             telemetry.addData("extendo_right", r.extendoRight.getCurrent(CurrentUnit.AMPS));
             telemetry.addData("extendo_left", r.extendoLeft.getCurrent(CurrentUnit.AMPS));
+
+//            telemetry.addData("leftStopper", r.leftStopper.getState());
+//            telemetry.addData("rightStopper", r.rightStopper.getState());
+            telemetry.addData("extendotarget", extendo.activePID.targetValue);
+            telemetry.addData("sensorpublisher", sensorPublisher.getSensorState());
 
            // telemetry.addData("liftcp", r.lift.getCurrentPosition());
             //telemetry.addData("lift", lift.activePID.targetValue );
@@ -659,5 +669,6 @@ timer.reset();
 
             telemetry.update();
         }
+        sensorPublisher.stopPublishing();
     }
 }

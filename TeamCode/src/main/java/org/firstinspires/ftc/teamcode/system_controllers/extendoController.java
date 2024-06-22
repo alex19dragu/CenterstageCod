@@ -7,24 +7,28 @@ import static org.firstinspires.ftc.teamcode.system_controllers.extendoControlle
 import static org.firstinspires.ftc.teamcode.system_controllers.extendoController.extendoStatus.FAIL_SAFE;
 import static org.firstinspires.ftc.teamcode.system_controllers.extendoController.extendoStatus.INITIALIZE;
 import static org.firstinspires.ftc.teamcode.system_controllers.extendoController.extendoStatus.PURPLE;
+import static org.firstinspires.ftc.teamcode.system_controllers.extendoController.extendoStatus.RERTRY_PURPLE;
 import static org.firstinspires.ftc.teamcode.system_controllers.extendoController.extendoStatus.RETRACTED;
+import static org.firstinspires.ftc.teamcode.system_controllers.funnyExtendoController.funnyExtendoStatus.AUTO;
 
 
 import com.acmerobotics.dashboard.config.Config;
 
 
 //import org.firstinspires.ftc.teamcode.Auto.RedFarBun;
-import org.firstinspires.ftc.teamcode.Auto.BlueFar;
-import org.firstinspires.ftc.teamcode.Auto.FUNNYBlueFar;
-import org.firstinspires.ftc.teamcode.Auto.RedFar;
+//import org.firstinspires.ftc.teamcode.Auto.BlueFar;
+//import org.firstinspires.ftc.teamcode.Auto.FUNNYBlueFar;
+//import org.firstinspires.ftc.teamcode.Auto.RedFar;
 import org.firstinspires.ftc.teamcode.globals.SimplePIDController;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
 
 @Config
 public class extendoController {
 
-    public enum extendoStatus
-    {
+    private boolean analog_value;
+     private SensorPublisher sensorPublisher;
+
+    public enum extendoStatus {
         INITIALIZE,
         RETRACTED,
         EXTENDED,
@@ -63,13 +67,14 @@ public class extendoController {
     public static double Ki_retract = 0;
     public static double Kd_retract = 0;
 
-    public static double Kp_drive = 0.003;
-    public static double Ki_drive = 0.002;
-    public static double Kd_drive = 0.001;
+    public static double Kp_drive = 0.0022;
+    public static double Ki_drive = 0.001;
+    public static double Kd_drive = 0.0005;
 
     public static double Kp_short = 0.017;
     public static double Ki_short = 0.002;
     public static double Kd_short = 0;
+
 
 
 
@@ -85,7 +90,6 @@ public class extendoController {
 //    public static double Kd = 0;
 
 
-
     public static double maxSpeed = 1;
 
     public extendoStatus CS = INITIALIZE, PS = INITIALIZE;
@@ -97,32 +101,34 @@ public class extendoController {
     public static double extended = 800;
     public static double drive = 800;
     public static double failsafe = 800;
-    public static double purple[] ={ 515, 315, 0};
-    public static double purpleredfar[] ={ 0, 280, 505};
+    public static double purple[] = {515, 315, 0};
+    public static double purpleredfar[] = {0, 280, 505};
     public static double cycle = 840;
     public static double cycle_far = 835;
     public static double x = 10;
     public static int caz = 0;
     public static double transfer = -20;
     public static double retry = 900;
+    public static double max = 700;
+    public static double purple_max = 475;
+    public static double extendedmax = 700;
 
     public static double retry_near = 800;
     public static double failsafe_near = 800;
 
-        public static double retry_purple[] = {445, 230, 0};
+    public static double retry_purple[] = {445, 230, 0};
     public static double fail_purple[] = {420, 150, 0};
 
     public static double retry_purpleredfar[] = {0, 230, 445};
     public static double fail_purpleredfar[] = {0, 150, 420};
 
-//    public static double retry_purple[] = {0, 290, 580};
+    //    public static double retry_purple[] = {0, 290, 580};
 //    public static double fail_purple[] = {0, 150, 480};
-public SimplePIDController activePID;
+    public SimplePIDController activePID;
 
     public static double extend_multiply_index = 0;
 
-    public extendoController()
-    {
+    public extendoController() {
         extendoPIDExtend = new SimplePIDController(Kp_extend, Ki_extend, Kd_extend);
         extendoPIDRetract = new SimplePIDController(Kp_retract, Ki_retract, Kd_retract);
         extendoPIDDrive = new SimplePIDController(Kp_drive, Ki_drive, Kd_drive);
@@ -140,10 +146,11 @@ public SimplePIDController activePID;
         extendoPIDDrive.maxOutput = maxSpeed;
     }
 
-    public void update(robotMap r, int position, double powerCap, double voltage)
-    {
+    public void update(robotMap r, int position, double powerCap, double voltage, SensorPublisher sensorPublisher) {
+         this.sensorPublisher = sensorPublisher;
+        // analog_value = sensorPublisher.getSensorState();
 
-      //  SimplePIDController activePID;
+        //  SimplePIDController activePID;
         switch (CS) {
             case INITIALIZE:
                 activePID = extendoPIDRetract;
@@ -187,21 +194,54 @@ public SimplePIDController activePID;
         double powerColectare = activePID.update(position);
         powerColectare = Math.max(-powerCap, Math.min(powerColectare * 14 / voltage, powerCap));
 
+//        if (r.leftStopper.getState() || r.rightStopper.getState()) {
+//            analog_value = true;
+//        } else {
+//            analog_value = false;
+//        }
+
         r.extendoLeft.setPower(powerColectare);
-       r.extendoRight.setPower(powerColectare);
+        r.extendoRight.setPower(powerColectare);
 
-        if(CS == EXTENDED)
-        {
-            activePID.targetValue = extended + extend_multiply_index;
+        analog_value = sensorPublisher.getSensorState();
+
+        if ( CS == PURPLE || CS == DRIVE || CS == RERTRY_PURPLE) {
+            activePID.targetValue = max;
+            if (analog_value) {
+               max = position;
+            }
+            else
+            {
+                max = 750;
+            }
         }
 
-        if(CS == FAIL_SAFE)
+        if(CS == PURPLE || CS == RERTRY_PURPLE)
         {
-            activePID.targetValue = failsafe + x;
+            activePID.targetValue = purple_max;
+            if (analog_value) {
+                max = position;
+            }
+            else
+            {
+                purple_max = 475;
+            }
         }
+//
+//        if(CS ==EXTENDED)
+//        {
+//            activePID.targetValue = extendedmax;
+//            if (analog_value) {
+//                extendedmax = position;
+//            }
+//            else
+//            {
+//                extendedmax = 700;
+//            }
+//        }
 
-        if(CS == RETRACTED || CS == INITIALIZE)
-        {
+
+        if (CS == RETRACTED || CS == INITIALIZE) {
             activePID.targetValue = retracted;
         }
 
@@ -211,128 +251,109 @@ public SimplePIDController activePID;
 //              extendoPID.maxOutput = 0.6;
 //          }
 
-        if(CS != PS || CS == INITIALIZE || CS == EXTENDED || CS == RETRACTED || CS == PURPLE || CS == FAIL_SAFE || CS == DRIVE || CS == CYCLE)
-        {
-            switch (CS)
-            {
-                case INITIALIZE:
-                {
+        if (CS != PS || CS == INITIALIZE || CS == EXTENDED || CS == RETRACTED || CS == PURPLE || CS == FAIL_SAFE || CS == DRIVE || CS == CYCLE) {
+            switch (CS) {
+                case INITIALIZE: {
                     activePID.targetValue = retracted;
                     activePID.maxOutput = 1;
                     break;
                 }
 
-                case EXTENDED:
-                {
-                    activePID.targetValue = extended + extend_multiply_index;
-                    activePID.maxOutput = 1;
+                case EXTENDED: {
+                    activePID.targetValue = max;
+                    activePID.maxOutput = 0.8;
                     break;
                 }
 
-                case EXTENDED_NEAR:
-                {
+                case EXTENDED_NEAR: {
                     activePID.targetValue = 990;
                     activePID.maxOutput = 1;
                     break;
                 }
 
-                case RETRY:
-                {
+                case RETRY: {
                     activePID.targetValue = retry;
                     activePID.maxOutput = 1;
                     break;
                 }
 
-                case RETRACTED:
-                {
+                case RETRACTED: {
                     activePID.targetValue = retracted;
                     activePID.maxOutput = 1;
                     break;
                 }
 
-                case PURPLE:
-                {
-                    activePID.targetValue = purple[caz];
-                    activePID.maxOutput = 0.9;
+                case PURPLE: {
+                    activePID.targetValue = purple_max;
+                    activePID.maxOutput = 0.4;
                     //CS = SENSOR;
                     break;
                 }
 
-                case PURPLEredfar:
-                {
+                case PURPLEredfar: {
                     activePID.targetValue = purpleredfar[caz];
                     activePID.maxOutput = 0.9;
                     //CS = SENSOR;
                     break;
                 }
 
-                case CYCLE:
-                {
+                case CYCLE: {
                     activePID.targetValue = cycle_far;
                     activePID.maxOutput = 1;
                     break;
                 }
 
-                case DRIVE:
-                {
-                    activePID.targetValue = drive;
+                case DRIVE: {
+                    activePID.targetValue = max;
                     activePID.maxOutput = 1;
                     break;
                 }
 
-                case FAIL_SAFE:
-                {
+                case FAIL_SAFE: {
                     activePID.targetValue = failsafe;
                     activePID.maxOutput = 1;
                     break;
                 }
 
-                case TRANSFER:
-                {
+                case TRANSFER: {
                     activePID.targetValue = transfer;
-                    activePID.maxOutput =1;
+                    activePID.maxOutput = 1;
                     break;
                 }
 
-                case RERTRY_PURPLE:
-                {
-                    activePID.targetValue = retry_purple[caz];
-                    activePID.maxOutput =1;
+                case RERTRY_PURPLE: {
+                    activePID.targetValue = purple_max;
+                    activePID.maxOutput = 1;
                     break;
                 }
 
-                case FAIL_SAFE_PURPLE:
-                {
+                case FAIL_SAFE_PURPLE: {
                     activePID.targetValue = fail_purple[caz];
-                    activePID.maxOutput =1;
+                    activePID.maxOutput = 1;
                     break;
                 }
 
-                case RERTRY_PURPLEredfar:
-                {
+                case RERTRY_PURPLEredfar: {
                     activePID.targetValue = retry_purpleredfar[caz];
-                    activePID.maxOutput =1;
+                    activePID.maxOutput = 1;
                     break;
                 }
 
-                case FAIL_SAFE_PURPLEredfar:
-                {
+                case FAIL_SAFE_PURPLEredfar: {
                     activePID.targetValue = fail_purpleredfar[caz];
-                    activePID.maxOutput =1;
+                    activePID.maxOutput = 1;
                     break;
                 }
 
-                case FAIL_SAFE_NEAR:
-                {
+                case FAIL_SAFE_NEAR: {
                     activePID.targetValue = failsafe_near;
-                    activePID.maxOutput =1;
+                    activePID.maxOutput = 1;
                     break;
                 }
 
-                case RETRY_NEAR:
-                {
+                case RETRY_NEAR: {
                     activePID.targetValue = retry_near;
-                    activePID.maxOutput =1;
+                    activePID.maxOutput = 1;
                     break;
                 }
             }

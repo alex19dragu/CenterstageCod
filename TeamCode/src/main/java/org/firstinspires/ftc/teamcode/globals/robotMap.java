@@ -58,6 +58,9 @@ public class robotMap {
 //    public DistanceSensor extendoDistance = null;
     public DigitalChannel pixelLeft = null;
     public DigitalChannel pixelRight = null;
+
+    public DigitalChannel leftStopper = null;
+    public DigitalChannel rightStopper =null;
    // public DistanceSensor left = null;
    // public DistanceSensor right = null;
 
@@ -123,6 +126,9 @@ public class robotMap {
        // right = Init.get(DistanceSensor.class, "right");
         pixelLeft = Init.get(DigitalChannel.class, "pixelLeft");
         pixelRight = Init.get(DigitalChannel.class, "pixelRight");
+
+        leftStopper = Init.get(DigitalChannel.class, "leftStopper");
+        rightStopper = Init.get(DigitalChannel.class, "rightStopper");
 
         /**
          * ENDGAME

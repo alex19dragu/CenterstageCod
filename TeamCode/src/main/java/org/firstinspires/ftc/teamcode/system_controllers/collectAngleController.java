@@ -25,9 +25,10 @@ public class collectAngleController {
 
     public static collectAngleStatus CS = INITIALIZE, PS = INITIALIZE;
 
-    public static double collect[] = {0.77 , 0.72, 0.685, 0.65, 0.615};
-    public static double drive = 0.4;
-    public static double init = 0.3;
+    public static double collect[] = {0.68 , 0.63, 0.60, 0.555, 0.52};
+    public static double drive = 0.35;
+    public static double init = 0.25;
+    public static double relax = 0.48;
 
 
     public static int collectAngle_i = 0;
