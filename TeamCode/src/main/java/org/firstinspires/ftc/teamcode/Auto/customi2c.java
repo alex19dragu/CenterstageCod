@@ -16,10 +16,11 @@ public class customi2c extends LinearOpMode
     public void runOpMode() throws InterruptedException
     {
         tempSensor = hardwareMap.get(urm09_customdriver.class, "tempSensor");
+        tempSensor.setMeasureRange(300);
 
-       // boolean isinit = tempSensor.doInitialize();
+       boolean isinit = tempSensor.doInitialize();
 
-        //telemetry.addData("isinit", isinit);
+        telemetry.addData("isinit", isinit);
 
         // Uncomment to use parameter version of driver class. This will require you to respecify
         // the sensor type from MCP9808 to MCP9808Params
@@ -36,7 +37,7 @@ public class customi2c extends LinearOpMode
 
                 telemetry.addData("idk", tempSensor.getDistanceCM());
             telemetry.update();
-            idle();
+         //   idle();
         }
     }
 }

@@ -25,10 +25,10 @@ import java.util.concurrent.TimeUnit;
 public class AtagYellowOpMode extends LinearOpMode {
 
     private YellowPipeline atagYellow ;
-    public AtagMath atagMath;
-    public static int desieredTag = 5;
+    private getCasePipeline getCasePipeline;
+    public static int desieredTag = 2;
 
-    public static int duration =5;
+    public static int duration =3;
     public static int gainControl = 255;
     public static Pose2d pose2d = new Pose2d(50, 50, Math.toRadians(180));
 
@@ -36,22 +36,27 @@ public class AtagYellowOpMode extends LinearOpMode {
     @Override
     public void runOpMode() {
 
+Globals.desieredtag= 1;
 
+getCasePipeline = new getCasePipeline();
 
         AprilTagProcessor aprilTagProcessor = new AprilTagProcessor.Builder()
                 .setDrawTagID(true)
                 .setDrawCubeProjection(true)
                 .setDrawTagOutline(true)
-                .setLensIntrinsics(520.035, 520.035, 288.093, 269.186)
+             //   .setLensIntrinsics(520.035, 520.035, 288.093, 269.186)
 
         .build();
 
-        atagYellow = new YellowPipeline(aprilTagProcessor, desieredTag);
+        atagYellow = new YellowPipeline(aprilTagProcessor, Globals.desieredtag);
+
+        Globals.rec = Globals.Recognision.blue_far;
 
 
         VisionPortal visionPortal = new VisionPortal.Builder()
                 .addProcessor(aprilTagProcessor)
                 .addProcessor(atagYellow)
+                .addProcessor(getCasePipeline)
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
                 .setCameraResolution(new Size(640, 480))
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
@@ -75,9 +80,9 @@ public class AtagYellowOpMode extends LinearOpMode {
             telemetry.addData("right zone average: ", atagYellow.rightZoneAverage);
             telemetry.addData("left zone average: ", atagYellow.leftZoneAverage);
             try {
-                telemetry.addData("H = " , atagYellow.averageHSV[0]);
-                telemetry.addData("S = ", atagYellow.averageHSV[1]);
-                telemetry.addData("V = ", atagYellow.averageHSV[2]);
+                telemetry.addData("H = " , getCasePipeline.averageHSV[0]);
+                telemetry.addData("S = ", getCasePipeline.averageHSV[1]);
+                telemetry.addData("V = ", getCasePipeline.averageHSV[2]);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -94,16 +99,16 @@ public class AtagYellowOpMode extends LinearOpMode {
 
             List<AprilTagDetection> detectionList = aprilTagProcessor.getDetections();
 
-            for (AprilTagDetection detection : detectionList) {
-                if (detection.id == 2) {
-                    telemetry.addData("pose x", atagYellow.poseFromTag(pose2d, detection).getX());
-                    telemetry.addData("pose y", atagYellow.poseFromTag(pose2d, detection).getY());
-                    telemetry.addData("pose angle", Math.toDegrees(atagYellow.CorectedDetecion(detection).getHeading()));
-                }}
+//            for (AprilTagDetection detection : detectionList) {
+//                if (detection.id == 2) {
+//                    telemetry.addData("pose x", atagYellow.poseFromTag(pose2d, detection).getX());
+//                    telemetry.addData("pose y", atagYellow.poseFromTag(pose2d, detection).getY());
+//                    telemetry.addData("pose angle", Math.toDegrees(atagYellow.CorectedDetecion(detection).getHeading()));
+//                }}
 //            telemetry.addData("Location", atagYellow.location);
-         //  telemetry.addData("location", atagYellow.location);
-//            telemetry.addData("right zone average: ", atagYellow.rightZoneAverage);
-//            telemetry.addData("left zone average: ", atagYellow.leftZoneAverage);
+//           telemetry.addData("location", atagYellow.location);
+            telemetry.addData("right zone average: ", atagYellow.rightZoneAverage);
+            telemetry.addData("left zone average: ", atagYellow.leftZoneAverage);
             telemetry.update();
             sleep(100);
 

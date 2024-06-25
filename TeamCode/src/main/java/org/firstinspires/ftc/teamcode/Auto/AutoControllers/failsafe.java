@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.Auto.AutoControllers;
 
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
 import org.firstinspires.ftc.teamcode.system_controllers.clawAngleController;
 import org.firstinspires.ftc.teamcode.system_controllers.clawFlipController;
@@ -14,7 +16,6 @@ import org.firstinspires.ftc.teamcode.system_controllers.latchRightController;
 import org.firstinspires.ftc.teamcode.system_controllers.liftController;
 
 import java.io.BufferedReader;
-
 
 public class failsafe {
     public enum failsafeStatus
@@ -34,19 +35,20 @@ public class failsafe {
 
     }
     public static failsafeStatus CurrentStatus = failsafeStatus.NOTHING, PreviousStatus = failsafeStatus.NOTHING;
-
     ElapsedTime fail_safe_header = new ElapsedTime();
+
 
 
     public void update(robotMap r, liftController lift, fourbarController fourbar, clawAngleController clawAngle, clawFlipController clawFlip, collectAngleController collectAngle, doorController door, extendoController extendo, latchLeftController latchLeft, latchRightController latchRight)
     {
+        r.collect.setCurrentAlert(5, CurrentUnit.AMPS);
 
         switch (CurrentStatus)
         {
 
             case FAIL_SAFE:
             {
-                extendo.CS = extendoController.extendoStatus.FAIL_SAFE;
+              //  extendo.CS = extendoController.extendoStatus.FAIL_SAFE;
                 r.collect.setPower(-0.7);
                 fail_safe_header.reset();
                 CurrentStatus = failsafeStatus.FAIL_SAFE_HEADER;
@@ -55,11 +57,15 @@ public class failsafe {
 
             case FAIL_SAFE_HEADER:
             {
+                if(r.collect.isOverCurrent())
+                {
+                    CurrentStatus = failsafeStatus.FAIL_SAFE;
+                }
 
-                if(fail_safe_header.seconds() > 0.05)
+                if(fail_safe_header.seconds() > 0.25 && !r.collect.isOverCurrent())
                 {   r.collect.setPower(1);
                     collectAngle.collectAngle_i = Math.max(0, collectAngle.collectAngle_i - 1);
-                    extendo.CS = extendoController.extendoStatus.RETRY;
+                   // extendo.CS = extendoController.extendoStatus.RETRY;
                     CurrentStatus = failsafeStatus.FAIL_SAFE_DONE;
                 }
                 break;

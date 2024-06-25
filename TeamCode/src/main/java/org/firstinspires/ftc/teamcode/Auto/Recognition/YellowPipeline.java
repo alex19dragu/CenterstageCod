@@ -55,8 +55,8 @@ public class YellowPipeline implements VisionProcessor {
 
     public static double distanceToCenter = 19.5 / 2.54;
     public static double AprilTagToINCHES = 25.4; // assume distance is in meters
-    public static double[] TAG_X_OFFSET = {0, 29.5, 35.5, 41.5, 57.7, 59, 57.7};
-    public static double[] TAG_Y_OFFSET = {0, 40.9, 35, 40.9, 40.9, 39.2, 40.9};
+    public static double[] TAG_X_OFFSET = {0, 35.5, 35.5, 35.5, 57.7, 59, 57.7};
+    public static double[] TAG_Y_OFFSET = {0, 40, 35, 27.5, 40.9, 39.2, 40.9};
 
     public location preloadedZone = nothing; //default
     public boolean diditsee = false;
@@ -65,8 +65,8 @@ public class YellowPipeline implements VisionProcessor {
     public int  leftZoneAverage, rightZoneAverage;
     private double absolute_diff;
 
-    public static double lowhue = 70, lowsaturation = 138, lowvalue = 140;
-    public static double highhue = 110, highsaturation = 178, highvalue = 255;
+    public static double lowhue = 70, lowsaturation = 130, lowvalue = 165;
+    public static double highhue = 110, highsaturation = 180, highvalue = 255;
 
     public double[] averageHSV;
 
@@ -133,20 +133,21 @@ public class YellowPipeline implements VisionProcessor {
 
                      averageHSV = calculateAverageHSV(frame, leftInclusionZone);
 
-                    if (leftZoneAverage <= 150 && rightZoneAverage <= 150) {
-                        Globals.side = Globals.Side.NONE;
-                        Globals.isItNone = true;
-                    } else if(leftZoneAverage > 250 && rightZoneAverage > 250 ){
-                        Globals.side = Globals.Side.MIDDLE;
-                        Globals.isItMiddle = true;
-                    } else if(leftZoneAverage > 500 && rightZoneAverage <= 250)
+//                    if (leftZoneAverage <= 150 && rightZoneAverage <= 150) {
+//                        Globals.side = Globals.Side.NONE;
+//                       // Globals.isItNone = true;
+//                    } else if(leftZoneAverage > 250 && rightZoneAverage > 250 ){
+//                        Globals.side = Globals.Side.MIDDLE;
+//                     //   Globals.isItMiddle = true;
+//                    } else
+                  if(leftZoneAverage > rightZoneAverage)
                     {
                         Globals.side = Globals.Side.LEFT;
-                        Globals.isItMiddle = true;
+                      //  Globals.isItMiddle = true;
                     } else
                     {
                         Globals.side = Globals.Side.RIGHT;
-                        Globals.isItMiddle = true;
+                      //  Globals.isItMiddle = true;
                     }
 
                     Globals.returnAutoClawPoz(Globals.alliance, Globals.side);

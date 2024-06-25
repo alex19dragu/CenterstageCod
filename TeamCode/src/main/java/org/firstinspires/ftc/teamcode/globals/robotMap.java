@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.Auto.urm09_customdriver;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 public class robotMap {
@@ -19,6 +20,7 @@ public class robotMap {
     public DcMotorEx leftBack = null;
     public DcMotorEx rightFront = null;
     public DcMotorEx rightBack = null;
+
 
 
  //   public MecanumDrivetrain drivetrain;
@@ -61,6 +63,10 @@ public class robotMap {
 
     public DigitalChannel leftStopper = null;
     public DigitalChannel rightStopper =null;
+
+    public urm09_customdriver right = null;
+    // public urm09_customdriver left = null;
+
    // public DistanceSensor left = null;
    // public DistanceSensor right = null;
 
@@ -129,6 +135,9 @@ public class robotMap {
 
         leftStopper = Init.get(DigitalChannel.class, "leftStopper");
         rightStopper = Init.get(DigitalChannel.class, "rightStopper");
+
+        right = Init.get(urm09_customdriver.class, "right");
+        //left = Init.get(urm09_customdriver.class, "left");
 
         /**
          * ENDGAME

@@ -19,6 +19,7 @@ import com.acmerobotics.dashboard.config.Config;
 //import org.firstinspires.ftc.teamcode.Auto.BlueFar;
 //import org.firstinspires.ftc.teamcode.Auto.FUNNYBlueFar;
 //import org.firstinspires.ftc.teamcode.Auto.RedFar;
+import org.firstinspires.ftc.teamcode.Auto.Recognition.Globals;
 import org.firstinspires.ftc.teamcode.globals.SimplePIDController;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
 
@@ -54,9 +55,9 @@ public class extendoController {
     }
 
     // PID constants for extension
-    public static double Kp_extend = 0.0015;
+    public static double Kp_extend = 0.004;
     public static double Ki_extend = 0.0002;
-    public static double Kd_extend = 0.002;
+    public static double Kd_extend = 0.001;
 
     public static double Kp_purple = 0.0015;
     public static double Ki_purple = 0.0002;
@@ -67,9 +68,9 @@ public class extendoController {
     public static double Ki_retract = 0;
     public static double Kd_retract = 0;
 
-    public static double Kp_drive = 0.0022;
-    public static double Ki_drive = 0.001;
-    public static double Kd_drive = 0.0005;
+    public static double Kp_drive = 0.004;
+    public static double Ki_drive = 0.0002;
+    public static double Kd_drive = 0.001;
 
     public static double Kp_short = 0.017;
     public static double Ki_short = 0.002;
@@ -97,21 +98,21 @@ public class extendoController {
     //   SimplePIDController extendoPID = null;
 
     public static double CurrentPosition = 0;
-    public static double retracted = -2;
+    public static double retracted = -5;
     public static double extended = 800;
     public static double drive = 800;
-    public static double failsafe = 800;
-    public static double purple[] = {515, 315, 0};
+    public static double failsafe = 625;
+    public static double purple[] = {750, 315, 0};
     public static double purpleredfar[] = {0, 280, 505};
     public static double cycle = 840;
     public static double cycle_far = 835;
     public static double x = 10;
     public static int caz = 0;
     public static double transfer = -20;
-    public static double retry = 900;
-    public static double max = 700;
-    public static double purple_max = 475;
-    public static double extendedmax = 700;
+    public static double retry = 800;
+    public static double max = 900;
+    public static double purple_max = 550;
+    public static double extendedmax = 750;
 
     public static double retry_near = 800;
     public static double failsafe_near = 800;
@@ -148,7 +149,7 @@ public class extendoController {
 
     public void update(robotMap r, int position, double powerCap, double voltage, SensorPublisher sensorPublisher) {
          this.sensorPublisher = sensorPublisher;
-        // analog_value = sensorPublisher.getSensorState();
+         analog_value = sensorPublisher.getSensorState();
 
         //  SimplePIDController activePID;
         switch (CS) {
@@ -168,7 +169,7 @@ public class extendoController {
                 activePID = extendoPIDExtend;
                 break;
             case CYCLE:
-                activePID = extendoPIDDrive;
+                activePID = extendoPIDExtend;
                 break;
             case DRIVE:
                 activePID = extendoPIDDrive;
@@ -200,45 +201,57 @@ public class extendoController {
 //            analog_value = false;
 //        }
 
-        r.extendoLeft.setPower(powerColectare);
-        r.extendoRight.setPower(powerColectare);
+        if(CS != CYCLE && CS != PURPLE && CS != RERTRY_PURPLE)
+        { r.extendoLeft.setPower(powerColectare);
+        r.extendoRight.setPower(powerColectare);}
 
         analog_value = sensorPublisher.getSensorState();
 
-        if ( CS == PURPLE || CS == DRIVE || CS == RERTRY_PURPLE) {
-            activePID.targetValue = max;
-            if (analog_value) {
-               max = position;
-            }
-            else
-            {
-                max = 750;
-            }
-        }
+//        if ( CS == DRIVE) {
+//            activePID.targetValue = max;
+//            if (analog_value) {
+//               max = position;
+//            }
+//            else
+//            {
+//                max = 800;
+//            }
+//        }
 
         if(CS == PURPLE || CS == RERTRY_PURPLE)
         {
             activePID.targetValue = purple_max;
+           if(!Globals.is_left)
+           {  if (analog_value) {
+               r.extendoLeft.setPower(0);
+               r.extendoRight.setPower(0);
+            }
+            else
+            {  r.extendoLeft.setPower(powerColectare);
+                r.extendoRight.setPower(powerColectare);
+                purple_max = 550;
+            }}
+           else
+           {
+               purple_max = 0;
+           }
+        }
+
+
+        if(CS ==CYCLE)
+        {
+            activePID.targetValue = extendedmax;
+
             if (analog_value) {
-                max = position;
+                r.extendoLeft.setPower(0);
+                r.extendoRight.setPower(0);
             }
             else
             {
-                purple_max = 475;
+                r.extendoLeft.setPower(powerColectare);
+                r.extendoRight.setPower(powerColectare);
             }
         }
-//
-//        if(CS ==EXTENDED)
-//        {
-//            activePID.targetValue = extendedmax;
-//            if (analog_value) {
-//                extendedmax = position;
-//            }
-//            else
-//            {
-//                extendedmax = 700;
-//            }
-//        }
 
 
         if (CS == RETRACTED || CS == INITIALIZE) {
@@ -260,7 +273,7 @@ public class extendoController {
                 }
 
                 case EXTENDED: {
-                    activePID.targetValue = max;
+                    activePID.targetValue = extendedmax;
                     activePID.maxOutput = 0.8;
                     break;
                 }
@@ -285,7 +298,7 @@ public class extendoController {
 
                 case PURPLE: {
                     activePID.targetValue = purple_max;
-                    activePID.maxOutput = 0.4;
+                    activePID.maxOutput = 0.45;
                     //CS = SENSOR;
                     break;
                 }
@@ -298,7 +311,7 @@ public class extendoController {
                 }
 
                 case CYCLE: {
-                    activePID.targetValue = cycle_far;
+                    activePID.targetValue = extendedmax;
                     activePID.maxOutput = 1;
                     break;
                 }

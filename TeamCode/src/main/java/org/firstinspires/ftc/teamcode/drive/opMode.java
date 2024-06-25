@@ -444,7 +444,7 @@ sensorPublisher.startPublishing();
                 }
             }
 
-            if(lift.CS == UP && clawFlip.CS != clawFlipController.clawFlipStatus.MOVE)
+            if((lift.CS == UP && clawFlip.CS != clawFlipController.clawFlipStatus.MOVE) || outtake.CS == HANG_DONE)
             {
                 PrecisionDenominatorAngle = 0.5;
             } else if (clawFlip.CS == clawFlipController.clawFlipStatus.MOVE)
@@ -629,13 +629,15 @@ sensorPublisher.startPublishing();
 //            telemetry.addData("amps_extendoleft", r.extendoLeft.getCurrent(CurrentUnit.AMPS));
 //            telemetry.addData("extendoright", r.extendoRight.getCurrent(CurrentUnit.AMPS));
           //  telemetry.addData("liftamps", r.lift.getCurrent(CurrentUnit.AMPS));
-            telemetry.addData("extendo_right", r.extendoRight.getCurrent(CurrentUnit.AMPS));
-            telemetry.addData("extendo_left", r.extendoLeft.getCurrent(CurrentUnit.AMPS));
+          //  telemetry.addData("extendo_right", r.extendoRight.getCurrent(CurrentUnit.AMPS));
+          //  telemetry.addData("extendo_left", r.extendoLeft.getCurrent(CurrentUnit.AMPS));
 
 //            telemetry.addData("leftStopper", r.leftStopper.getState());
 //            telemetry.addData("rightStopper", r.rightStopper.getState());
-            telemetry.addData("extendotarget", extendo.activePID.targetValue);
-            telemetry.addData("sensorpublisher", sensorPublisher.getSensorState());
+         //   telemetry.addData("extendotarget", extendo.activePID.targetValue);
+         //   telemetry.addData("sensorpublisher", sensorPublisher.getSensorState());
+           // telemetry.addData("left", r.right.getDistanceCM());
+
 
            // telemetry.addData("liftcp", r.lift.getCurrentPosition());
             //telemetry.addData("lift", lift.activePID.targetValue );

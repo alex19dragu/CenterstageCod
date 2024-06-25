@@ -21,6 +21,21 @@ public class Globals {
         NONE,
     }
 
+    public enum Recognision
+    {
+        blue_far,
+        blue_near,
+        red_far,
+        red_near,
+    }
+
+    public enum Rec_Side
+    {
+        left,
+        center,
+        right
+    }
+
     public static Alliance alliance ;
     public static Side side;
 
@@ -32,7 +47,11 @@ public class Globals {
     public static boolean canirelocalize;
     public static boolean waitformiddle;
     public static int desieredtag;
+    public static boolean is_left;
+    public static Recognision rec;
+    public static Rec_Side rec_side;
 //    "bagpulaintactu"
+
 
 
     public static void returnAutoClawPoz(Alliance alliance, Side side)

@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.Auto.AutoControllers;
 
 
+import static org.firstinspires.ftc.teamcode.Auto.AutoControllers.RedFarAutoController.autoControllerStatus.SCORE_YELLOW_DONE;
+
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
@@ -293,11 +295,11 @@ public class RedFarAutoController {
 
             case PURPLE_DRIVE_NEAR:
             {
-                if(purple_drive.seconds() > 0.35)
+                if(purple_drive.seconds() > 0.25)
                 {
                     lift.CS = liftController.liftStatus.YELLOW_NEAR;
                 }
-                if(purple_drive.seconds() > 0.6)
+                if(purple_drive.seconds() > 0.35)
                 { fourbar.CS = fourbarController.fourbarStatus.DRIVE;
                     clawFlip.CS = clawFlipController.clawFlipStatus.COLLECT;
                     CurrentStatus = autoControllerStatus.PURPLE_DROP_DONE;
@@ -462,10 +464,12 @@ public class RedFarAutoController {
                 if(pulamea.seconds() > 0.3)
                 {
                     door.CS = doorController.doorStatus.CLOSED;
+                    clawAngle.clawAngle_i = 5;
+                    clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
                     lift.pid = 1;
                     lift.CS = liftController.liftStatus.PRELOAD_YELLOW;
                     claw_timer.reset();
-                    CurrentStatus = autoControllerStatus.SCORE_YELLOW_DONE_BLUE;
+                    CurrentStatus = autoControllerStatus.SCORE_YELLOW_CLAW;
                 }
                 break;
             }
@@ -487,42 +491,9 @@ public class RedFarAutoController {
             {
                 if(claw_timer.seconds() > 0.2)
                 {
-                    switch (claw_caz)
-                    {
-                        case 0:
-                        { clawAngle.clawAngle_i = BlueFar.clawanglefrompipeline; //1
-                            clawAngle.CS = clawAngleController.clawAngleStatus.AUTO;
-                            break;
-                        }
-
-                        case 1:
-                        { if(funny_or_not == false)
-                        { clawAngle.clawAngle_i = BlueFar.clawanglefrompipeline;}
-                            else
-                        {
-                            clawAngle.clawAngle_i = BlueFar.clawanglefrompipeline;
-                        }
-                            clawAngle.CS = clawAngleController.clawAngleStatus.AUTO;
-                            break;
-                        }
-
-                        case 2:
-                        {
-                            clawAngle.clawAngle_i = BlueFar.clawanglefrompipeline;
-                            clawAngle.CS = clawAngleController.clawAngleStatus.AUTO;
-                            break;
-                        }
+                    clawAngle.CS = clawAngleController.clawAngleStatus.AUTO;
+                    CurrentStatus = SCORE_YELLOW_DONE;
                     }
-
-                    if(Globals.isItMiddle == true)
-                    {
-                        CurrentStatus = autoControllerStatus.LIFT_DOWN_BABY;
-                    }
-                    else
-                    {
-                        CurrentStatus = autoControllerStatus.SCORE_YELLOW_DONE;
-                    }
-                }
                 break;
             }
 
@@ -538,7 +509,7 @@ public class RedFarAutoController {
             case LIFT_DOWN_BABY_OK:
             {
                 if(lift_down_baby.seconds() > 0.3)
-                { CurrentStatus =  autoControllerStatus.SCORE_YELLOW_DONE;}
+                { CurrentStatus =  SCORE_YELLOW_DONE;}
                 break;
             }
 

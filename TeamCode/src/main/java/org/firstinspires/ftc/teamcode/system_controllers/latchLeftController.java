@@ -22,8 +22,8 @@ public class latchLeftController {
 
     public static LatchLeftStatus CS = INITIALIZE, PS = INITIALIZE;
 
-    public static double closed = 0.5;
-    public static double secured = 0.95;
+    public static double closed = 0.47;
+    public static double secured = 0.875;
 
     public void update(robotMap r) {
         if (PS != CS || CS == INITIALIZE) {
