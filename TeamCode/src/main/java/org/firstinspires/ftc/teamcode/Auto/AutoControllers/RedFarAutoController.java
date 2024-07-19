@@ -130,7 +130,7 @@ public class RedFarAutoController {
     ElapsedTime fourbar_timer = new ElapsedTime();
     public ElapsedTime claw_timer = new ElapsedTime();
     ElapsedTime latches_timer = new ElapsedTime();
-    ElapsedTime pulamea = new ElapsedTime();
+    ElapsedTime funny_timer = new ElapsedTime();
     ElapsedTime failsafe_header = new ElapsedTime();
     ElapsedTime funny_java = new ElapsedTime();
     ElapsedTime alibitup = new ElapsedTime();
@@ -430,7 +430,7 @@ public class RedFarAutoController {
 
             case TIMER_RESET_BLUEnear:
             {
-                pulamea.reset();
+                funny_timer.reset();
                 CurrentStatus = autoControllerStatus.SCORE_YELLOW_LIFT_BLUEnear;
                 break;
             }
@@ -438,21 +438,21 @@ public class RedFarAutoController {
 
             case TIMER_RESET:
             {
-                pulamea.reset();
+                funny_timer.reset();
                 CurrentStatus = autoControllerStatus.SCORE_YELLOW_LIFT;
                 break;
             }
 
             case TIMER_RESET_BLUE:
             {
-                pulamea.reset();
+                funny_timer.reset();
                 CurrentStatus = autoControllerStatus.SCORE_YELLOW_LIFT_BLUE;
                 break;
             }
 
             case SCORE_YELLOW_LIFT:
             {
-                if(pulamea.seconds() > 0.3)
+                if(funny_timer.seconds() > 0.3)
                 {
                     door.CS = doorController.doorStatus.CLOSED;
                     lift.pid = 1;
@@ -466,7 +466,7 @@ public class RedFarAutoController {
 
             case SCORE_YELLOW_LIFT_BLUE:
             {
-                if(pulamea.seconds() > 0.3)
+                if(funny_timer.seconds() > 0.3)
                 {
                     door.CS = doorController.doorStatus.CLOSED;
                     clawAngle.clawAngle_i = 5;
@@ -482,7 +482,7 @@ public class RedFarAutoController {
 
             case SCORE_YELLOW_LIFT_BLUEnear:
             {
-                if(pulamea.seconds() > 0.3)
+                if(funny_timer.seconds() > 0.3)
                 {
                     door.CS = doorController.doorStatus.CLOSED;
                     lift.pid = 1;
@@ -680,7 +680,7 @@ public class RedFarAutoController {
                 if(claw_timer.seconds() > 0.2)
                 {
                     clawFlip.CS = clawFlipController.clawFlipStatus.COLLECT;
-                    pulamea.reset();
+                    funny_timer.reset();
                     CurrentStatus = autoControllerStatus.COLLECT_PREPARE_LIFT;
                 }
                 break;
@@ -688,7 +688,7 @@ public class RedFarAutoController {
 
             case COLLECT_PREPARE_LIFT:
             {
-                if(pulamea.seconds() > 0.2)
+                if(funny_timer.seconds() > 0.2)
                 {
                     lift.pid = 0;
                     lift.CS = liftController.liftStatus.DOWN;
@@ -714,14 +714,14 @@ public class RedFarAutoController {
 
             case TIMER_CYCLE_RESET:
             {
-                pulamea.reset();
+                funny_timer.reset();
                 CurrentStatus = autoControllerStatus.SCORE_CYCLE_LIFT;
                 break;
             }
 
             case SCORE_CYCLE_LIFT:
             {
-                if(pulamea.seconds() > 0.15)
+                if(funny_timer.seconds() > 0.15)
 
                 {clawAngle.clawAngle_i = 6;
 
