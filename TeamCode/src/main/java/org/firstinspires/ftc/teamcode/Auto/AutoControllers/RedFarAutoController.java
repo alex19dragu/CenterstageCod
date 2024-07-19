@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Auto.AutoControllers;
 
 
 import static org.firstinspires.ftc.teamcode.Auto.AutoControllers.RedFarAutoController.autoControllerStatus.SCORE_YELLOW_DONE;
+import static org.firstinspires.ftc.teamcode.Auto.Recognition.Globals.yellow_drop.right;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.Auto.BlueFar;
 import org.firstinspires.ftc.teamcode.Auto.Recognition.Globals;
 
 
+import org.firstinspires.ftc.teamcode.Auto.RedFarMTI;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
 
 import org.firstinspires.ftc.teamcode.system_controllers.clawAngleController;
@@ -113,6 +115,7 @@ public class RedFarAutoController {
         LATCH_DROP,
         LATCH_DROP_UNGHI,
         LATCH_DROP_YELLOW,
+        LATCH_DROP_YELLOW2,
         LATCH_DROP_YELLOWnear,
         DIMA_O_SUGE,
         DIMA_O_SUGE_done,
@@ -132,6 +135,7 @@ public class RedFarAutoController {
     ElapsedTime funny_java = new ElapsedTime();
     ElapsedTime alibitup = new ElapsedTime();
     ElapsedTime lift_down_baby = new ElapsedTime();
+    ElapsedTime ceva = new ElapsedTime();
 
 
     double distance_error = 14;
@@ -168,13 +172,13 @@ public class RedFarAutoController {
 
                 fourbar.CS = fourbarController.fourbarStatus.PRELOAD;
                 clawFlip.CS = clawFlipController.clawFlipStatus.PURPLE;
-                clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
+                clawAngle.CS = clawAngleController.clawAngleStatus.PURPLE;
 //                if(BlueNear.caz == 1)
 //                {
 //                    clawAngle.clawAngle_i = 1;
 //                } else
 
-                    clawAngle.clawAngle_i = 2;
+
 
 //                if(RedFarBun.caz == 0){
 //                    clawAngleController.clawAngle_i = 0;
@@ -288,6 +292,8 @@ public class RedFarAutoController {
                 if(purple_drive.seconds() > 0.6)
                 { fourbar.CS = fourbarController.fourbarStatus.DRIVE;
                 clawFlip.CS = clawFlipController.clawFlipStatus.COLLECT;
+                clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
+                clawAngle.clawAngle_i = 2;
                 CurrentStatus = autoControllerStatus.PURPLE_DROP_DONE;
                 }
                 break;
@@ -295,11 +301,11 @@ public class RedFarAutoController {
 
             case PURPLE_DRIVE_NEAR:
             {
-                if(purple_drive.seconds() > 0.25)
+                if(purple_drive.seconds() > 0.15)
                 {
                     lift.CS = liftController.liftStatus.YELLOW_NEAR;
                 }
-                if(purple_drive.seconds() > 0.35)
+                if(purple_drive.seconds() > 0.25)
                 { fourbar.CS = fourbarController.fourbarStatus.DRIVE;
                     clawFlip.CS = clawFlipController.clawFlipStatus.COLLECT;
                     CurrentStatus = autoControllerStatus.PURPLE_DROP_DONE;
@@ -309,7 +315,7 @@ public class RedFarAutoController {
 
             case PURPLE_DRIVE_NEARnucentru:
             {
-                if(purple_drive.seconds() > 0.3)
+                if(purple_drive.seconds() > 0.15)
                 {
                     CurrentStatus = autoControllerStatus.PURPLE_DROP_DONE;
                 }
@@ -403,7 +409,6 @@ public class RedFarAutoController {
             case SCORE_YELLOW_BEGIN:
             {
                 fourbar.CS = fourbarController.fourbarStatus.SCORE;
-                clawFlip.CS = clawFlipController.clawFlipStatus.SCORE;
                 CurrentStatus = autoControllerStatus.TIMER_RESET;
                 break;
             }
@@ -411,7 +416,6 @@ public class RedFarAutoController {
             case SCORE_YELLOW_BEGIN_BLUE:
             {
                 fourbar.CS = fourbarController.fourbarStatus.SCORE;
-                clawFlip.CS = clawFlipController.clawFlipStatus.SCORE;
                 CurrentStatus = autoControllerStatus.TIMER_RESET_BLUE;
                 break;
             }
@@ -453,6 +457,7 @@ public class RedFarAutoController {
                     door.CS = doorController.doorStatus.CLOSED;
                     lift.pid = 1;
                     lift.CS = liftController.liftStatus.PRELOAD_YELLOW;
+                    clawFlip.CS = clawFlipController.clawFlipStatus.SCORE;
                     claw_timer.reset();
                     CurrentStatus = autoControllerStatus.SCORE_YELLOW_CLAW;
                 }
@@ -467,6 +472,7 @@ public class RedFarAutoController {
                     clawAngle.clawAngle_i = 5;
                     clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
                     lift.pid = 1;
+                    clawFlip.CS = clawFlipController.clawFlipStatus.SCORE;
                     lift.CS = liftController.liftStatus.PRELOAD_YELLOW;
                     claw_timer.reset();
                     CurrentStatus = autoControllerStatus.SCORE_YELLOW_CLAW;
@@ -595,16 +601,31 @@ public class RedFarAutoController {
             {
                 latchLeft.CS = latchLeftController.LatchLeftStatus.CLOSED;
                 latchRight.CS = latchRightController.LatchRightStatus.CLOSED;
-                alibitup.reset();
+                    alibitup.reset();
                 CurrentStatus = autoControllerStatus.NOTHING;
                 break;
             }
 
             case LATCH_DROP_YELLOW:
             {
-                latchLeft.CS = latchLeftController.LatchLeftStatus.CLOSED;
+                if(Globals.yellow_drop_side == right)
+                {                latchRight.CS = latchRightController.LatchRightStatus.CLOSED;}
+                else
+                {
+                    latchLeft.CS = latchLeftController.LatchLeftStatus.CLOSED;
+
+                }
+                alibitup.reset();
+                CurrentStatus = autoControllerStatus.LATCH_DROP_YELLOW2;
+                break;
+            }
+
+            case LATCH_DROP_YELLOW2:
+            {
+                if(alibitup.seconds() > 0.1)
+                {  latchLeft.CS = latchLeftController.LatchLeftStatus.CLOSED;
                 latchRight.CS = latchRightController.LatchRightStatus.CLOSED;
-                CurrentStatus = autoControllerStatus.NOTHING;
+                CurrentStatus = autoControllerStatus.NOTHING;}
                 break;
             }
 
@@ -685,8 +706,9 @@ public class RedFarAutoController {
                 fourbar.CS = fourbarController.fourbarStatus.SCORE;
                 lift.pid = 1;
                 lift.CS = liftController.liftStatus.CYCLE;
+                clawAngle.clawAngle_i = 2;
                 clawAngle.CS = clawAngleController.clawAngleStatus.SCORE;
-                CurrentStatus = autoControllerStatus.SCORE_CYCLE_LIFT;
+                CurrentStatus = autoControllerStatus.TIMER_CYCLE_RESET;
                 break;
             }
 
@@ -699,13 +721,13 @@ public class RedFarAutoController {
 
             case SCORE_CYCLE_LIFT:
             {
+                if(pulamea.seconds() > 0.15)
 
-                clawAngle.clawAngle_i = 6;
+                {clawAngle.clawAngle_i = 6;
 
                 clawFlip.CS = clawFlipController.clawFlipStatus.SCORE;
                 door.CS = doorController.doorStatus.CLOSED;
-                    CurrentStatus = autoControllerStatus.SCORE_CYCLE_DONE;
-
+                CurrentStatus = autoControllerStatus.SCORE_CYCLE_DONE;}
                 break;
             }
 

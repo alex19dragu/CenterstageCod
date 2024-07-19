@@ -56,7 +56,7 @@ public class transferController {
                 {
 
 
-                        extendo.CS = extendoController.extendoStatus.TRANSFER;
+                        extendo.CS = extendoController.extendoStatus.TRANSFER_DRIVE;
                         lift.CS = liftController.liftStatus.TRANSFER;
 
 

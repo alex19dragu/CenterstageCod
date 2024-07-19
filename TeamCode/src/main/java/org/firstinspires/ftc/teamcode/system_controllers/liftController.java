@@ -187,7 +187,7 @@ public class liftController {
                 case PRELOAD_YELLOW:
                 {
                    // target = 10;
-                    activePID.targetValue = 350;
+                    activePID.targetValue = 330; //350
                     break;
                 }
 

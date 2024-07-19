@@ -114,6 +114,7 @@ public class outtakeController {
                 case COLLECT_FOURBAR:
                 {
                         fourbar.CS = fourbarController.fourbarStatus.DRIVE;
+                        door.CS = doorController.doorStatus.CLOSED;
                         claw_timer.reset();
                         CS = COLLLECT_CLAW;
                     break;

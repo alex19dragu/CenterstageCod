@@ -41,7 +41,7 @@ public class failsafe {
 
     public void update(robotMap r, liftController lift, fourbarController fourbar, clawAngleController clawAngle, clawFlipController clawFlip, collectAngleController collectAngle, doorController door, extendoController extendo, latchLeftController latchLeft, latchRightController latchRight)
     {
-        r.collect.setCurrentAlert(5, CurrentUnit.AMPS);
+     //   r.collect.setCurrentAlert(5, CurrentUnit.AMPS);
 
         switch (CurrentStatus)
         {
@@ -51,20 +51,23 @@ public class failsafe {
               //  extendo.CS = extendoController.extendoStatus.FAIL_SAFE;
                 r.collect.setPower(-0.7);
                 fail_safe_header.reset();
+                collectAngle.CS = collectAngleController.collectAngleStatus.COLLECT;
+                collectAngle.collectAngle_i = Math.min(4, collectAngle.collectAngle_i + 1);
                 CurrentStatus = failsafeStatus.FAIL_SAFE_HEADER;
                 break;
             }
 
             case FAIL_SAFE_HEADER:
             {
-                if(r.collect.isOverCurrent())
-                {
-                    CurrentStatus = failsafeStatus.FAIL_SAFE;
-                }
+//                if(r.collect.isOverCurrent())
+//                {
+//                    CurrentStatus = failsafeStatus.FAIL_SAFE;
+//                }
 
-                if(fail_safe_header.seconds() > 0.25 && !r.collect.isOverCurrent())
+                if(fail_safe_header.seconds() > 0.25)
                 {   r.collect.setPower(1);
-                    collectAngle.collectAngle_i = Math.max(0, collectAngle.collectAngle_i - 1);
+                    collectAngle.CS = collectAngleController.collectAngleStatus.COLLECT;
+                    collectAngle.collectAngle_i = Math.max(0, collectAngle.collectAngle_i - 2);
                    // extendo.CS = extendoController.extendoStatus.RETRY;
                     CurrentStatus = failsafeStatus.FAIL_SAFE_DONE;
                 }

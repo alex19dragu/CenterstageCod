@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.drive;
 
+import static org.firstinspires.ftc.teamcode.system_controllers.collectAngleController.CS;
 import static org.firstinspires.ftc.teamcode.system_controllers.collectAngleController.collectAngle_i;
 import static org.firstinspires.ftc.teamcode.system_controllers.doorController.doorStatus.CLOSED;
 import static org.firstinspires.ftc.teamcode.system_controllers.doorController.doorStatus.CLOSED_COLLECT;
+import static org.firstinspires.ftc.teamcode.system_controllers.doorController.doorStatus.OPENED;
 import static org.firstinspires.ftc.teamcode.system_controllers.droneController.droneStatus.RELEASED;
 import static org.firstinspires.ftc.teamcode.system_controllers.extendoController.extendoStatus.DRIVE;
 import static org.firstinspires.ftc.teamcode.system_controllers.extendoController.extendoStatus.EXTENDED;
@@ -255,7 +257,7 @@ public class opMode extends LinearOpMode {
 
 timer.reset();
 
-sensorPublisher.startPublishing();
+//sensorPublisher.startPublishing();
 
         waitForStart();
 
@@ -392,13 +394,21 @@ sensorPublisher.startPublishing();
                 }
             }
 
-            if(!previousGamepad1.right_stick_button && currentGamepad1.right_stick_button)
-            {
-                if(door.CS != CLOSED)
-                {
-                    door.CS = CLOSED;
-                }
-            }
+//            if(!previousGamepad1.options && currentGamepad1.options)
+//            {
+//                if(door.CS != CLOSED)
+//                {
+//                    door.CS = CLOSED;
+//                }
+//            }
+//
+//            if(!previousGamepad1.start && currentGamepad1.start)
+//            {
+//                if(door.CS != OPENED)
+//                {
+//                    door.CS = OPENED;
+//                }
+//            }
 
             if(!previousGamepad1.left_bumper && currentGamepad1.left_bumper)
             {
@@ -440,6 +450,7 @@ sensorPublisher.startPublishing();
                 }
                 else
                 {
+                  //  door.CS = CLOSED;
                  outtake.CS = COLLECT_FOURBAR;
                 }
             }
@@ -661,16 +672,16 @@ sensorPublisher.startPublishing();
 //            telemetry.addData("liftpos", r.lift.getCurrentPosition());
 //            telemetry.addData("outtake",outtake.CS);
 //            telemetry.addData("transfer",transfer.CS);
-//            telemetry.addData("amps extendo left", r.extendoLeft.getCurrent(CurrentUnit.AMPS));
-//            telemetry.addData("amps extendo right", r.extendoRight.getCurrent(CurrentUnit.AMPS));
-//            telemetry.addData("amps lift", r.lift.getCurrent(CurrentUnit.AMPS));
+            telemetry.addData("amps extendo left", r.extendoLeft.getCurrent(CurrentUnit.AMPS));
+            telemetry.addData("amps extendo right", r.extendoRight.getCurrent(CurrentUnit.AMPS));
+            telemetry.addData("amps lift", r.lift.getCurrent(CurrentUnit.AMPS));
 //            telemetry.addData("x", poseEstimate.getX());
 //            telemetry.addData("y", poseEstimate.getY());
 //            telemetry.addData("heading", poseEstimate.getHeading());
 
-
+               // telemetry.addData("cache", )
             telemetry.update();
         }
-        sensorPublisher.stopPublishing();
+        //sensorPublisher.stopPublishing();
     }
 }

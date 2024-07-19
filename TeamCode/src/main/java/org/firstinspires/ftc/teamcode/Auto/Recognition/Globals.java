@@ -36,8 +36,15 @@ public class Globals {
         right
     }
 
+    public enum yellow_drop
+    {
+        right,
+        left
+    }
+
     public static Alliance alliance ;
     public static Side side;
+    public static yellow_drop yellow_drop_side;
 
     public static boolean isItNone ;
     public static boolean isItMiddle;

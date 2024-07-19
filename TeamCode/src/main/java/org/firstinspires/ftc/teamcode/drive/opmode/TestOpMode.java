@@ -42,8 +42,8 @@ public class TestOpMode extends LinearOpMode {
 
     //  clawAngleController clawAngle = new clawAngleController();
     //clawFlipController clawFlip = new clawFlipController();
-       collectAngleController collectAngle = new collectAngleController();
- //doorController door = new doorController();
+   //    collectAngleController collectAngle = new collectAngleController();
+ doorController door = new doorController();
       // fourbarController fourbar = new fourbarController();
     // latchLeftController latchLeft = new latchLeftController();
  //latchRightController latchRight = new latchRightController();
@@ -114,13 +114,13 @@ public class TestOpMode extends LinearOpMode {
 //
             if(!previousGamepad1.circle && currentGamepad1.circle)
             {
-               if(collectAngle.CS != collectAngleController.collectAngleStatus.INITIALIZE)
+               if(door.CS != doorController.doorStatus.CLOSED)
                {
-                   collectAngle.CS = collectAngleController.collectAngleStatus.INITIALIZE;
+                  door.CS = doorController.doorStatus.CLOSED;
                }
                else
                {
-                   collectAngle.CS = collectAngleController.collectAngleStatus.DRIVE;
+                   door.CS = doorController.doorStatus.OPENED;
                }
             }
 //            if(!previousGamepad1.triangle && currentGamepad1.triangle)
@@ -147,7 +147,7 @@ public class TestOpMode extends LinearOpMode {
           //  clawFlip.update(r);
 //            clawAngle.update(r);
           //door.update(r);
-       collectAngle.update(r);
+       door.update(r);
 //        droneLatch.update(r);
 //        latchLeft.update(r);
 //            latchRight.update(r);
@@ -162,7 +162,7 @@ public class TestOpMode extends LinearOpMode {
             double loop = System.nanoTime();
 
             telemetry.addData("hz ", 1000000000 / (loop - loopTime));
-            telemetry.addData("latchLeft",  collectAngle.CS );
+            telemetry.addData("latchLeft",  door.CS );
 
 
           //  telemetry.addData("position", position);

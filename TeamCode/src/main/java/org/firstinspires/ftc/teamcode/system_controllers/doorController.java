@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.system_controllers;
 
 import static org.firstinspires.ftc.teamcode.system_controllers.doorController.doorStatus.CLOSED;
+import static org.firstinspires.ftc.teamcode.system_controllers.doorController.doorStatus.CLOSED_COLLECT;
 import static org.firstinspires.ftc.teamcode.system_controllers.doorController.doorStatus.INITIALIZE;
 import static org.firstinspires.ftc.teamcode.system_controllers.doorController.doorStatus.OPENED;
 
@@ -27,13 +28,17 @@ public class doorController {
 
     public static doorStatus CS = INITIALIZE, PS = INITIALIZE;
 
-    public static double opened = 0.525;
-    public static double closed = 0.27;
+//    public static double opened = 0.525;
+//    public static double closed = 0.27;
+//    public static double closed_collect = 0.425;
+
+    public static double opened = 0.85;
+    public static double closed = 0.42;
     public static double closed_collect = 0.425;
 
     public void update(robotMap r)
     {
-        if(CS != PS || CS == INITIALIZE)
+        if(CS != PS || CS == INITIALIZE || CS == OPENED || CS == CLOSED || CS == CLOSED_COLLECT)
         {
             switch (CS)
             {

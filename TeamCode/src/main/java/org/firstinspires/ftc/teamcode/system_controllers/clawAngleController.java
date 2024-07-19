@@ -18,6 +18,7 @@ public class clawAngleController {
         COLLECT,
         SCORE,
         AUTO,
+        PURPLE,
     }
 
     public clawAngleController()
@@ -29,11 +30,14 @@ public class clawAngleController {
     public static clawAngleStatus CS = INITIALIZE, PS = INITIALIZE;
 
     public static double collect = 0.5;
-        public static double score[] = {0.123, 0.318, 0.5, 0.682, 0.877, 0.28, 0.782};
+        public static double score[] = {0.123, 0.318, 0.5, 0.682, 0.877, 0.782, 0.782};
+    public static double purple[] = {0.318, 0.5, 0.682};
+
     public static double auto = 0.5;
 
 
     public static int clawAngle_i = 1;
+    public static int clawAnglePurple_i;
 
     public void update(robotMap r)
     {
@@ -73,6 +77,12 @@ public class clawAngleController {
                 case AUTO:
                 {
                     r.clawAngle.setPosition(auto);
+                    break;
+                }
+
+                case PURPLE:
+                {
+                    r.clawAngle.setPosition(purple[clawAnglePurple_i]);
                     break;
                 }
 

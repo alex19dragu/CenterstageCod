@@ -7,8 +7,6 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.Auto.urm09_customdriver;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 public class robotMap {
 
@@ -64,7 +62,7 @@ public class robotMap {
     public DigitalChannel leftStopper = null;
     public DigitalChannel rightStopper =null;
 
-    public urm09_customdriver right = null;
+   // public urm09_customdriver right = null;
     // public urm09_customdriver left = null;
 
    // public DistanceSensor left = null;
@@ -136,7 +134,7 @@ public class robotMap {
         leftStopper = Init.get(DigitalChannel.class, "leftStopper");
         rightStopper = Init.get(DigitalChannel.class, "rightStopper");
 
-        right = Init.get(urm09_customdriver.class, "right");
+      //  right = Init.get(urm09_customdriver.class, "right");
         //left = Init.get(urm09_customdriver.class, "left");
 
         /**
@@ -181,6 +179,9 @@ public class robotMap {
 //        extendoLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 //        extendoLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         extendoLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+      // right.setModeRange(urm09_customdriver.DistanceMode.MODE_300CM.bVal, urm09_customdriver.MeasurementMode.AUTOMATIC.bVal);
+
 
 //        DcMotor.RunMode prevMode = lift.getMode();
 //        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

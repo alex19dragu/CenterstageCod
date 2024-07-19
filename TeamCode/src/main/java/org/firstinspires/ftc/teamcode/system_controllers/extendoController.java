@@ -7,6 +7,7 @@ import static org.firstinspires.ftc.teamcode.system_controllers.extendoControlle
 import static org.firstinspires.ftc.teamcode.system_controllers.extendoController.extendoStatus.FAIL_SAFE;
 import static org.firstinspires.ftc.teamcode.system_controllers.extendoController.extendoStatus.INITIALIZE;
 import static org.firstinspires.ftc.teamcode.system_controllers.extendoController.extendoStatus.PURPLE;
+import static org.firstinspires.ftc.teamcode.system_controllers.extendoController.extendoStatus.PURPLE_RED_MTI;
 import static org.firstinspires.ftc.teamcode.system_controllers.extendoController.extendoStatus.RERTRY_PURPLE;
 import static org.firstinspires.ftc.teamcode.system_controllers.extendoController.extendoStatus.RETRACTED;
 import static org.firstinspires.ftc.teamcode.system_controllers.funnyExtendoController.funnyExtendoStatus.AUTO;
@@ -20,6 +21,7 @@ import com.acmerobotics.dashboard.config.Config;
 //import org.firstinspires.ftc.teamcode.Auto.FUNNYBlueFar;
 //import org.firstinspires.ftc.teamcode.Auto.RedFar;
 import org.firstinspires.ftc.teamcode.Auto.Recognition.Globals;
+import org.firstinspires.ftc.teamcode.Auto.RedFarMTI;
 import org.firstinspires.ftc.teamcode.globals.SimplePIDController;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
 
@@ -42,6 +44,7 @@ public class extendoController {
         DRIVE,
         FAIL_SAFE,
         TRANSFER,
+        TRANSFER_DRIVE,
         RETRY,
 
         RERTRY_PURPLE,
@@ -52,6 +55,7 @@ public class extendoController {
 
         FAIL_SAFE_NEAR,
         RETRY_NEAR,
+        PURPLE_RED_MTI,
     }
 
     // PID constants for extension
@@ -64,9 +68,13 @@ public class extendoController {
     public static double Kd_purple = 0.002;
 
     // PID constants for retraction
-    public static double Kp_retract = 0.015;
-    public static double Ki_retract = 0;
-    public static double Kd_retract = 0;
+    public static double Kp_retract = 0.015; //0.01
+    public static double Ki_retract = 0; //0
+    public static double Kd_retract = 0; //0
+
+    public static double Kp_retractauto = 0.01; //0.01
+    public static double Ki_retractauto = 0; //0
+    public static double Kd_retractauto = 0; //0
 
     public static double Kp_drive = 0.004;
     public static double Ki_drive = 0.0002;
@@ -81,6 +89,7 @@ public class extendoController {
 
     SimplePIDController extendoPIDExtend;
     SimplePIDController extendoPIDRetract;
+    SimplePIDController extendoPIDRetractauto;
     SimplePIDController extendoPIDDrive;
     SimplePIDController SHORTPID;
     SimplePIDController purplepid;
@@ -111,8 +120,9 @@ public class extendoController {
     public static double transfer = -20;
     public static double retry = 800;
     public static double max = 900;
-    public static double purple_max = 550;
-    public static double extendedmax = 750;
+    public static double purple_max;
+    public static double purple_max_red_far = 350;
+    public static double extendedmax = 775;
 
     public static double retry_near = 800;
     public static double failsafe_near = 800;
@@ -135,6 +145,7 @@ public class extendoController {
         extendoPIDDrive = new SimplePIDController(Kp_drive, Ki_drive, Kd_drive);
         SHORTPID = new SimplePIDController(Kp_short, Ki_short, Kd_short);
         purplepid = new SimplePIDController(Kp_purple, Ki_purple, Kd_purple);
+        extendoPIDRetractauto = new SimplePIDController(Kp_retractauto, Ki_retractauto, Kd_retractauto);
 
         // Initially, we can set to retract as a default or based on your initial state
         extendoPIDExtend.targetValue = retracted; // Assuming you start with retraction
@@ -165,6 +176,9 @@ public class extendoController {
             case PURPLE:
                 activePID = extendoPIDExtend;
                 break;
+            case PURPLE_RED_MTI:
+                activePID = extendoPIDExtend;
+                break;
             case PURPLEredfar:
                 activePID = extendoPIDExtend;
                 break;
@@ -186,6 +200,9 @@ public class extendoController {
             case RERTRY_PURPLE:
                 activePID = SHORTPID;
                 break;
+            case TRANSFER:
+                activePID = extendoPIDRetractauto;
+                break;
             default:
                 activePID = extendoPIDRetract; // Default to the first one or any you prefer
                 break;
@@ -194,6 +211,8 @@ public class extendoController {
         // Use the active PID controller for calculations
         double powerColectare = activePID.update(position);
         powerColectare = Math.max(-powerCap, Math.min(powerColectare * 14 / voltage, powerCap));
+
+
 
 //        if (r.leftStopper.getState() || r.rightStopper.getState()) {
 //            analog_value = true;
@@ -205,7 +224,7 @@ public class extendoController {
         { r.extendoLeft.setPower(powerColectare);
         r.extendoRight.setPower(powerColectare);}
 
-        analog_value = sensorPublisher.getSensorState();
+       // analog_value = sensorPublisher.getSensorState();
 
 //        if ( CS == DRIVE) {
 //            activePID.targetValue = max;
@@ -229,12 +248,31 @@ public class extendoController {
             else
             {  r.extendoLeft.setPower(powerColectare);
                 r.extendoRight.setPower(powerColectare);
-                purple_max = 550;
+              //  purple_max = 550;
             }}
            else
            {
                purple_max = 0;
            }
+        }
+
+        if(CS == PURPLE_RED_MTI)
+        {
+            activePID.targetValue = purple_max_red_far;
+            if(!Globals.is_left)
+            {  if (analog_value) {
+                r.extendoLeft.setPower(0);
+                r.extendoRight.setPower(0);
+            }
+            else
+            {  r.extendoLeft.setPower(powerColectare);
+                r.extendoRight.setPower(powerColectare);
+                purple_max_red_far = 350;
+            }}
+            else
+            {
+                purple_max_red_far = 0;
+            }
         }
 
 
@@ -303,6 +341,14 @@ public class extendoController {
                     break;
                 }
 
+                case PURPLE_RED_MTI:{
+                    activePID.targetValue = purple_max_red_far;
+                    activePID.maxOutput = 0.45;
+                    //CS = SENSOR;
+                    break;
+                }
+
+
                 case PURPLEredfar: {
                     activePID.targetValue = purpleredfar[caz];
                     activePID.maxOutput = 0.9;
@@ -329,6 +375,12 @@ public class extendoController {
                 }
 
                 case TRANSFER: {
+                    activePID.targetValue = transfer;
+                    activePID.maxOutput = 1;
+                    break;
+                }
+
+                case TRANSFER_DRIVE: {
                     activePID.targetValue = transfer;
                     activePID.maxOutput = 1;
                     break;

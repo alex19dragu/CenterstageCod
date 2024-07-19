@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.drive.opmode.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
-import org.firstinspires.ftc.teamcode.system_controllers.SensorPublisher;
 import org.firstinspires.ftc.teamcode.system_controllers.collectAngleController;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -34,30 +33,31 @@ public class testbreak extends LinearOpMode {
 
         collectAngleController.update(r);
 
-        SensorPublisher sensorPublisher = new SensorPublisher(r);
+       // SensorPublisher sensorPublisher = new SensorPublisher(r);
 
         Pose2d start_pose = new Pose2d(0, 0, Math.toRadians(0));
-        TrajectorySequence testTrajectory = drive.trajectorySequenceBuilder(start_pose)
-                .forward(50)
-                .build();
+       // TrajectorySequence testTrajectory = drive.trajectorySequenceBuilder(start_pose)
+            //    .forward(5)
+          //      .build();
 
         drive.setPoseEstimate(start_pose);
 
         waitForStart();
-        sensorPublisher.startPublishing();
+      //  sensorPublisher.startPublishing();
 
-        drive.followTrajectorySequenceAsync(testTrajectory);
+        //drive.followTrajectorySequenceAsync(testTrajectory);
 
         while (opModeIsActive() && !isStopRequested()) {
-            if (sensorPublisher.getSensorState()) {
-                drive.breakFollowing();
-                break;
-            }
+
+
             drive.update();
-            telemetry.addData("Sensor State", sensorPublisher.getSensorState());
+          telemetry.addData("Sensor State", r.leftFront.getPower());
+          telemetry.addData("lol", r.leftFront.getCurrentPosition());
+          telemetry.addData("pose", drive.getPoseEstimate().getHeading());
+          telemetry.addData("posex", drive.getPoseEstimate().getY());
             telemetry.update();
         }
 
-        sensorPublisher.stopPublishing();
+      //  sensorPublisher.stopPublishing();
     }
 }

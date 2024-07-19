@@ -42,9 +42,9 @@ import java.util.List;
 
 @Photon
 @Config
-@Autonomous(group = "Auto" , name = "BlueNear")
+@Autonomous(group = "Auto" , name = "AutonomyNearWall - BLUE")
 
-public class BlueNear extends LinearOpMode {
+public class AutonomyNearWall extends LinearOpMode {
 
     enum STROBOT {
         START,
@@ -189,10 +189,10 @@ public class BlueNear extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        BlueOpenCVMaster blueRight = new BlueOpenCVMaster(this);
-        blueRight.observeStick();
+        BlueOpenCVMaster blueNearWall = new BlueOpenCVMaster(this);
+        blueNearWall.observeStick();
 
-       // DistanceSensorCalibrator calibrator;
+        // DistanceSensorCalibrator calibrator;
 
         for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
             // Clear the cache for each module.
@@ -217,7 +217,7 @@ public class BlueNear extends LinearOpMode {
         liftController lift = new liftController();
         extendoController extendo = new extendoController();
         failsafe failsafecontroller = new failsafe();
-droneLatchController droneLatch = new droneLatchController();
+        droneLatchController droneLatch = new droneLatchController();
         RedFarAutoController redFarAutoController = new RedFarAutoController();
 
 
@@ -663,21 +663,21 @@ droneLatchController droneLatch = new droneLatchController();
         while (!isStarted() && !isStopRequested()) {
 
             sleep(20);
-            if(blueRight.opencv2.getWhichSide() == "left"){
+            if(blueNearWall.opencv2.getWhichSide() == "left"){
                 clawAngleController.auto = clawAngleController.score[1];
                 caz = 0;
-            } else if (blueRight.opencv2.getWhichSide() == "center") {
+            } else if (blueNearWall.opencv2.getWhichSide() == "center") {
                 clawAngleController.auto = clawAngleController.score[1];
                 caz = 1;
             } else {
                 clawAngleController.auto = clawAngleController.score[1];
                 caz = 2;
             }
-            telemetry.addData("case", blueRight.opencv2.getWhichSide());
+            telemetry.addData("case", blueNearWall.opencv2.getWhichSide());
             telemetry.update();
             sleep(50);
         }
-sensorPublisher.startPublishing();
+        sensorPublisher.startPublishing();
         waitForStart();
         park.reset();
 //        double[] rawReadings = {28.5, 27.3, 26.2, 24.9, 24.3, 23.6, 28.4, 29.5, 30.6, 31.2, 31.3, 31.6, 32.3, 33.4, 34.5, 35.3, 36.1, 37.8, 37.9, 38};
@@ -744,7 +744,7 @@ sensorPublisher.startPublishing();
                 {
                     if(preload.seconds() > 0.1)
                     {
-                      //  blueRight.stopCamera();
+                        //  blueRight.stopCamera();
                         redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.PURPLE;
                         extendo_timer.reset();
                         status = STROBOT.PURPLE;
@@ -774,8 +774,8 @@ sensorPublisher.startPublishing();
 
                 case GO_SCORE_YELLOW:
                 {
-                          if(redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.PURPLE_DROP_DONE )
-                          { switch (caz)
+                    if(redFarAutoController.CurrentStatus == RedFarAutoController.autoControllerStatus.PURPLE_DROP_DONE )
+                    { switch (caz)
                     {
                         case 0:
 
@@ -812,7 +812,7 @@ sensorPublisher.startPublishing();
                     if(transfer.seconds() > 0.5)
                     {
                         redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.SCORE_YELLOW_BEGIN_BLUEnear;
-                       preload.reset();
+                        preload.reset();
                         status = STROBOT.YELLOW_DROP;
                     }
 
@@ -837,7 +837,7 @@ sensorPublisher.startPublishing();
                     if(drive.getPoseEstimate().getX() > 48.3 || !drive.isBusy())
                     { redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.LATCH_DROP_YELLOWnear;
 
-                   status = STROBOT.GO_POWER_RANGERS;}
+                        status = STROBOT.GO_POWER_RANGERS;}
                     break;
                 }
 
@@ -982,7 +982,7 @@ sensorPublisher.startPublishing();
                 {
                     if(park.seconds() < 26)
                     { tries =0;
-                      //  drive.followTrajectorySequenceAsync(RETRY);
+                        //  drive.followTrajectorySequenceAsync(RETRY);
                         retry.reset();
                         status = STROBOT.RETRY_TIMER_RESET;} else
                     {
@@ -1108,7 +1108,7 @@ sensorPublisher.startPublishing();
                 {
                     if(park.seconds() < 26)
                     { tries =0;
-                     //   drive.followTrajectorySequenceAsync(RETRY);
+                        //   drive.followTrajectorySequenceAsync(RETRY);
                         retry.reset();
                         status = STROBOT.RETRY_TIMER_RESET_v2;} else
                     {
@@ -1177,67 +1177,67 @@ sensorPublisher.startPublishing();
                 {
                     extendo.CS = extendoController.extendoStatus.RETRACTED;
 
-                        switch (nrcicluri) {
-                            case 0:
-                                switch (caz) {
-                                    case 0:
-                                        drive.followTrajectorySequenceAsync(SCORE_SECOND_CYCLE_RIGHT);
-                                        break;
-                                    case 1:
-                                        drive.followTrajectorySequenceAsync(SCORE_SECOND_CYCLE_CENTER);
-                                        break;
-                                    case 2:
-                                        drive.followTrajectorySequenceAsync(SCORE_SECOND_CYCLE_LEFT);
-                                        break;
-                                }
-                                break;
+                    switch (nrcicluri) {
+                        case 0:
+                            switch (caz) {
+                                case 0:
+                                    drive.followTrajectorySequenceAsync(SCORE_SECOND_CYCLE_RIGHT);
+                                    break;
+                                case 1:
+                                    drive.followTrajectorySequenceAsync(SCORE_SECOND_CYCLE_CENTER);
+                                    break;
+                                case 2:
+                                    drive.followTrajectorySequenceAsync(SCORE_SECOND_CYCLE_LEFT);
+                                    break;
+                            }
+                            break;
 
-                            case 1:
-                                switch (caz) {
-                                    case 0:
-                                        drive.followTrajectorySequenceAsync(SCORE_THIRD_CYCLE_RIGHT);
-                                        break;
-                                    case 1:
-                                        drive.followTrajectorySequenceAsync(SCORE_THIRD_CYCLE_CENTER);
-                                        break;
-                                    case 2:
-                                        drive.followTrajectorySequenceAsync(SCORE_THIRD_CYCLE_LEFT);
-                                        break;
-                                }
-                                break;
+                        case 1:
+                            switch (caz) {
+                                case 0:
+                                    drive.followTrajectorySequenceAsync(SCORE_THIRD_CYCLE_RIGHT);
+                                    break;
+                                case 1:
+                                    drive.followTrajectorySequenceAsync(SCORE_THIRD_CYCLE_CENTER);
+                                    break;
+                                case 2:
+                                    drive.followTrajectorySequenceAsync(SCORE_THIRD_CYCLE_LEFT);
+                                    break;
+                            }
+                            break;
 
-                            case 2:
-                                switch (caz) {
-                                    case 0:
-                                        drive.followTrajectorySequenceAsync(SCORE_FORTH_CYCLE_RIGHT);
-                                        break;
-                                    case 1:
-                                        drive.followTrajectorySequenceAsync(SCORE_FORTH_CYCLE_CENTER);
-                                        break;
-                                    case 2:
-                                        drive.followTrajectorySequenceAsync(SCORE_FORTH_CYCLE_LEFT);
-                                        break;
-                                }
-                                break;
+                        case 2:
+                            switch (caz) {
+                                case 0:
+                                    drive.followTrajectorySequenceAsync(SCORE_FORTH_CYCLE_RIGHT);
+                                    break;
+                                case 1:
+                                    drive.followTrajectorySequenceAsync(SCORE_FORTH_CYCLE_CENTER);
+                                    break;
+                                case 2:
+                                    drive.followTrajectorySequenceAsync(SCORE_FORTH_CYCLE_LEFT);
+                                    break;
+                            }
+                            break;
 
-                            case 3:
-                                switch (caz) {
-                                    case 0:
-                                        drive.followTrajectorySequenceAsync(SCORE_FORTH_CYCLE_RIGHT);
-                                        break;
-                                    case 1:
-                                        drive.followTrajectorySequenceAsync(SCORE_FORTH_CYCLE_CENTER);
-                                        break;
-                                    case 2:
-                                        drive.followTrajectorySequenceAsync(SCORE_FORTH_CYCLE_LEFT);
-                                        break;
-                                }
-                                break;
+                        case 3:
+                            switch (caz) {
+                                case 0:
+                                    drive.followTrajectorySequenceAsync(SCORE_FORTH_CYCLE_RIGHT);
+                                    break;
+                                case 1:
+                                    drive.followTrajectorySequenceAsync(SCORE_FORTH_CYCLE_CENTER);
+                                    break;
+                                case 2:
+                                    drive.followTrajectorySequenceAsync(SCORE_FORTH_CYCLE_LEFT);
+                                    break;
+                            }
+                            break;
 
 
-                        }
-                        extendo_timer.reset();
-                        status = STROBOT.GO_SCORE_CYCLE_FUNNY_JAVA;
+                    }
+                    extendo_timer.reset();
+                    status = STROBOT.GO_SCORE_CYCLE_FUNNY_JAVA;
                     //   r.collect.setPower(-1);
                     //  redFarAutoController.CurrentStatus = RedFarAutoController.autoControllerStatus.TRANSFER_BEGIN;
 
@@ -1452,10 +1452,10 @@ sensorPublisher.startPublishing();
             double loop = System.nanoTime();
 
             telemetry.addData("hz ", 1000000000 / (loop - loopTime));
-           // telemetry.addData("status", status);
+            // telemetry.addData("status", status);
 //            telemetry.addData("robotcontroller", RedFarAutoController.CurrentStatus);
             telemetry.addData("realpoz", r.extendoLeft.getCurrentPosition());
-           // telemetry.addData("targetpoz", extendo.activePID.targetValue);
+            // telemetry.addData("targetpoz", extendo.activePID.targetValue);
             //telemetry.addData("collectamps", r.collect.getCurrent(CurrentUnit.AMPS));
 //            telemetry.addData("extendo x", extendoController.x);
 //            telemetry.addData("extendi", extendo.CS);
