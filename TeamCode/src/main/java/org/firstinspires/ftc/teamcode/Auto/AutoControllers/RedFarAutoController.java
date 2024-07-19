@@ -117,8 +117,8 @@ public class RedFarAutoController {
         LATCH_DROP_YELLOW,
         LATCH_DROP_YELLOW2,
         LATCH_DROP_YELLOWnear,
-        DIMA_O_SUGE,
-        DIMA_O_SUGE_done,
+        Reset_claw_timer,
+       Reset_claw_timer_done,
         LIFT_ALILBITUP,
         LIFT_ALILBITUP_DONE,
 
@@ -650,11 +650,11 @@ public class RedFarAutoController {
                 break;
             }
 
-            case DIMA_O_SUGE:
+            case Reset_claw_timer:
             {
                 if(claw_timer.seconds() > 0.1)
                 {
-                    CurrentStatus = autoControllerStatus.DIMA_O_SUGE_done;
+                    CurrentStatus = autoControllerStatus.Reset_claw_timer_done;
                 }
                 break;
             }
