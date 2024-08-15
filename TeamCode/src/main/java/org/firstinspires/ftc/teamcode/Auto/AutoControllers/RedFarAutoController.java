@@ -122,7 +122,7 @@ public class RedFarAutoController {
         LIFT_ALILBITUP,
         LIFT_ALILBITUP_DONE,
 
-
+        DIMA_O_SUGE_done,
     }
     public static autoControllerStatus CurrentStatus = autoControllerStatus.NOTHING, PreviousStatus = autoControllerStatus.NOTHING;
 
@@ -645,7 +645,7 @@ public class RedFarAutoController {
                     fourbar.CS = fourbarController.fourbarStatus.SCORE_BAZI;
                     clawFlip.CS = clawFlipController.clawFlipStatus.YELLO_BAZI;
                     claw_timer.reset();
-                    CurrentStatus = autoControllerStatus.DIMA_O_SUGE;
+                    CurrentStatus = autoControllerStatus.DIMA_O_SUGE_done;
                 }
                 break;
             }

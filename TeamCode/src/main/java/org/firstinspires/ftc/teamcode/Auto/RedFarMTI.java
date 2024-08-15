@@ -53,7 +53,7 @@ import java.util.concurrent.TimeUnit;
 
 @Photon
 @Config
-@Autonomous(group = "Auto", name = "RedFarMTI")
+@Autonomous(group = "Auto", name = "RedFarBTC")
 
 public class RedFarMTI extends LinearOpMode {
 
@@ -113,17 +113,17 @@ public class RedFarMTI extends LinearOpMode {
      * purple
      */
 
-    public static double x_purple_preload_right = -43, y_purple_preload_right = -26, angle_purple_preload_right = 176;
-    public static double x_purple_preload_center = -49, y_purple_preload_center = -23, angle_purple_preload_center = 183;
-    public static double x_purple_preload_left = -61.7, y_purple_preload_left = -34, angle_purple_preload_left = 184;
+    public static double x_purple_preload_right = -41, y_purple_preload_right = -25, angle_purple_preload_right = 179;
+    public static double x_purple_preload_center = -49, y_purple_preload_center = -22, angle_purple_preload_center = 181;
+    public static double x_purple_preload_left = -61.5, y_purple_preload_left = -32, angle_purple_preload_left = 184;
 
     /**
      * yellow
      */
 
-    public static double x_yellow_preload_right = 45, y_yellow_preload_right = -36, angle_yellow_preload_right = 180;
-    public static double x_yellow_preload_center = 45, y_yellow_preload_center = -34.7, angle_yellow_preload_center = 180;
-    public static double x_yellow_preload_left = 46, y_yellow_preload_left = -29.4, angle_yellow_preload_left = 180;
+    public static double x_yellow_preload_right = 45, y_yellow_preload_right = -35, angle_yellow_preload_right = 180;
+    public static double x_yellow_preload_center = 45, y_yellow_preload_center = -30, angle_yellow_preload_center = 180;
+    public static double x_yellow_preload_left = 46, y_yellow_preload_left = -25, angle_yellow_preload_left = 180;
     // public static double x_yellow_inter =
 
     /**
@@ -294,19 +294,23 @@ public class RedFarMTI extends LinearOpMode {
 
 
         TrajectorySequence PURPLE_RIGHT = drive.trajectorySequenceBuilder(start_pose)
-                .lineToLinearHeading(purpleRight)
+                .lineToLinearHeading(purpleRight, SampleMecanumDrive.getVelocityConstraint(60, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(40))
                 .build();
 
         TrajectorySequence PURPLE_CENTER = drive.trajectorySequenceBuilder(start_pose)
-                .lineToLinearHeading(purpleCenter)
+                .lineToLinearHeading(purpleCenter, SampleMecanumDrive.getVelocityConstraint(60, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(40))
                 .build();
 
         TrajectorySequence PURPLE_LEFT = drive.trajectorySequenceBuilder(start_pose)
-                .lineToLinearHeading(purpleLeft)
+                .lineToLinearHeading(purpleLeft, SampleMecanumDrive.getVelocityConstraint(60, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(40))
                 .build();
 
         TrajectorySequence YELLOW_LEFT = drive.trajectorySequenceBuilder(purpleLeft)
-                .lineToLinearHeading(interCollectFirstCycleleft)
+                .lineToLinearHeading(interCollectFirstCycleleft, SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(40))
                 .UNSTABLE_addTemporalMarkerOffset(-0.05, () -> {
                     youcango = true;
                 })
@@ -315,7 +319,8 @@ public class RedFarMTI extends LinearOpMode {
                 .build();
 
         TrajectorySequence YELLOW_CENTER = drive.trajectorySequenceBuilder(purpleCenter)
-                .lineToLinearHeading(new Pose2d(-49, -8, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-49, -8, Math.toRadians(180)), SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(40))
                 .UNSTABLE_addTemporalMarkerOffset(-0.05, () -> {
                     youcango = true;
                 })
@@ -325,7 +330,8 @@ public class RedFarMTI extends LinearOpMode {
                 .build();
 
         TrajectorySequence YELLOW_RIGHT = drive.trajectorySequenceBuilder(purpleRight)
-                .lineToLinearHeading(new Pose2d(-40, -8, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-40, -8, Math.toRadians(180)), SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(40))
                 .UNSTABLE_addTemporalMarkerOffset(-0.05, () -> {
                     youcango = true;
                 })
@@ -333,15 +339,16 @@ public class RedFarMTI extends LinearOpMode {
 
         TrajectorySequence YELLOW_LEFT2 = drive.trajectorySequenceBuilder(YELLOW_LEFT.end())
                 .setTangent(0)
-                .splineToSplineHeading(new Pose2d(0, -8, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(0, -8, Math.toRadians(180)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .splineToLinearHeading(new Pose2d(15, -8, Math.toRadians(180)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .UNSTABLE_addTemporalMarkerOffset(-1, () -> {
                     checkatag = true;
                 })
-                .splineToLinearHeading(new Pose2d(35, -26, Math.toRadians(180)), Math.toRadians(300), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineToLinearHeading(new Pose2d(35, -25, Math.toRadians(180)), Math.toRadians(300), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToLinearHeading(new Pose2d(45, -27, Math.toRadians(180)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineToLinearHeading(new Pose2d(46, -27, Math.toRadians(180)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 //                .setTangent(0)
@@ -355,17 +362,18 @@ public class RedFarMTI extends LinearOpMode {
 
         TrajectorySequence YELLOW_CENTER2 = drive.trajectorySequenceBuilder(YELLOW_CENTER.end())
                 .setTangent(0)
-                .splineToSplineHeading(new Pose2d(0, -8, Math.toRadians(180)), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(15, -8, Math.toRadians(180)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineToSplineHeading(new Pose2d(0, -8, Math.toRadians(180)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(45, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToLinearHeading(new Pose2d(15, -8, Math.toRadians(180)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(45, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 //  .UNSTABLE_addTemporalMarkerOffset(-0.5, ()  -> {checkatag = true;})
                 // .waitSeconds(0.01)
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     checkatag = true;
                 })
-                .splineToLinearHeading(new Pose2d(35, -27.15, Math.toRadians(180)), Math.toRadians(300), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineToLinearHeading(new Pose2d(35, -27, Math.toRadians(180)), Math.toRadians(300), SampleMecanumDrive.getVelocityConstraint(45, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToLinearHeading(new Pose2d(45, -29.15, Math.toRadians(180)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineToLinearHeading(new Pose2d(46.2, -29.7, Math.toRadians(180)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(45, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
 
                 //.waitSeconds(0.1)
@@ -380,15 +388,16 @@ public class RedFarMTI extends LinearOpMode {
 
         TrajectorySequence YELLOW_RIGHT2 = drive.trajectorySequenceBuilder(YELLOW_RIGHT.end())
                 .setTangent(0)
-                .splineToSplineHeading(new Pose2d(0, -8, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(0, -8, Math.toRadians(180)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .splineToLinearHeading(new Pose2d(15, -8, Math.toRadians(180)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> {
                     checkatag = true;
                 })
-                .splineToLinearHeading(new Pose2d(35, -32.5, Math.toRadians(180)), Math.toRadians(300), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineToLinearHeading(new Pose2d(35, -32.7, Math.toRadians(180)), Math.toRadians(300), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToLinearHeading(new Pose2d(45, -34.5, Math.toRadians(180)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineToLinearHeading(new Pose2d(46, -35.7, Math.toRadians(180)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 //                .setTangent(0)
@@ -400,15 +409,15 @@ public class RedFarMTI extends LinearOpMode {
 
 
         TrajectorySequence COLLECT_CYCLE_2_RIGHT = drive.trajectorySequenceBuilder(YELLOW_RIGHT2.end())
-                .setTangent(Math.toRadians(100))
-                .splineToLinearHeading(new Pose2d(30, -10.6, Math.toRadians(180)), Math.toRadians(180),
+                .setTangent(Math.toRadians(120))
+                .splineToLinearHeading(new Pose2d(25, -9.5, Math.toRadians(180)), Math.toRadians(180),
                         SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-15, -10.6, Math.toRadians(180)), Math.toRadians(180),
+                .splineToSplineHeading(new Pose2d(-22.5, -9.5, Math.toRadians(180)), Math.toRadians(180),
                         SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-35, -10.6, Math.toRadians(180)), Math.toRadians(180),
-                        SampleMecanumDrive.getVelocityConstraint(23, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineToSplineHeading(new Pose2d(-37.5, -9.5, Math.toRadians(180)), Math.toRadians(180),
+                        SampleMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 //                .setTangent(Math.toRadians(240))
@@ -421,28 +430,28 @@ public class RedFarMTI extends LinearOpMode {
 //                .build();
 
         TrajectorySequence COLLECT_CYCLE_2_CENTER = drive.trajectorySequenceBuilder(YELLOW_CENTER2.end())
-                .setTangent(Math.toRadians(100))
-                .splineToLinearHeading(new Pose2d(30, -9.5, Math.toRadians(180)), Math.toRadians(180),
-                        SampleMecanumDrive.getVelocityConstraint(33, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .setTangent(Math.toRadians(120))
+                .splineToLinearHeading(new Pose2d(25, -9.5, Math.toRadians(180)), Math.toRadians(180),
+                        SampleMecanumDrive.getVelocityConstraint(45, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-15, -9.5, Math.toRadians(180)), Math.toRadians(180),
-                        SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineToSplineHeading(new Pose2d(-22.5, -9.5, Math.toRadians(180)), Math.toRadians(180),
+                        SampleMecanumDrive.getVelocityConstraint(45, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-35, -9.5, Math.toRadians(183)), Math.toRadians(180),
-                        SampleMecanumDrive.getVelocityConstraint(23, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineToSplineHeading(new Pose2d(-37.5, -9.5, Math.toRadians(180)), Math.toRadians(180),
+                        SampleMecanumDrive.getVelocityConstraint(45, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         TrajectorySequence COLLECT_CYCLE_2_LEFT = drive.trajectorySequenceBuilder(YELLOW_LEFT2.end())
-                .setTangent(Math.toRadians(100))
-                .splineToLinearHeading(new Pose2d(30, -11, Math.toRadians(180)), Math.toRadians(180),
+                .setTangent(Math.toRadians(120))
+                .splineToLinearHeading(new Pose2d(25, -9.5, Math.toRadians(180)), Math.toRadians(180),
                         SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-15, -11, Math.toRadians(180)), Math.toRadians(180),
+                .splineToSplineHeading(new Pose2d(-22.5, -9.5, Math.toRadians(180)), Math.toRadians(180),
                         SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-35, -11, Math.toRadians(184)), Math.toRadians(180),
-                        SampleMecanumDrive.getVelocityConstraint(23, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineToSplineHeading(new Pose2d(-37.5, -9.5, Math.toRadians(184)), Math.toRadians(180),
+                        SampleMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 //                .setTangent(Math.toRadians(240))
@@ -456,41 +465,44 @@ public class RedFarMTI extends LinearOpMode {
 
         TrajectorySequence SCORE_SECOND_CYCLE_RIGHT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_2_RIGHT.end())
                 .setTangent(0)
-                .splineToSplineHeading(new Pose2d(7, -10.6, Math.toRadians(180)), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(46, -27, Math.toRadians(180)), Math.toRadians(0),
-                        SampleMecanumDrive.getVelocityConstraint(50, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineToSplineHeading(new Pose2d(20, -9.5, Math.toRadians(180)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToLinearHeading(new Pose2d(46.2, -30, Math.toRadians(180)), Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 //  .lineToLinearHeading(score_second_cycle_right)
                 .build();
 
         TrajectorySequence SCORE_SECOND_CYCLE_CENTER = drive.trajectorySequenceBuilder(COLLECT_CYCLE_2_CENTER.end())
                 .setTangent(0)
-                .splineToSplineHeading(new Pose2d(7, -9.5, Math.toRadians(180)), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(46, -27, Math.toRadians(180)), Math.toRadians(0),
-                        SampleMecanumDrive.getVelocityConstraint(50, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineToSplineHeading(new Pose2d(20, -9.5, Math.toRadians(180)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToLinearHeading(new Pose2d(46, -30, Math.toRadians(180)), Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 //  .lineToLinearHeading(score_second_cycle_center)
                 .build();
 
         TrajectorySequence SCORE_SECOND_CYCLE_LEFT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_2_LEFT.end())
                 .setTangent(0)
-                .splineToSplineHeading(new Pose2d(7, -11, Math.toRadians(180)), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(46, -27, Math.toRadians(180)), Math.toRadians(0),
-                        SampleMecanumDrive.getVelocityConstraint(50, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineToSplineHeading(new Pose2d(20, -9.5, Math.toRadians(180)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToLinearHeading(new Pose2d(46, -30, Math.toRadians(180)), Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 // .lineToLinearHeading(score_second_cycle_left)
                 .build();
 
         TrajectorySequence COLLECT_CYCLE_3_RIGHT = drive.trajectorySequenceBuilder(SCORE_SECOND_CYCLE_RIGHT.end())
-                .setTangent(Math.toRadians(100))
-                .splineToLinearHeading(new Pose2d(30, -10.5, Math.toRadians(180)), Math.toRadians(180),
+                .setTangent(Math.toRadians(120))
+                .splineToLinearHeading(new Pose2d(25, -10, Math.toRadians(180)), Math.toRadians(180),
                         SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-15, -10.5, Math.toRadians(180)), Math.toRadians(180),
+                .splineToSplineHeading(new Pose2d(-22.5, -10, Math.toRadians(180)), Math.toRadians(180),
                         SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-35, -10.5, Math.toRadians(180)), Math.toRadians(180),
-                        SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineToSplineHeading(new Pose2d(-37.5, -10, Math.toRadians(180)), Math.toRadians(180),
+                        SampleMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 //                .setTangent(Math.toRadians(240))
@@ -503,28 +515,28 @@ public class RedFarMTI extends LinearOpMode {
 //                .build();
 
         TrajectorySequence COLLECT_CYCLE_3_CENTER = drive.trajectorySequenceBuilder(SCORE_SECOND_CYCLE_CENTER.end())
-                .setTangent(Math.toRadians(100))
-                .splineToLinearHeading(new Pose2d(30, -9.5, Math.toRadians(180)), Math.toRadians(180),
-                        SampleMecanumDrive.getVelocityConstraint(33, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .setTangent(Math.toRadians(120))
+                .splineToLinearHeading(new Pose2d(25, -10, Math.toRadians(180)), Math.toRadians(180),
+                        SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-15, -9.5, Math.toRadians(180)), Math.toRadians(180),
+                .splineToSplineHeading(new Pose2d(-22.5, -10, Math.toRadians(180)), Math.toRadians(180),
                         SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-35, -9.5, Math.toRadians(182)), Math.toRadians(180),
-                        SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineToSplineHeading(new Pose2d(-37.5, -10, Math.toRadians(182)), Math.toRadians(180),
+                        SampleMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         TrajectorySequence COLLECT_CYCLE_3_LEFT = drive.trajectorySequenceBuilder(SCORE_SECOND_CYCLE_LEFT.end())
-                .setTangent(Math.toRadians(100))
-                .splineToLinearHeading(new Pose2d(30, -10, Math.toRadians(180)), Math.toRadians(180),
+                .setTangent(Math.toRadians(120))
+                .splineToLinearHeading(new Pose2d(25, -10, Math.toRadians(180)), Math.toRadians(180),
                         SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-15, -10, Math.toRadians(180)), Math.toRadians(180),
+                .splineToSplineHeading(new Pose2d(-22.5, -10, Math.toRadians(180)), Math.toRadians(180),
                         SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(-35, -10, Math.toRadians(180)), Math.toRadians(180),
-                        SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineToSplineHeading(new Pose2d(-37.5, -10, Math.toRadians(180)), Math.toRadians(180),
+                        SampleMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 //                .setTangent(Math.toRadians(240))
@@ -539,27 +551,30 @@ public class RedFarMTI extends LinearOpMode {
 
         TrajectorySequence SCORE_THIRD_CYCLE_RIGHT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_3_RIGHT.end())
                 .setTangent(0)
-                .splineToSplineHeading(new Pose2d(7, -10.5, Math.toRadians(180)), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(46, -26, Math.toRadians(180)), Math.toRadians(0),
-                        SampleMecanumDrive.getVelocityConstraint(50, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineToSplineHeading(new Pose2d(20, -9.5, Math.toRadians(180)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToLinearHeading(new Pose2d(46.2, -30, Math.toRadians(180)), Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 //  .lineToLinearHeading(score_third_cycle_right)
                 .build();
 
         TrajectorySequence SCORE_THIRD_CYCLE_CENTER = drive.trajectorySequenceBuilder(COLLECT_CYCLE_3_CENTER.end())
                 .setTangent(0)
-                .splineToSplineHeading(new Pose2d(7, -9.5, Math.toRadians(180)), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(46, -27, Math.toRadians(180)), Math.toRadians(0),
-                        SampleMecanumDrive.getVelocityConstraint(50, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineToSplineHeading(new Pose2d(20, -9.5, Math.toRadians(180)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToLinearHeading(new Pose2d(46.2, -30, Math.toRadians(180)), Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 // .lineToLinearHeading(score_third_cycle_center)
                 .build();
 
         TrajectorySequence SCORE_THIRD_CYCLE_LEFT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_3_LEFT.end())
                 .setTangent(0)
-                .splineToSplineHeading(new Pose2d(7, -10, Math.toRadians(180)), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(46, -27, Math.toRadians(180)), Math.toRadians(0),
-                        SampleMecanumDrive.getVelocityConstraint(50, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineToSplineHeading(new Pose2d(20, -9.5, Math.toRadians(180)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToLinearHeading(new Pose2d(46, -30, Math.toRadians(180)), Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 //.lineToLinearHeading(score_third_cycle_left)
                 .build();
@@ -567,12 +582,13 @@ public class RedFarMTI extends LinearOpMode {
         TrajectorySequence COLLECT_CYCLE_4_RIGHT = drive.trajectorySequenceBuilder(SCORE_THIRD_CYCLE_RIGHT.end())
 //                .setTangent(Math.toRadians(180))
 //                .splineToSplineHeading(new Pose2d(-22.5, 7, Math.toRadians(168)), Math.toRadians(180))
-                .setTangent(Math.toRadians(100))
-                .splineToLinearHeading(new Pose2d(30, -8, Math.toRadians(180)), Math.toRadians(180),
+                .setTangent(Math.toRadians(110))
+                .splineToLinearHeading(new Pose2d(25, -9, Math.toRadians(180)), Math.toRadians(180),
                         SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(0, -8, Math.toRadians(180)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-32, -8, Math.toRadians(195)), Math.toRadians(180),
+                .splineToSplineHeading(new Pose2d(0, -9, Math.toRadians(180)), Math.toRadians(180), SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(-27.3, -9, Math.toRadians(195)), Math.toRadians(180),
                         SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
@@ -580,12 +596,13 @@ public class RedFarMTI extends LinearOpMode {
         TrajectorySequence COLLECT_CYCLE_4_CENTER = drive.trajectorySequenceBuilder(SCORE_THIRD_CYCLE_CENTER.end())
 //                .setTangent(Math.toRadians(180))
 //                .splineToSplineHeading(new Pose2d(-22, 6.75, Math.toRadians(169)), Math.toRadians(180))
-                .setTangent(Math.toRadians(100))
-                .splineToLinearHeading(new Pose2d(30, -8, Math.toRadians(180)), Math.toRadians(180),
+                .setTangent(Math.toRadians(110))
+                .splineToLinearHeading(new Pose2d(25, -9, Math.toRadians(180)), Math.toRadians(180),
                         SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(0, -8, Math.toRadians(180)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-30, -8, Math.toRadians(196)), Math.toRadians(180),
+                .splineToSplineHeading(new Pose2d(0, -9, Math.toRadians(180)), Math.toRadians(180), SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(-26.8, -9, Math.toRadians(195)), Math.toRadians(180),
                         SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
@@ -593,12 +610,13 @@ public class RedFarMTI extends LinearOpMode {
         TrajectorySequence COLLECT_CYCLE_4_LEFT = drive.trajectorySequenceBuilder(SCORE_THIRD_CYCLE_LEFT.end())
 //                .setTangent(Math.toRadians(180))
 //                .splineToSplineHeading(new Pose2d(-22, 4, Math.toRadians(165)), Math.toRadians(180))
-                .setTangent(Math.toRadians(100))
-                .splineToLinearHeading(new Pose2d(30, -8, Math.toRadians(180)), Math.toRadians(180),
+                .setTangent(Math.toRadians(110))
+                .splineToLinearHeading(new Pose2d(25, -9, Math.toRadians(180)), Math.toRadians(180),
                         SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .splineToSplineHeading(new Pose2d(0, -8, Math.toRadians(180)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-30, -8, Math.toRadians(196)), Math.toRadians(180),
+                .splineToSplineHeading(new Pose2d(0, -9, Math.toRadians(180)), Math.toRadians(180), SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading(new Pose2d(-26.8, -9, Math.toRadians(193)), Math.toRadians(180),
                         SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
@@ -627,37 +645,40 @@ public class RedFarMTI extends LinearOpMode {
         TrajectorySequence SCORE_FORTH_CYCLE_RIGHT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_4_RIGHT.end())
                 //    .lineToLinearHeading(score_forth_cycle_right)
                 .setTangent(0)
-                .splineToSplineHeading(new Pose2d(7, -8, Math.toRadians(180)), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(46, -30, Math.toRadians(180)), Math.toRadians(0),
-                        SampleMecanumDrive.getVelocityConstraint(50, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineToSplineHeading(new Pose2d(20, -9, Math.toRadians(180)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToLinearHeading(new Pose2d(46, -31, Math.toRadians(180)), Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         TrajectorySequence SCORE_FORTH_CYCLE_CENTER = drive.trajectorySequenceBuilder(COLLECT_CYCLE_4_CENTER.end())
                 // .lineToLinearHeading(score_forth_cycle_center)
                 .setTangent(0)
-                .splineToSplineHeading(new Pose2d(7, -8, Math.toRadians(180)), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(46, -29, Math.toRadians(180)), Math.toRadians(0),
-                        SampleMecanumDrive.getVelocityConstraint(50, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineToSplineHeading(new Pose2d(20, -9, Math.toRadians(180)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToLinearHeading(new Pose2d(46, -31, Math.toRadians(180)), Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         TrajectorySequence SCORE_FORTH_CYCLE_LEFT = drive.trajectorySequenceBuilder(COLLECT_CYCLE_4_LEFT.end())
                 //  .lineToLinearHeading(score_forth_cycle_left)
                 .setTangent(0)
-                .splineToSplineHeading(new Pose2d(7, -8, Math.toRadians(180)), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(46, -29, Math.toRadians(180)), Math.toRadians(0),
-                        SampleMecanumDrive.getVelocityConstraint(50, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .splineToSplineHeading(new Pose2d(20, -9, Math.toRadians(180)), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToLinearHeading(new Pose2d(46, -31, Math.toRadians(180)), Math.toRadians(0),
+                        SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
 
         TrajectorySequence ParkBun = drive.trajectorySequenceBuilder(SCORE_FORTH_CYCLE_CENTER.end())
-                .lineToLinearHeading(new Pose2d(42, -7, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(42, -8, Math.toRadians(180)))
                 .build();
 
         TrajectorySequence ParkBun2 = drive.trajectorySequenceBuilder(COLLECT_CYCLE_3_CENTER.end())
-                .lineToLinearHeading(new Pose2d(42, -7, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(42, -8, Math.toRadians(180)))
                 .build();
 
         TrajectorySequence RETRY = drive.trajectorySequenceBuilder(COLLECT_CYCLE_2_CENTER.end())

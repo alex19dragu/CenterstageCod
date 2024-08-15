@@ -672,6 +672,8 @@ timer.reset();
 //            telemetry.addData("liftpos", r.lift.getCurrentPosition());
 //            telemetry.addData("outtake",outtake.CS);
 //            telemetry.addData("transfer",transfer.CS);
+            telemetry.addData("paral", r.extendoRight.getCurrentPosition());
+            telemetry.addData("perp", r.collect.getCurrentPosition());
             telemetry.addData("amps extendo left", r.extendoLeft.getCurrent(CurrentUnit.AMPS));
             telemetry.addData("amps extendo right", r.extendoRight.getCurrent(CurrentUnit.AMPS));
             telemetry.addData("amps lift", r.lift.getCurrent(CurrentUnit.AMPS));
